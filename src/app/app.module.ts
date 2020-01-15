@@ -8,10 +8,16 @@ import {RouterModule, Routes} from '@angular/router';
 import { SidebarComponent } from './layout/secure-layout/sidebar/sidebar.component';
 import { FooterComponent } from './layout/secure-layout/footer/footer.component';
 import { TopbarComponent } from './layout/secure-layout/topbar/topbar.component';
+import { SigninComponent } from './auth/signin/signin.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {AuthService} from './auth/auth.service';
 
 const appRoutes: Routes = [
-  { path: 'public', component : PublicLayoutComponent , children: PUBLIC_ROUTES },
-  { path: 'secure', component : SecureLayoutComponent , children: SECURE_ROUTES }
+  { path: '', redirectTo: '/signin', pathMatch: 'full' },
+  { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES },
+  { path: 'secure', component : SecureLayoutComponent , children: SECURE_ROUTES },
+  {path: '**', redirectTo: '/secure'}
 ];
 
 @NgModule({
@@ -21,13 +27,20 @@ const appRoutes: Routes = [
     SecureLayoutComponent,
     SidebarComponent,
     FooterComponent,
-    TopbarComponent
+    TopbarComponent,
+    SigninComponent
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    ReactiveFormsModule,
+    AuthService,
+    HttpClient
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
