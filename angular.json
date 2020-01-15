@@ -28,9 +28,20 @@
               "src/assets"
             ],
             "styles": [
+              "src/assets/front-template/css/sb-admin-2.min.css",
+              "src/assets/front-template/vendor/fontawesome-free/css/all.min.css",
+              "src/assets/front-template/scss/sb-admin-2.scss",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/front-template/vendor/jquery/jquery.min.js",
+              "src/assets/front-template/vendor/bootstrap/js/bootstrap.min.js",
+              "src/assets/front-template/vendor/jquery-easing/jquery.easing.min.js",
+              "src/assets/front-template/vendor/fontawesome-free/js/all.min.js",
+              "src/assets/front-template/vendor/datatables/jquery.dataTables.min.js",
+              "src/assets/front-template/vendor/datatables/dataTables.bootstrap4.min.js",
+              "src/assets/front-template/vendor/chart.js/Chart.min.js"
+            ]
           },
           "configurations": {
             "production": {
