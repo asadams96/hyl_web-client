@@ -12,6 +12,7 @@ import { SigninComponent } from './auth/signin/signin.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {AuthService} from './auth/auth.service';
+import { SignupComponent } from './auth/signup/signup.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full' },
@@ -28,7 +29,8 @@ const appRoutes: Routes = [
     SidebarComponent,
     FooterComponent,
     TopbarComponent,
-    SigninComponent
+    SigninComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,8 @@ const appRoutes: Routes = [
   providers: [
     ReactiveFormsModule,
     AuthService,
-    HttpClient
+    HttpClient,
+    SigninComponent
   ],
   bootstrap: [AppComponent]
 })
