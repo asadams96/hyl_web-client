@@ -13,12 +13,14 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {AuthService} from './auth/auth.service';
 import { SignupComponent } from './auth/signup/signup.component';
+import {AuthGuard} from './guards/auth.guard';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/signin', pathMatch: 'full' },
-  { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES },
-  { path: 'secure', component : SecureLayoutComponent , children: SECURE_ROUTES },
-  {path: '**', redirectTo: '/secure'}
+  { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
+  { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard] },
+  { path: '', component : SecureLayoutComponent , children: SECURE_ROUTES, canActivate: [AuthGuard] },
+  // TODO EDITER LA ROUTE PAR SIGNIN QUAND COMPOSANT SECURE CREE -> Evite bug pour le moment en simulant route /dashboard
+  {path: '**', component: SecureLayoutComponent}
 ];
 
 @NgModule({
