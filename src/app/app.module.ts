@@ -14,6 +14,7 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {AuthService} from './auth/auth.service';
 import { SignupComponent } from './auth/signup/signup.component';
 import {AuthGuard} from './guards/auth.guard';
+import { SignoutComponent } from './auth/signout/signout.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
@@ -32,7 +33,8 @@ const appRoutes: Routes = [
     FooterComponent,
     TopbarComponent,
     SigninComponent,
-    SignupComponent
+    SignupComponent,
+    SignoutComponent
   ],
   imports: [
     BrowserModule,

@@ -30,4 +30,8 @@ export class AuthService {
     const params = {email};
     return this.httpClient.get(this.host + '/check-email', {params});
   }
+
+  signout(authToken: string) {
+    return this.httpClient.post(this.host + '/signout', {token: authToken});
+  }
 }
