@@ -15,6 +15,9 @@ import {AuthService} from './auth/auth.service';
 import { SignupComponent } from './auth/signup/signup.component';
 import {AuthGuard} from './guards/auth.guard';
 import { SignoutComponent } from './auth/signout/signout.component';
+import { ListItemComponent } from './item/list-item/list-item.component';
+import {ItemService} from './item/item.service';
+import { CategoryComponent } from './item/list-item/category/category.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
@@ -34,7 +37,9 @@ const appRoutes: Routes = [
     TopbarComponent,
     SigninComponent,
     SignupComponent,
-    SignoutComponent
+    SignoutComponent,
+    ListItemComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,8 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     AuthService,
     HttpClient,
-    SigninComponent
+    SigninComponent,
+    ItemService
   ],
   bootstrap: [AppComponent]
 })

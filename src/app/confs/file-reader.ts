@@ -1,5 +1,6 @@
 const  javascriptBaseFiles = [
   'assets/front-template/vendor/jquery/jquery.min.js',
+  'assets/front-template/vendor/popper/popper.min.js',
   'assets/front-template/vendor/bootstrap/js/bootstrap.min.js',
   'assets/front-template/vendor/jquery-easing/jquery.easing.min.js',
   'assets/front-template/vendor/fontawesome-free/js/all.min.js',

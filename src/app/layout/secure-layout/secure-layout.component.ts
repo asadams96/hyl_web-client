@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Routes} from '@angular/router';
+import {ListItemComponent} from '../../item/list-item/list-item.component';
 
-export const SECURE_ROUTES: Routes = [];
+export const SECURE_ROUTES: Routes = [
+  {path: 'items', component: ListItemComponent}
+];
 
 @Component({
   selector: 'app-secure-layout',

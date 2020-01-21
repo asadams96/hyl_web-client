@@ -167,7 +167,7 @@
 .modal-footer {
   display: flex;
   align-items: center; // vertically center
-  justify-content: flex-end; // Right align buttons with flex property because text-align doesn't work on flex items
+  justify-content: flex-end; // Right align buttons with flex property because text-align doesn't work on flex item
   padding: $modal-inner-padding;
   border-top: $modal-footer-border-width solid $modal-footer-border-color;
   @include border-bottom-radius($modal-content-border-radius);

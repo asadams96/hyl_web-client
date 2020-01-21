@@ -1,0 +1,40 @@
+<!-- Dropdown Card Example -->
+<div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center">
+    <div class="col-lg-9 col-md-9">
+      <h6 class="m-0 font-weight-bold text-primary">{{ name }}</h6>
+    </div>
+
+    <div class="col-lg-2 col-md-2">
+      <a [href]="'#collapseCategory'+id" class="d-block py-3" data-toggle="collapse" role="button" aria-expanded="true">
+        <i class="fas fa-arrow-down fa-sm fa-fw text-gray-400"></i>
+      </a>
+    </div>
+
+    <!-- Dropdown Category -->
+    <div class="dropdown no-arrow">
+      <!-- Bouton menu animé -->
+      <a class="dropdown-toggle" href="#" role="button" [id]="'dropdownCategory'+id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+      </a>
+      <!-- Menu annimé -->
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" [attr.aria-labelledby]="'dropdownCategory'+id">
+        <div class="dropdown-header">Dropdown Header:</div>
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </div>
+  </div>
+  <!-- Category Body -->
+  <div *ngIf="categories !== null && categories.length !== 0" class="collapse show" [id]="'collapseCategory'+id">
+    <div class="card-body col-lg-12">
+      <app-category *ngFor="let category of categories"
+                    [id]="category.id"
+                    [name]="category.name"
+                    [categories]="category.categories"></app-category>
+    </div>
+  </div>
+</div>
