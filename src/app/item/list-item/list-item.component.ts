@@ -11,20 +11,20 @@ import {CategoryComponent} from './category/category.component';
 })
 export class ListItemComponent implements OnInit {
 
-  items: CategoryComponent[];
+  categoriesParent: CategoryComponent[];
 
   constructor(private itemService: ItemService) { }
 
   ngOnInit() {
-    this.getItems();
+    this.getCategoriesParent();
   }
 
-  getItems() {
+  getCategoriesParent() {
     this.itemService.fullItemFormatByCategories(null).subscribe(
       value => {
         console.log(value.length);
 
-        this.items = value;
+        this.categoriesParent = value;
 
         for (let i = 0; i < value.length; i++) {
 
@@ -40,6 +40,7 @@ export class ListItemComponent implements OnInit {
   iterate(categoryComponent: CategoryComponent) {
     for (let i = 0; i < categoryComponent.categories.length; i++) {
       console.log(categoryComponent.categories[i].name);
+      console.log(categoryComponent.categories[i].items);
 
       if (categoryComponent.categories[i].categories !== null
         && categoryComponent.categories[i].categories.length !== 0) {

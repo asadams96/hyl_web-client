@@ -10,10 +10,14 @@
       </div>
     </div>
     -->
-    <div class="col-lg-12 col-md-12 mb-4">
-      <app-category *ngFor="let category of items"
+    <div class="container">
+      <app-category *ngFor="let category of categoriesParent"
                     [id]="category.id"
                     [name]="category.name"
-                    [categories]="category.categories"></app-category>
+                    [categories]="category.categories"
+                    [items]="category.items">
+      </app-category>
     </div>
+
+
 

@@ -1,7 +1,7 @@
 <!-- Dropdown Card Example -->
 <div class="card shadow mb-4">
   <!-- Card Header - Dropdown -->
-  <div class="card-header py-3 d-flex flex-row align-items-center">
+  <div class="card-header py-0 d-flex flex-row align-items-center">
     <div class="col-lg-9 col-md-9">
       <h6 class="m-0 font-weight-bold text-primary">{{ name }}</h6>
     </div>
@@ -29,12 +29,33 @@
     </div>
   </div>
   <!-- Category Body -->
-  <div *ngIf="categories !== null && categories.length !== 0" class="collapse show" [id]="'collapseCategory'+id">
-    <div class="card-body col-lg-12">
-      <app-category *ngFor="let category of categories"
-                    [id]="category.id"
-                    [name]="category.name"
-                    [categories]="category.categories"></app-category>
-    </div>
+  <!-- <div *ngIf="categories !== null && categories.length !== 0" class="collapse show" [id]="'collapseCategory'+id">-->
+  <div class="collapse" [id]="'collapseCategory'+id">
+    <div class="card-body">
+        <app-category class="" *ngFor="let category of categories"
+                      [id]="category.id"
+                      [name]="category.name"
+                      [categories]="category.categories"
+                      [items]="category.items">
+        </app-category>
+      <div class="card-deck">
+        <!--
+      <app-item-in-category *ngFor="let item of items"
+                            [id]="item.id"
+                            [name]="item.name"
+                            [description]="item.description"
+                            [urlItem]="item.urlItem">
+      </app-item-in-category>
+      -->
+        <div *ngFor="let item of items">
+        <div class="card mb-3">
+          <div class="card-header">
+            <a routerLink="/items/{{ item.id }}">{{ item.name  }}</a>
+          </div>
+        </div>
+        </div>
+      </div>
   </div>
 </div>
+</div>
+

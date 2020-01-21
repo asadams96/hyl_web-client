@@ -18,6 +18,7 @@ import { SignoutComponent } from './auth/signout/signout.component';
 import { ListItemComponent } from './item/list-item/list-item.component';
 import {ItemService} from './item/item.service';
 import { CategoryComponent } from './item/list-item/category/category.component';
+import { ItemInCategoryComponent } from './item/list-item/item-in-category/item-in-category.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
@@ -39,7 +40,8 @@ const appRoutes: Routes = [
     SignupComponent,
     SignoutComponent,
     ListItemComponent,
-    CategoryComponent
+    CategoryComponent,
+    ItemInCategoryComponent
   ],
   imports: [
     BrowserModule,
