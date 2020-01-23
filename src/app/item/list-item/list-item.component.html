@@ -1,23 +1,59 @@
-    <!--
-    <div class="col-lg-3 col-md-3 mb-3" *ngFor="let item of items">
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">{{item.titre}}</h6>
-        </div>
-        <div class="card-body">
-          <p>{{item.prix}}€</p>
+<ng-template #recursiveList let-categories>
+  <!-- Dropdown Card Example -->
+  <div class="card shadow mb-4" *ngFor="let category of categories; let i = index">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-0 d-flex flex-row align-items-center">
+      <div class="col-lg-9 col-md-9">
+        <h6 class="m-0 font-weight-bold text-primary">{{ category.name }}</h6>
+      </div>
+
+      <div class="col-lg-2 col-md-2">
+        <a [href]="'#collapseCategory'+category.id" class="d-block py-3" data-toggle="collapse" role="button" aria-expanded="true">
+          <i class="fas fa-arrow-down fa-sm fa-fw text-gray-400"></i>
+        </a>
+      </div>
+
+      <!-- Dropdown Category -->
+      <div class="dropdown no-arrow">
+        <!-- Bouton menu animé -->
+        <a class="dropdown-toggle" href="#" role="button" [id]="'dropdownCategory'+category.id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+        </a>
+        <!-- Menu annimé -->
+        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" [attr.aria-labelledby]="'dropdownCategory'+category.id">
+          <div class="dropdown-header">{{ category.name }}</div>
+          <a class="dropdown-item" href="#">Ajouter un objet</a>
+          <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#addCategoryModal'+category.id" href="#">Ajouter une catégorie</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Renommer '{{ category.name }}'</a>
+          <a class="dropdown-item" href="#">Supprimer '{{ category.name }}'</a>
         </div>
       </div>
     </div>
-    -->
-    <div class="container">
-      <app-category *ngFor="let category of categoriesParent"
-                    [id]="category.id"
-                    [name]="category.name"
-                    [categories]="category.categories"
-                    [items]="category.items">
-      </app-category>
+    <!-- Category Body -->
+    <!-- <div *ngIf="categories !== null && categories.length !== 0" class="collapse show" [id]="'collapseCategory'+id">-->
+    <div class="collapse" [id]="'collapseCategory'+category.id">
+      <div class="card-body">
+        <div *ngIf="category.categories != null && category.categories.length > 0">
+          <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: category.categories }"></ng-container>
+        </div>
+        <div class="card-deck" *ngIf="category.items != null && category.items.length > 0">
+          <div *ngFor="let item of category.items">
+            <div class="card mb-3">
+              <div class="card-header">
+                <a routerLink="/items/{{ item.id }}">{{ item.name  }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <app-category [id]="category.id"
+                  [name]="category.name"
+                  [categories]="category.categories"></app-category>
 
+  </div>
+</ng-template>
+<ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
 

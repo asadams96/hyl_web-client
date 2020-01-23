@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ItemService} from '../item.service';
 import {JsonPipe} from '@angular/common';
 import {ListItemModel} from './list-item.model';
 import {CategoryComponent} from './category/category.component';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-list-item',
@@ -11,43 +12,17 @@ import {CategoryComponent} from './category/category.component';
 })
 export class ListItemComponent implements OnInit {
 
-  categoriesParent: CategoryComponent[];
+   @Input() categories: CategoryComponent[];
+   categoriesSubscription: Subscription;
 
   constructor(private itemService: ItemService) { }
 
   ngOnInit() {
-    this.getCategoriesParent();
-  }
-
-  getCategoriesParent() {
-    this.itemService.fullItemFormatByCategories(null).subscribe(
-      value => {
-        console.log(value.length);
-
-        this.categoriesParent = value;
-
-        for (let i = 0; i < value.length; i++) {
-
-          this.iterate(value[i]);
-        }
-      },
-      error => {
-        console.log('ERROOOOOOOOOOOOOOOOOOOOOOOOOOR');
+    this.categoriesSubscription = this.itemService.categoriesSubject.subscribe(
+      (categories: CategoryComponent[]) => {
+        this.categories = categories;
       }
     );
+    this.itemService.fullItemFormatByCategories(null);
   }
-
-  iterate(categoryComponent: CategoryComponent) {
-    for (let i = 0; i < categoryComponent.categories.length; i++) {
-      console.log(categoryComponent.categories[i].name);
-      console.log(categoryComponent.categories[i].items);
-
-      if (categoryComponent.categories[i].categories !== null
-        && categoryComponent.categories[i].categories.length !== 0) {
-
-        this.iterate(categoryComponent.categories[i]);
-      }
-    }
-  }
-
 }
