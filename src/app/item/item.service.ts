@@ -74,6 +74,20 @@ export class ItemService {
       );
   }
 
+  renameCategory(category: CategoryComponent, name: string) {
+    const id = category.id;
+    console.log('NAME AVT ->' + name);
+    return this.httpClient.post(this.host + '/items/rename-category', {id, name})
+      .toPromise().then(
+        () => {
+          this.renameCategoryInArray(this.categories, name, id);
+        },
+        reason => {
+          console.log(reason);
+        }
+      );
+  }
+
   /*
    * Cherche à ajouter newCategorie à l'array categories ou bien à une de ses sous catégorie (récurisivité) de façon a ne pas avoir à
    * recharcher tout l'array avec une interaction avec le back et éviter la transmission de donner inutile
@@ -148,6 +162,37 @@ export class ItemService {
         }
       }
       return null;
+    }
+  }
+
+  /*
+    Renommer la catégorie ayant pour id=idCategory dans l'array passer en paramètre où elle doit bien sur se trouver
+   */
+  private renameCategoryInArray(categories: CategoryComponent[], name: string, idCategory: bigint) {
+    // Cherche la categorie à renommer dans l'array 'categories' passer en paramètre graàce à son id passer aussi en paramètre
+    // Si la categorie est trouvé -> Index = l'index de la catégorie dans l'array
+    // Sinon -> Index = -1
+    const index = categories.findIndex(category => {
+      return idCategory === category.id;
+    });
+
+    // Si index différent de -1 -> donc catégorie est trouvé -> catégorie renommée
+    // Sinon on chercher la catégorie dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
+    if (index !== -1) {
+      categories[index].name = name;
+      this.emitCategories();
+    } else {
+      const c = categories.length;
+      for (let i = 0; i < c; i++) {
+        // console.log(categoryComponent.categories[i].name);
+        // console.log(categoryComponent.categories[i].items);
+
+        // SI la catégorie[i] a des enfants, appliquer cette même méthode de façon récursive
+        // pour trouver la catégorie et pouvoir la renommer
+        if (categories[i].categories !== null && categories[i].categories.length !== 0) {
+          this.renameCategoryInArray(categories[i].categories, name, idCategory);
+        }
+      }
     }
   }
 

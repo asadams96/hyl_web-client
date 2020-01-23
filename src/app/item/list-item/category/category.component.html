@@ -4,16 +4,16 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">
-          Ajouter une categorie à <span class="font-weight-bolder">{{ name }}</span>
+          Ajouter une categorie à <span class="font-weight-bolder">{{ name }}</span> ?
         </h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <form [formGroup]="categoryForm">
+      <form [formGroup]="createCategoryForm">
       <div class="modal-body text-center">
           <div class="form-group">
-           <input class="form-control form-control-user" formControlName="name" id="name" type="text"
+           <input class="form-control form-control-user" formControlName="name" id="nameCreate" type="text"
                   placeholder="Saisir le nom de la nouvelle catégorie" [maxlength]="maxlength">
           </div>
           <div class="form-group">
@@ -26,10 +26,39 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-        <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitForm()" [disabled]="!categoryForm.valid">Ajouter</button>
+        <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateCategoryForm()" [disabled]="!createCategoryForm.valid">Ajouter</button>
       </div>
       </form>
     </div>
   </div>
 </div>
 
+
+
+<!-- rename category Modal-->
+<div class="modal fade" [id]="'renameCategoryModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">
+          Renommer <span class="font-weight-bolder">{{ name }}</span> ?
+        </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form [formGroup]="renameCategoryForm">
+        <div class="modal-body text-center">
+          <div class="form-group">
+            <input class="form-control form-control-user" formControlName="name" id="nameRename" type="text"
+                   placeholder="Saisir le nouveau nom de '{{ name }}'" [maxlength]="maxlength">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitRenameCategoryForm()" [disabled]="!renameCategoryForm.valid">Renommer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

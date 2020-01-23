@@ -15,30 +15,37 @@ export class CategoryComponent implements OnInit {
   @Input() categories: Array<CategoryComponent>;
   @Input() items: Array<ItemComponent>;
 
- private categoryForm: FormGroup;
- private maxlength = '15';
+  private createCategoryForm: FormGroup;
+  private renameCategoryForm: FormGroup;
+  private maxlength = '15';
 
   constructor(private itemService: ItemService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
-    this.initForm();
+    this.initCreateCategoryForm();
+    this.initRenameCategoryForm();
   }
 
-  initForm() {
-    this.categoryForm = this.formBuilder.group({
+  initCreateCategoryForm() {
+    this.createCategoryForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       type: ['', [Validators.required]]
     });
   }
+  initRenameCategoryForm() {
+    this.renameCategoryForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+    });
+  }
 
-  onSubmitForm() {
-    const name = String(this.categoryForm.controls.name.value);
-    const type = String(this.categoryForm.controls.type.value);
+  onSubmitCreateCategoryForm() {
+    const name = String(this.createCategoryForm.controls.name.value);
+    const type = String(this.createCategoryForm.controls.type.value);
 
     if (type === 'C') {
       this.itemService.createChildCategory(this, name).then(
         value =>  {
-          this.initForm();
+          this.initCreateCategoryForm();
         },
         reason => {
           console.log(reason);
@@ -48,7 +55,7 @@ export class CategoryComponent implements OnInit {
     } else if (type === 'P') {
       this.itemService.createParentCategory(this, name).then(
         value =>  {
-          this.initForm();
+          this.initCreateCategoryForm();
         },
         reason => {
           console.log(reason);
@@ -58,5 +65,19 @@ export class CategoryComponent implements OnInit {
     } else {
       this.router.navigate(['/error']);
     }
+  }
+
+  onSubmitRenameCategoryForm() {
+    const name = String(this.renameCategoryForm.controls.name.value);
+    this.itemService.renameCategory(this, name).then(
+      value =>  {
+        this.initRenameCategoryForm();
+      },
+      reason => {
+        console.log(reason);
+        this.router.navigate(['/error']);
+      }
+    );
+
   }
 }
