@@ -47,8 +47,7 @@ export class CategoryComponent implements OnInit {
         value =>  {
           this.initCreateCategoryForm();
         },
-        reason => {
-          console.log(reason);
+          () => {
           this.router.navigate(['/error']);
         }
         );
@@ -73,11 +72,18 @@ export class CategoryComponent implements OnInit {
       value =>  {
         this.initRenameCategoryForm();
       },
-      reason => {
-        console.log(reason);
+      () => {
         this.router.navigate(['/error']);
       }
     );
 
+  }
+
+  onDeleteCategory() {
+    this.itemService.deleteCategory(this).catch(
+        () => {
+          this.router.navigate(['/error']);
+        }
+    );
   }
 }

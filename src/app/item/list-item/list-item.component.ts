@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ItemService} from '../item.service';
-import {JsonPipe} from '@angular/common';
-import {ListItemModel} from './list-item.model';
 import {CategoryComponent} from './category/category.component';
 import {Subscription} from 'rxjs';
+import {FormBuilder} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-list-item',
@@ -12,17 +12,32 @@ import {Subscription} from 'rxjs';
 })
 export class ListItemComponent implements OnInit {
 
-   @Input() categories: CategoryComponent[];
-   categoriesSubscription: Subscription;
+   @Input() category: CategoryComponent = new CategoryComponent(this.itemService, new FormBuilder(), this.router);
+   private categorySubscription: Subscription;
 
-  constructor(private itemService: ItemService) { }
+  constructor(private itemService: ItemService, private router: Router) {
+      this.category.items = [];
+      this.category.categories = [];
+  }
 
   ngOnInit() {
-    this.categoriesSubscription = this.itemService.categoriesSubject.subscribe(
-      (categories: CategoryComponent[]) => {
-        this.categories = categories;
-      }
-    );
-    this.itemService.fullItemFormatByCategories(null);
+      this.initCategorySuscription();
+      this.fillMainCategory();
+  }
+
+  initCategorySuscription() {
+      this.categorySubscription = this.itemService.categoryStorageSubject.subscribe(
+          (category: CategoryComponent) => {
+              this.category = category;
+          }
+      );
+  }
+
+  fillMainCategory() {
+      this.itemService.getItemsFormatInCategory(this.category).catch(
+          () => {
+              this.router.navigate(['/error']);
+          }
+      );
   }
 }

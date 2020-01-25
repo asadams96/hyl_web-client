@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ListItemModel} from './list-item/list-item.model';
 import {CategoryComponent} from './list-item/category/category.component';
-import {ListItemComponent} from './list-item/list-item.component';
 import {Subject} from 'rxjs';
 
 @Injectable({
@@ -11,34 +9,34 @@ import {Subject} from 'rxjs';
 export class ItemService {
 
   private host = 'http://localhost:8080';
-  private categories: CategoryComponent[] = [];
-  categoriesSubject = new Subject<CategoryComponent[]>();
-
+  private categoryStorage: CategoryComponent;
+  categoryStorageSubject = new Subject<CategoryComponent>();
 
   constructor(private httpClient: HttpClient) { }
 
-  emitCategories() {
-    this.categoriesSubject.next(this.categories.slice());
+  emitCategoryStorage() {
+    this.categoryStorageSubject.next([this.categoryStorage].slice()[0]);
   }
 
-  fullItemFormatByCategories(token: string) {
+
+
+  getItemsFormatInCategory(pCategoryStorage: CategoryComponent) {
+    const token = localStorage.getItem('auth');
     const params = {token};
-    this.httpClient.get<CategoryComponent[]>(this.host + '/items', {params}).toPromise().then(
-      value => {
-        this.categories = value;
-        this.emitCategories();
-      },
-      reason =>  {
-        console.log(reason);
-      }
+    return this.httpClient.get<CategoryComponent>(this.host + '/items', {params}).toPromise().then(
+        categoryData => {
+          this.categoryStorage = pCategoryStorage;
+          this.categoryStorage.id = null;
+          this.categoryStorage.name = 'Inventaire';
+          this.categoryStorage.categories = categoryData.categories ? categoryData.categories : [];
+          this.categoryStorage.items = categoryData.items ? categoryData.items : [];
+          this.emitCategoryStorage();
+        },
+        reason => {
+          console.log(reason);
+        }
     );
   }
-
-  fullItemFormatByCategoriesBis(token: string) {
-    const params = {token};
-    return this.httpClient.get<ListItemComponent[]>(this.host + '/items', {params});
-  }
-
 
   createChildCategory(parentCategory: CategoryComponent, name: string) {
     const token = localStorage.getItem('auth');
@@ -46,8 +44,8 @@ export class ItemService {
 
     return this.httpClient.post<CategoryComponent>(this.host + '/items/add-child-category', {token, name, idParent})
       .toPromise<CategoryComponent>().then(
-      newCategorie => {
-        this.addNewChildCategoryToArray(this.categories, newCategorie, idParent);
+      newCategory => {
+        this.addNewChildCategoryToArray(this.categoryStorage.categories, newCategory, idParent);
       },
       reason => {
         console.log(reason);
@@ -61,12 +59,8 @@ export class ItemService {
 
     return this.httpClient.post<CategoryComponent>(this.host + '/items/add-parent-category', {token, name, idChild})
       .toPromise<CategoryComponent>().then(
-        newCategorie => {
-          const index = this.addNewParentCategoryToArray(this.categories, newCategorie, idChild);
-          if (index !== null && index !== -1) {
-            this.categories[index] = newCategorie;
-            this.emitCategories();
-         }
+        newCategory => {
+          this.addNewParentCategoryToArray(this.categoryStorage.categories, newCategory, idChild);
         },
         reason => {
           console.log(reason);
@@ -76,11 +70,11 @@ export class ItemService {
 
   renameCategory(category: CategoryComponent, name: string) {
     const id = category.id;
-    console.log('NAME AVT ->' + name);
+
     return this.httpClient.post(this.host + '/items/rename-category', {id, name})
       .toPromise().then(
         () => {
-          this.renameCategoryInArray(this.categories, name, id);
+          this.renameCategoryInArray(this.categoryStorage.categories, name, id);
         },
         reason => {
           console.log(reason);
@@ -88,12 +82,27 @@ export class ItemService {
       );
   }
 
+  deleteCategory(category: CategoryComponent) {
+    const id = String(category.id);
+    const params = {id};
+    return this.httpClient.delete(this.host + '/items/delete-category', {params}).toPromise().then(
+      () => {
+        this.deleteCategoryInArray(this.categoryStorage, category);
+      },
+      reason => {
+        console.log(reason);
+      }
+    );
+  }
+
+
+
   /*
-   * Cherche à ajouter newCategorie à l'array categories ou bien à une de ses sous catégorie (récurisivité) de façon a ne pas avoir à
+   * Cherche à ajouter newCategory à l'array categories ou bien à une de ses sous catégorie (récurisivité) de façon a ne pas avoir à
    * recharcher tout l'array avec une interaction avec le back et éviter la transmission de donner inutile
-   * L'array categories (ou une des sous catégories) doit contenir la catégorie parente de newCategorie ayant pour id -> idParent
+   * L'array categories (ou une des sous catégories) doit contenir la catégorie parente de newCategory ayant pour id -> idParent
     */
-  private addNewChildCategoryToArray(categories: CategoryComponent[], newCategorie: CategoryComponent, idParent: bigint) {
+  private addNewChildCategoryToArray(categories: CategoryComponent[], newCategory: CategoryComponent, idParent: bigint) {
 
     // Cherche la categorie parente de la nouvelle categorie crée dans l'array 'categories' passer en paramètre
     // Si la categorie parente est trouvé -> Index = l'index de la catégorie parente dans l'array
@@ -106,18 +115,15 @@ export class ItemService {
     // Sinon on chercher la catégorie parente dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
     if (index !== -1) {
       if (categories[index].categories === null) { categories[index].categories = []; }
-      categories[index].categories.push(newCategorie);
-      this.emitCategories();
+      categories[index].categories.push(newCategory);
+      this.emitCategoryStorage();
     } else {
       const c = categories.length;
       for (let i = 0; i < c; i++) {
-        // console.log(categoryComponent.categories[i].name);
-        // console.log(categoryComponent.categories[i].items);
-
         // SI la catégorie[i] a des enfants, appliquer cette même méthode de façon récursive
         // pour trouver la catégorie parente et pouvoir insérer la nouvelle catégorie
         if (categories[i].categories !== null && categories[i].categories.length !== 0) {
-          this.addNewChildCategoryToArray(categories[i].categories, newCategorie, idParent);
+          this.addNewChildCategoryToArray(categories[i].categories, newCategory, idParent);
         }
       }
     }
@@ -128,7 +134,7 @@ export class ItemService {
     La nouvelle catégorie mise à jour renvoyé par le back contient la catégorie enfant (avec tous ses enfants)
     // Il ne reste donc plus qu'a la remplacer dans l'array en trouvant sa position
    */
-  private addNewParentCategoryToArray(categories: CategoryComponent[], newCategorie: CategoryComponent, idChild: bigint): number {
+  private addNewParentCategoryToArray(categories: CategoryComponent[], newCategory: CategoryComponent, idChild: bigint) {
 
     // Cherche la categorie enfant de la nouvelle categorie crée dans l'array 'categories' passer en paramètre
     // Si la categorie enant est trouvé -> Index = l'index de la catégorie enfant dans l'array
@@ -137,31 +143,21 @@ export class ItemService {
       return idChild === category.id;
     });
 
-    // Si index différent de -1 -> donc catégorie enfant trouvé -> on renvoi sa position dans l'array
-    // Sinon on chercher la catégorie enfant dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
+    // Si index différent de -1 -> donc catégorie enfant trouvé -> on la remplace dans l'array
+    // Sinon on cherche la catégorie enfant dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
     if (index !== -1) {
-      return index;
+      categories[index] = newCategory;
+      this.emitCategoryStorage();
 
     } else {
       const c = categories.length;
       for (let i = 0; i < c; i++) {
-        // console.log(categoryComponent.categories[i].name);
-        // console.log(categoryComponent.categories[i].items);
-
         // SI la catégorie[i] a des enfants, appliquer cette même méthode de façon récursive
         // pour trouver la catégorie enfant et pouvoir la remplacer par la nouvelle catégorie
         if (categories[i].categories !== null && categories[i].categories.length !== 0) {
-
-          // Si !== null et de -1 -> A trouvé la position de la catégorie à remplacer -> La remplacer
-          const indexChildToReplace = this.addNewParentCategoryToArray(categories[i].categories, newCategorie, idChild);
-          if ( indexChildToReplace !== null && indexChildToReplace !== -1 ) {
-            categories[i].categories[indexChildToReplace] = newCategorie;
-            this.emitCategories();
-            break;
-          }
+          this.addNewParentCategoryToArray(categories[i].categories, newCategory, idChild);
         }
       }
-      return null;
     }
   }
 
@@ -180,13 +176,10 @@ export class ItemService {
     // Sinon on chercher la catégorie dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
     if (index !== -1) {
       categories[index].name = name;
-      this.emitCategories();
+      this.emitCategoryStorage();
     } else {
       const c = categories.length;
       for (let i = 0; i < c; i++) {
-        // console.log(categoryComponent.categories[i].name);
-        // console.log(categoryComponent.categories[i].items);
-
         // SI la catégorie[i] a des enfants, appliquer cette même méthode de façon récursive
         // pour trouver la catégorie et pouvoir la renommer
         if (categories[i].categories !== null && categories[i].categories.length !== 0) {
@@ -196,4 +189,70 @@ export class ItemService {
     }
   }
 
+  /*
+    Supprime la catégorie 'category' des sous-catégorie de parentCategory
+    Category doit donc être une sous-cat de parentCategory ou d'un de ses enfants (utilisation de la récursivité jusqu'a trouvé catégory)
+    Category est ensuite supprimer et ses sous-categories & items sont transférés à sa catégorie parente
+   */
+  private deleteCategoryInArray(parentCategory: CategoryComponent, category: CategoryComponent) {
+    // Cherche la categorie à supprimer 'category' dans les enfant de la categorie parent passer en paramètre
+    // Si la categorie à supprimer est trouvé -> parentCategory est bien le parent de category -> Index = position de catégorie
+    // Sinon -> category n'est pas un enfant direct de parentCategory ->  Index = -1
+    const index = parentCategory.categories.findIndex(pCategory => {
+      return category.id === pCategory.id;
+    });
+
+    // Si index différent de -1 -> donc catégorie enfant trouvé -> on peut maintenant supprimer la catégorie de l'array
+    // Sinon on chercher la catégorie enfant dans les enfants et chaque enfant de la parentCategory et ainsi de suite de façon récussive
+    if (index !== -1) {
+      if (parentCategory.categories[index].items === null) { parentCategory.categories[index].items = []; }
+
+      parentCategory.categories.splice(index, 1);
+
+      // On ajoute les sous-catégories de la categorie supprimer à sa categorie parente
+      if (category.categories != null && category.categories.length > 0) {
+        const c2 = category.categories.length;
+        for (let j = 0; j < c2; j++) {
+          parentCategory.categories.push(category.categories[j]);
+        }
+      }
+      // On ajoute les items de la categorie supprimer à sa categorie parente
+      if (category.items != null && category.items.length > 0) {
+        const c2 = category.items.length;
+        console.log('c2 ->' + c2);
+        for (let j = 0; j < c2; j++) {
+          parentCategory.items.push(category.items[j]);
+        }
+      }
+      this.emitCategoryStorage();
+
+    } else {
+      const c = parentCategory.categories.length;
+      for (let i = 0; i < c; i++) {
+
+        // Recherche de la categorie parent de category de façon récursive dans les enfants de parentCategory
+        if (parentCategory.categories[i] !== null) {
+          this.deleteCategoryInArray(parentCategory.categories[i], category);
+        }
+      }
+    }
+  }
+
+  /*
+    Méthode pour logger tous le contenu d'une catégorie (sous-catégories + items)
+    Nécessaire seulement pour le débugage
+   */
+  private  iterate(categoryComponent: CategoryComponent) {
+    const c = categoryComponent.categories.length;
+    for (let i = 0; i < c; i++) {
+      console.log(categoryComponent.categories[i].name);
+      console.log(categoryComponent.categories[i].items);
+
+      if (categoryComponent.categories[i].categories !== null
+        && categoryComponent.categories[i].categories.length !== 0) {
+
+        this.iterate(categoryComponent.categories[i]);
+      }
+    }
+  }
 }
