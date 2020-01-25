@@ -16,7 +16,9 @@
       <!-- Menu annimé -->
       <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" [attr.aria-labelledby]="'dropdownCategory'+id">
         <div class="dropdown-header">{{ name }}</div>
-        <a class="dropdown-item" href="#">Ajouter un objet</a>
+        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#addItemModal'+id" href="#">
+          Ajouter un objet
+        </a>
         <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#addCategoryModal'+id" href="#">
           Ajouter une catégorie
         </a>
@@ -31,26 +33,23 @@
     </div>
   </div>
   <!-- Category Body -->
-  <!-- <div *ngIf="categories !== null && categories.length !== 0" class="collapse show" [id]="'collapseCategory'+id">-->
-  <div [ngClass]="{'show': id === null}" class="collapse" [id]="'collapseCategory'+id">
+   <div class="collapse" [id]="'collapseCategory'+id">
     <div class="card-body">
       <div class="card-deck" *ngIf="items != null && items.length > 0">
-        <div *ngFor="let item of items">
-          <div class="card mb-3">
-            <div class="card-header bg-gradient-light text-center">
-              <a routerLink="/items/{{ item.id }}">
-                <small class="text-primary font-italic font-weight-bold">{{ item.name  }}</small>
-              </a>
-            </div>
-          </div>
-        </div>
+        <app-item *ngFor="let item of items"
+                  [id]="item.id"
+                  [name]="item.name"
+                  [description]="item.description"
+                  [urlItem]="item.urlItem">
+        </app-item>
       </div>
-      <div *ngIf="categories != null && categories.length > 0">
+      <div class="card-deck" *ngIf="categories != null && categories.length > 0">
         <app-category *ngFor="let category of categories"
                       [id]="category.id"
                       [name]="category.name"
                       [categories]="category.categories"
-                      [items]="category.items"></app-category>
+                      [items]="category.items">
+        </app-category>
       </div>
     </div>
   </div>
@@ -73,7 +72,7 @@
       <div class="modal-body text-center">
           <div class="form-group">
            <input class="form-control form-control-user" formControlName="name" id="nameCreate" type="text"
-                  placeholder="Saisir le nom de la nouvelle catégorie" [maxlength]="maxlength">
+                  placeholder="Saisir le nom de la nouvelle catégorie" [maxlength]="maxlengthCategoryName">
           </div>
           <div class="form-group">
             <select  class="form-control custom-select" formControlName="type" id="type">
@@ -110,7 +109,7 @@
         <div class="modal-body text-center">
           <div class="form-group">
             <input class="form-control form-control-user" formControlName="name" id="nameRename" type="text"
-                   placeholder="Saisir le nouveau nom de '{{ name }}'" [maxlength]="maxlength">
+                   placeholder="Saisir le nouveau nom de '{{ name }}'" [maxlength]="maxlengthCategoryName">
           </div>
         </div>
         <div class="modal-footer">
@@ -145,6 +144,38 @@
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
           <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onDeleteCategory()">Supprimer</button>
         </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add item Modal-->
+<div class="modal fade" [id]="'addItemModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel4">
+          Ajouter un nouvel objet dans <span class="font-weight-bolder">{{ name }}</span> ?
+        </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form [formGroup]="createItemForm">
+        <div class="modal-body text-center">
+          <div class="form-group">
+            <input class="form-control form-control-user" formControlName="name" id="nameCreateItem" type="text"
+                   placeholder="Saisir le nom du nouvel objet" [maxlength]="maxlengthItemName" />
+          </div>
+          <div class="form-group">
+            <input class="form-control form-control-user" formControlName="description" id="descriptionCreateItem" type="text"
+                   placeholder="Saisir une description de l'objet" [maxlength]="maxlengthItemDescription" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()" [disabled]="!createItemForm.valid">Créer un nouvel objet</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -1,21 +1,19 @@
 <div *ngIf="category != null">
-    <div class="card-deck" *ngIf="category.items != null && category.items.length > 0">
-      <div *ngFor="let item of category.items">
-        <div class="card mb-3">
-          <div class="card-header bg-gradient-light text-center">
-            <a routerLink="/items/{{ item.id }}">
-              <small class="text-primary font-italic font-weight-bold">{{ item.name  }}</small>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  <div class="card-deck">
+  <div class="card-deck" *ngIf="category.items != null && category.items.length > 0">
+    <app-item *ngFor="let item of category.items"
+              [id]="item.id"
+              [name]="item.name"
+              [description]="item.description"
+              [urlItem]="item.urlItem">
+    </app-item>
+  </div>
+  <div class="card-deck" *ngIf="category.categories != null && category.categories.length > 0">
     <app-category *ngFor="let category of category.categories"
                   [id]="category.id"
                   [name]="category.name"
                   [categories]="category.categories"
-                  [items]="category.items"></app-category>
+                  [items]="category.items">
+    </app-category>
   </div>
 </div>
 

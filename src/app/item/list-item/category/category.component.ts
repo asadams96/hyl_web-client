@@ -17,13 +17,17 @@ export class CategoryComponent implements OnInit {
 
   private createCategoryForm: FormGroup;
   private renameCategoryForm: FormGroup;
-  private maxlength = '15';
+  private createItemForm: FormGroup;
+  private maxlengthCategoryName = '15';
+  private maxlengthItemName = '15';
+  private maxlengthItemDescription = '50';
 
   constructor(private itemService: ItemService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
     this.initCreateCategoryForm();
     this.initRenameCategoryForm();
+    this.initCreateItemForm();
   }
 
   initCreateCategoryForm() {
@@ -35,6 +39,13 @@ export class CategoryComponent implements OnInit {
   initRenameCategoryForm() {
     this.renameCategoryForm = this.formBuilder.group({
       name: ['', [Validators.required]],
+    });
+  }
+
+  initCreateItemForm() {
+    this.createItemForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]]
     });
   }
 
@@ -83,6 +94,20 @@ export class CategoryComponent implements OnInit {
     this.itemService.deleteCategory(this).catch(
         () => {
           this.router.navigate(['/error']);
+        }
+    );
+  }
+
+  onSubmitCreateItemForm() {
+    const name: string = this.createItemForm.controls.name.value;
+    const description: string = this.createItemForm.controls.description.value;
+
+    this.itemService.createItem(this.id, name, description).then(
+        value => {
+          this.initCreateItemForm();
+        },
+        reason => {
+          this.router.navigate(['error']);
         }
     );
   }

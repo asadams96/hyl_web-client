@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CategoryComponent} from './list-item/category/category.component';
 import {Subject} from 'rxjs';
+import {ItemComponent} from './list-item/item/item.component';
+import {FormBuilder} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -93,6 +95,20 @@ export class ItemService {
         console.log(reason);
       }
     );
+  }
+
+  createItem(idCategory: bigint, name: string, description: string) {
+    const token = localStorage.getItem('auth');
+
+    return this.httpClient.post<ItemComponent>(this.host + '/items/add-item', {token, name, description, idCategory})
+        .toPromise<ItemComponent>().then(
+            newItem => {
+              this.addNewItemToArray(this.categoryStorage, newItem, idCategory);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
   }
 
 
@@ -254,5 +270,34 @@ export class ItemService {
         this.iterate(categoryComponent.categories[i]);
       }
     }
+  }
+
+  private addNewItemToArray(mainCategory: CategoryComponent, newItem: ItemComponent, idCategory: bigint) {
+
+    if ( idCategory === null ) {
+      if ( mainCategory.items === null ) { mainCategory.items = []; }
+      mainCategory.items.push(newItem);
+      this.emitCategoryStorage();
+    } else {
+      const index = mainCategory.categories.findIndex(pCategory => {
+        return idCategory === pCategory.id;
+      });
+
+      // Si index différent de -1 -> donc catégorie enfant trouvé -> on la remplace dans l'array
+      // Sinon on cherche la catégorie enfant dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
+      if (index !== -1) {
+        if ( mainCategory.categories[index].items === null ) { mainCategory.categories[index].items = []; }
+        mainCategory.categories[index].items.push(newItem);
+        this.emitCategoryStorage();
+      } else {
+        const c = mainCategory.categories.length;
+        for (let i = 0; i < c; i++) {
+          if ( mainCategory.categories[i].categories !== null ) {
+            this.addNewItemToArray(mainCategory.categories[i], newItem, idCategory);
+          }
+        }
+      }
+    }
+
   }
 }
