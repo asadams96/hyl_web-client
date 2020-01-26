@@ -3,7 +3,7 @@
   <div class="card-header bg-gradient-light py-0 d-flex flex-row align-items-center">
     <div class="col-lg-11 col-md-11">
       <a style="text-decoration: none" [href]="'#collapseCategory'+id" class="d-block py-3" data-toggle="collapse" role="button" aria-expanded="true">
-        <h5 class="m-0 font-weight-bold font-italic text-gray-900">{{ name }}</h5>
+        <h5 class="m-0 font-weight-bold font-italic text-gray-800">{{ name }}</h5>
       </a>
     </div>
 
@@ -84,7 +84,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-        <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateCategoryForm()" [disabled]="!createCategoryForm.valid">Ajouter</button>
+        <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateCategoryForm()" [disabled]="!createCategoryForm.valid">Ajouter la catégorie</button>
       </div>
       </form>
     </div>
@@ -173,7 +173,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()" [disabled]="!createItemForm.valid">Créer un nouvel objet</button>
+          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()" [disabled]="!createItemForm.valid">Ajouter un nouvel objet</button>
         </div>
       </form>
     </div>

@@ -1,3 +1,15 @@
+<div class="card-deck align-items-center justify-content-between">
+  <div>
+    <h1 class="h1 mb-2 text-gray-800">Inventaire</h1>
+  </div>
+  <div>
+    <div class="text-center d-flex flex-row">
+      <h5><button class="mr-5 p-3 btn btn-primary" data-toggle="modal" data-target="#addCategoryModal">Ajouter une catégorie</button></h5>
+      <h5><button class="mr-1 p-3 btn btn-primary" data-toggle="modal" data-target="#addItemModal">Ajouter un objet</button></h5>
+    </div>
+  </div>
+</div>
+<hr />
 <div *ngIf="category != null">
   <div class="card-deck" *ngIf="category.items != null && category.items.length > 0">
     <app-item *ngFor="let item of category.items"
@@ -7,6 +19,7 @@
               [urlItem]="item.urlItem">
     </app-item>
   </div>
+  <hr *ngIf="category.items != null && category.items.length > 0" />
   <div class="card-deck" *ngIf="category.categories != null && category.categories.length > 0">
     <app-category *ngFor="let category of category.categories"
                   [id]="category.id"
@@ -17,3 +30,69 @@
   </div>
 </div>
 
+<!-- ******************************************************** MODALS ************************************************-->
+<!-- Add category Modal-->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Ajouter une categorie ?
+        </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form [formGroup]="createCategoryForm">
+        <div class="modal-body text-center">
+          <div class="form-group">
+            <input class="form-control form-control-user" formControlName="name" id="nameCreate" type="text"
+                   placeholder="Saisir le nom de la nouvelle catégorie" [maxlength]="maxlengthCategoryName">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateCategoryForm()" [disabled]="!createCategoryForm.valid">Ajouter la catégorie</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add item Modal-->
+<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel4">
+          Ajouter un nouvel objet ?
+        </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form [formGroup]="createItemForm">
+        <div class="modal-body text-center">
+          <div class="form-group">
+            <input class="form-control form-control-user" formControlName="name" id="nameCreateItem" type="text"
+                   placeholder="Saisir le nom du nouvel objet" [maxlength]="maxlengthItemName" />
+          </div>
+          <div class="form-group">
+            <input class="form-control form-control-user" formControlName="description" id="descriptionCreateItem" type="text"
+                   placeholder="Saisir une description de l'objet" [maxlength]="maxlengthItemDescription" />
+          </div>
+          <div class="form-group">
+            <select class="form-control custom-select text-muted" formControlName="categoryItem" id="categoryItem">
+              <option value="-1" >Sans catégorie</option>
+             <option *ngFor="let pCategory of getFullCategoriesInOneArray(category)" [value]="pCategory.id">{{ pCategory.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()" [disabled]="!createItemForm.valid">Ajouter un nouvel objet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

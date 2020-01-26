@@ -47,7 +47,7 @@ export class ItemService {
     return this.httpClient.post<CategoryComponent>(this.host + '/items/add-child-category', {token, name, idParent})
       .toPromise<CategoryComponent>().then(
       newCategory => {
-        this.addNewChildCategoryToArray(this.categoryStorage.categories, newCategory, idParent);
+        this.addNewChildCategoryToArray([this.categoryStorage], newCategory, idParent);
       },
       reason => {
         console.log(reason);
@@ -255,36 +255,25 @@ export class ItemService {
   }
 
   /*
-    Méthode pour logger tous le contenu d'une catégorie (sous-catégories + items)
-    Nécessaire seulement pour le débugage
+    Ajoute l'item dans l'array mainCategory passer en paramètre ou dans un de ses enfants
+    Cherche la categorie de l'item (idCategory) dans mainCategory de façon récussive jusqu'a la trouvé pour pouvoir y ajouter l'item
    */
-  private  iterate(categoryComponent: CategoryComponent) {
-    const c = categoryComponent.categories.length;
-    for (let i = 0; i < c; i++) {
-      console.log(categoryComponent.categories[i].name);
-      console.log(categoryComponent.categories[i].items);
-
-      if (categoryComponent.categories[i].categories !== null
-        && categoryComponent.categories[i].categories.length !== 0) {
-
-        this.iterate(categoryComponent.categories[i]);
-      }
-    }
-  }
-
   private addNewItemToArray(mainCategory: CategoryComponent, newItem: ItemComponent, idCategory: bigint) {
 
-    if ( idCategory === null ) {
+    // Si idCategory = -1 -> Ajout d'un item sans catégorie
+    // Sinon on recherche la catégorie de l'item pour l'ajouter à sa liste d'item
+    if (  Number(idCategory) === -1 ) {
       if ( mainCategory.items === null ) { mainCategory.items = []; }
       mainCategory.items.push(newItem);
       this.emitCategoryStorage();
     } else {
+
       const index = mainCategory.categories.findIndex(pCategory => {
-        return idCategory === pCategory.id;
+        return Number(idCategory) === Number(pCategory.id);
       });
 
-      // Si index différent de -1 -> donc catégorie enfant trouvé -> on la remplace dans l'array
-      // Sinon on cherche la catégorie enfant dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
+      // Si index différent de -1 -> donc catégorie parent trouvé -> on peut ajouter l'item
+      // Sinon on cherche la catégorie parent dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
       if (index !== -1) {
         if ( mainCategory.categories[index].items === null ) { mainCategory.categories[index].items = []; }
         mainCategory.categories[index].items.push(newItem);
@@ -299,5 +288,23 @@ export class ItemService {
       }
     }
 
+  }
+
+  /*
+    Méthode pour logger tous le contenu d'une catégorie (sous-catégories + items)
+    Nécessaire seulement pour le débugage
+   */
+  private  iterate(categoryComponent: CategoryComponent) {
+    const c = categoryComponent.categories.length;
+    for (let i = 0; i < c; i++) {
+      console.log(categoryComponent.categories[i].name);
+      console.log(categoryComponent.categories[i].items);
+
+      if (categoryComponent.categories[i].categories !== null
+          && categoryComponent.categories[i].categories.length !== 0) {
+
+        this.iterate(categoryComponent.categories[i]);
+      }
+    }
   }
 }
