@@ -133,8 +133,7 @@ export class CategoryComponent implements OnInit {
   }
 
   getFullCategoriesInOneArray() {
-    // Fonction récurssive servant à supprimer une catégorie dans la liste passé en paramètre
-    // La récursivité permet de chercher la catégorie dnas chaque sous-catégorie puis dans les sous-sous-catégories et ainsi de suite...
+    // Sert à supprimer une catégorie dans la liste passé en paramètre où toutes les catégories sont classées sans hierarchie
     const removeByRecursion = (pCategories: CategoryComponent[], categoryToRemove: bigint|number): CategoryComponent[] => {
       const index = pCategories.findIndex(pCategory => {
         return  Number(categoryToRemove) === Number(pCategory.id);
@@ -142,12 +141,6 @@ export class CategoryComponent implements OnInit {
       if (index !== -1) {
         pCategories.splice(index, 1);
         return pCategories;
-      } else {
-        for (const pCategory of pCategories) {
-          if (pCategory.categories != null && pCategory.categories.length > 0) {
-            removeByRecursion(pCategory.categories, categoryToRemove);
-          }
-        }
       }
     };
 

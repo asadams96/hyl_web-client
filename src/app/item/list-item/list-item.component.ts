@@ -51,7 +51,7 @@ export class ListItemComponent implements OnInit {
       this.createItemForm = this.formBuilder.group({
           name: ['', [Validators.required]],
           description: ['', [Validators.required]],
-          categoryItem: [-1, [Validators.required]]
+          categoryItem: ['null', [Validators.required]]
       });
   }
 

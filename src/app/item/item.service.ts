@@ -98,8 +98,9 @@ export class ItemService {
 
   renameCategory(category: CategoryComponent, name: string) {
     const id = category.id;
+    const token = localStorage.getItem('auth');
 
-    return this.httpClient.post(this.host + '/items/rename-category', {id, name})
+    return this.httpClient.post(this.host + '/items/rename-category', {token, id, name})
       .toPromise().then(
         () => {
           this.renameCategoryInArray(this.categoryStorage.categories, name, id);
@@ -112,7 +113,9 @@ export class ItemService {
 
   deleteCategory(category: CategoryComponent) {
     const id = String(category.id);
-    const params = {id};
+    const token = localStorage.getItem('auth');
+
+    const params = {id, token};
     return this.httpClient.delete(this.host + '/items/delete-category', {params}).toPromise().then(
       () => {
         this.deleteCategoryInArray(this.categoryStorage, category, true);
@@ -140,7 +143,9 @@ export class ItemService {
   moveCategory(categoryToMove: CategoryComponent, idCategoryDestination: bigint) {
     const id = categoryToMove.id;
     const idParent = idCategoryDestination;
-    return this.httpClient.patch(this.host + '/items/move-category', {id, idParent})
+    const token = localStorage.getItem('auth');
+
+    return this.httpClient.patch(this.host + '/items/move-category', {token, id, idParent})
         .toPromise().then(
         value => {
 
@@ -182,8 +187,9 @@ export class ItemService {
 
   renameItem(item: ItemComponent, name: string) {
     const id = item.id;
+    const token = localStorage.getItem('auth');
 
-    return this.httpClient.post(this.host + '/items/rename-item', {id, name})
+    return this.httpClient.post(this.host + '/items/rename-item', {token, id, name})
         .toPromise().then(
             () => {
               this.renameItemInArray(this.categoryStorage, name, id);
@@ -192,6 +198,25 @@ export class ItemService {
               console.log(reason);
             }
         );
+  }
+
+  moveItem(item: ItemComponent, idCatDest: bigint) {
+    const id = item.id;
+    const idCategory = idCatDest;
+    const token = localStorage.getItem('auth');
+
+    return this.httpClient.post(this.host + '/items/rename-item', {token, id, idCategory})
+        .toPromise().then(
+            () => {
+              this.deleteItemInArray(this.categoryStorage, id);
+              this.addNewItemToArray(this.categoryStorage, item, idCategory);
+
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
+
   }
 
 
@@ -357,10 +382,9 @@ export class ItemService {
     Cherche la categorie de l'item (idCategory) dans mainCategory de façon récussive jusqu'a la trouvé pour pouvoir y ajouter l'item
    */
   private addNewItemToArray(mainCategory: CategoryComponent, newItem: ItemComponent, idCategory: bigint) {
-
-    // Si idCategory = -1 -> Ajout d'un item sans catégorie
+    // Si idCategory = null -> Ajout d'un item sans catégorie
     // Sinon on recherche la catégorie de l'item pour l'ajouter à sa liste d'item
-    if (  Number(idCategory) === -1 ) {
+    if ( String(idCategory) === 'null') {
       if ( mainCategory.items === null ) { mainCategory.items = []; }
       mainCategory.items.push(newItem);
       this.emitCategoryStorage();
@@ -375,6 +399,7 @@ export class ItemService {
       if (index !== -1) {
         if ( mainCategory.categories[index].items === null ) { mainCategory.categories[index].items = []; }
         mainCategory.categories[index].items.push(newItem);
+        console.log('ADD ITEM');
         this.emitCategoryStorage();
       } else {
         const c = mainCategory.categories.length;
@@ -417,6 +442,31 @@ export class ItemService {
     }
   }
 
+  private deleteItemInArray(categoryStorage: CategoryComponent, id: bigint) {
+
+    if (categoryStorage.items !== null && categoryStorage.items.length > 0) {
+      const index = categoryStorage.items.findIndex(item => {
+        return Number(id) === Number(item.id);
+      });
+      if ( index !== -1 ) {
+        categoryStorage.items.splice(index, 1);
+        this.emitCategoryStorage();
+      } else {
+        if (categoryStorage.categories != null && categoryStorage.categories.length > 0) {
+          for (const category of categoryStorage.categories) {
+            this.deleteItemInArray(category, id);
+          }
+        }
+      }
+    } else {
+      if (categoryStorage.categories != null && categoryStorage.categories.length > 0) {
+        for (const category of categoryStorage.categories) {
+          this.deleteItemInArray(category, id);
+        }
+      }
+    }
+  }
+
   /*
     Méthode pour logger tous le contenu d'une catégorie (sous-catégories + items)
     Nécessaire seulement pour le débugage
@@ -434,4 +484,5 @@ export class ItemService {
       }
     }
   }
+
 }
