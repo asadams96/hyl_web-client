@@ -78,9 +78,7 @@ export class ListItemComponent implements OnInit {
       const idCategory = this.createItemForm.controls.categoryItem.value;
       const name = this.createItemForm.controls.name.value;
       const description = this.createItemForm.controls.description.value;
-      console.log('id ->' + idCategory);
-      console.log('name ->' + name);
-      console.log('description ->' + description);
+
       this.itemService.createItem(idCategory, name, description).then(
           () => {
               this.initCreateItemForm();
@@ -92,22 +90,7 @@ export class ListItemComponent implements OnInit {
   }
 
 
-  private getFullCategoriesInOneArray(categoryComponent: CategoryComponent): CategoryComponent[] {
-      const categories: CategoryComponent[] = [];
-      const c = categoryComponent.categories.length;
-
-      for (let i = 0; i < c; i++) {
-          categories.push(categoryComponent.categories[i]);
-
-          if (categoryComponent.categories[i].categories !== null && categoryComponent.categories[i].categories.length !== 0) {
-              const childCategories = this.getFullCategoriesInOneArray(categoryComponent.categories[i]);
-              const c2 = childCategories.length;
-
-              for (let j = 0; j < c2; j++) {
-                  categories.push(childCategories[j]);
-              }
-          }
-      }
-      return categories;
+  getFullCategoriesInOneArray(): CategoryComponent[] {
+      return this.itemService.getFullCategoriesInOneArray(null);
   }
 }

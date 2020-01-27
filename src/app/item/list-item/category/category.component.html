@@ -26,6 +26,9 @@
         <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#renameCategoryModal'+id" href="#">
           Renommer <span class="font-weight-bolder">{{ name }}</span>
         </a>
+        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#moveCategoryModal'+id" href="#">
+          Déplacer <span class="font-weight-bolder">{{ name }}</span>
+        </a>
         <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteCategoryModal'+id" href="#">
           Supprimer <span class="font-weight-bolder">{{ name }}</span>
         </a>
@@ -174,6 +177,37 @@
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
           <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()" [disabled]="!createItemForm.valid">Ajouter un nouvel objet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Move Category Modal-->
+<div class="modal fade" [id]="'moveCategoryModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel5">
+          Déplacer <span class="font-weight-bolder">{{ name }}</span> ?
+        </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form [formGroup]="moveCategoryForm">
+        <div class="modal-body text-center">
+          <div class="form-group">
+            <select class="form-control custom-select text-muted" formControlName="categoryMove" id="categoryMove">
+              <option value="" disabled="disabled" hidden="hidden">Choisir la catégorie de destination</option>
+              <!--<option value="-1" >Inventaire</option>-->
+              <option *ngFor="let pCategory of getFullCategoriesInOneArray()" [value]="pCategory.id">{{ pCategory.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitMoveCategoryForm()" [disabled]="!moveCategoryForm.valid">Déplacer {{ name }}</button>
         </div>
       </form>
     </div>

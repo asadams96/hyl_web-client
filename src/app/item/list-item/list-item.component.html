@@ -84,7 +84,7 @@
           <div class="form-group">
             <select class="form-control custom-select text-muted" formControlName="categoryItem" id="categoryItem">
               <option value="-1" >Sans catégorie</option>
-             <option *ngFor="let pCategory of getFullCategoriesInOneArray(category)" [value]="pCategory.id">{{ pCategory.name }}</option>
+             <option *ngFor="let pCategory of getFullCategoriesInOneArray()" [value]="pCategory.id">{{ pCategory.name }}</option>
             </select>
           </div>
         </div>

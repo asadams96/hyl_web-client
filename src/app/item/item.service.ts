@@ -4,6 +4,7 @@ import {CategoryComponent} from './list-item/category/category.component';
 import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
 import {FormBuilder} from '@angular/forms';
+import {isUndefined} from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,32 @@ export class ItemService {
           console.log(reason);
         }
     );
+  }
+
+  getFullCategoriesInOneArray(category: CategoryComponent): CategoryComponent[] {
+
+    const categories: CategoryComponent[] = [];
+    if ( category === null ) {
+      category = this.categoryStorage;
+      if (!isUndefined(category)) { categories.push(this.categoryStorage); }
+    }
+    if (!isUndefined(category)) {
+      const c = category.categories.length;
+
+      for (let i = 0; i < c; i++) {
+        categories.push(category.categories[i]);
+
+        if (category.categories[i].categories !== null && category.categories[i].categories.length !== 0) {
+          const childCategories = this.getFullCategoriesInOneArray(category.categories[i]);
+          const c2 = childCategories.length;
+
+          for (let j = 0; j < c2; j++) {
+            categories.push(childCategories[j]);
+          }
+        }
+      }
+      return categories;
+    }
   }
 
   createChildCategory(parentCategory: CategoryComponent, name: string) {
@@ -89,7 +116,7 @@ export class ItemService {
     const params = {id};
     return this.httpClient.delete(this.host + '/items/delete-category', {params}).toPromise().then(
       () => {
-        this.deleteCategoryInArray(this.categoryStorage, category);
+        this.deleteCategoryInArray(this.categoryStorage, category, true);
       },
       reason => {
         console.log(reason);
@@ -111,6 +138,48 @@ export class ItemService {
         );
   }
 
+  moveCategory(categoryToMove: CategoryComponent, idCategoryDestination: bigint) {
+    const id = categoryToMove.id;
+    const idParent = idCategoryDestination;
+    return this.httpClient.patch(this.host + '/items/move-category', {id, idParent})
+        .toPromise().then(
+        value => {
+
+          this.deleteCategoryInArray(this.categoryStorage, categoryToMove, false);
+          this.addNewChildCategoryToArray([this.categoryStorage], categoryToMove, idCategoryDestination);
+
+        },
+        reason => {
+          console.log(reason);
+        }
+    );
+  }
+
+  getParentCategoryOf(idCategory: bigint): CategoryComponent {
+    let parentCategory: CategoryComponent = null;
+
+    const searchParentFrom = (category: CategoryComponent) => {
+      if (category.categories != null) {
+        const index = category.categories.findIndex(pCategory => {
+              return idCategory === pCategory.id;
+            }
+        );
+
+        if (index !== -1) {
+          parentCategory = category;
+        } else {
+          const c = category.categories.length;
+          for (let i = 0; i < c; i++) {
+            searchParentFrom(category.categories[i]);
+          }
+        }
+      }
+
+    };
+    searchParentFrom(this.categoryStorage);
+    return parentCategory;
+
+  }
 
 
   /*
@@ -120,26 +189,41 @@ export class ItemService {
     */
   private addNewChildCategoryToArray(categories: CategoryComponent[], newCategory: CategoryComponent, idParent: bigint) {
 
-    // Cherche la categorie parente de la nouvelle categorie crée dans l'array 'categories' passer en paramètre
-    // Si la categorie parente est trouvé -> Index = l'index de la catégorie parente dans l'array
-    // Sinon -> Index = -1
-    const index = categories.findIndex(category => {
-      return idParent === category.id;
-    });
-
-    // Si index différent de -1 -> donc catégorie parente trouvé -> Ajout de la nouvelle catégorie dans les enfants de la catégorie parente
-    // Sinon on chercher la catégorie parente dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
-    if (index !== -1) {
-      if (categories[index].categories === null) { categories[index].categories = []; }
-      categories[index].categories.push(newCategory);
+    // Si ajout d'une propriété dans l'inventaire
+    console.log('idParent->' + String(idParent));
+    console.log('idParent === null ->' + String(idParent) === 'null');
+    if (String(idParent) === 'null') {
+      console.log('idParent->' + idParent);
+      if (categories[0].categories === null) { categories[0].categories = []; }
+      categories[0].categories.push(newCategory);
+      console.log('ADD');
       this.emitCategoryStorage();
     } else {
-      const c = categories.length;
-      for (let i = 0; i < c; i++) {
-        // SI la catégorie[i] a des enfants, appliquer cette même méthode de façon récursive
-        // pour trouver la catégorie parente et pouvoir insérer la nouvelle catégorie
-        if (categories[i].categories !== null && categories[i].categories.length !== 0) {
-          this.addNewChildCategoryToArray(categories[i].categories, newCategory, idParent);
+
+      // Cherche la categorie parente de la nouvelle categorie crée dans l'array 'categories' passer en paramètre
+      // Si la categorie parente est trouvé -> Index = l'index de la catégorie parente dans l'array
+      // Sinon -> Index = -1
+      const index = categories.findIndex(category => {
+        return Number(idParent) === Number(category.id);
+      });
+
+      // Si index différent de -1 ->  catégorie parente trouvé -> Ajout de la nouvelle catégorie dans les enfants de la catégorie parente
+      // Sinon on chercher la catégorie parente dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
+      if (index !== -1) {
+        console.log('ADD');
+        if (categories[index].categories === null) {
+          categories[index].categories = [];
+        }
+        categories[index].categories.push(newCategory);
+        this.emitCategoryStorage();
+      } else {
+        const c = categories.length;
+        for (let i = 0; i < c; i++) {
+          // SI la catégorie[i] a des enfants, appliquer cette même méthode de façon récursive
+          // pour trouver la catégorie parente et pouvoir insérer la nouvelle catégorie
+          if (categories[i].categories !== null && categories[i].categories.length !== 0) {
+            this.addNewChildCategoryToArray(categories[i].categories, newCategory, idParent);
+          }
         }
       }
     }
@@ -210,7 +294,7 @@ export class ItemService {
     Category doit donc être une sous-cat de parentCategory ou d'un de ses enfants (utilisation de la récursivité jusqu'a trouvé catégory)
     Category est ensuite supprimer et ses sous-categories & items sont transférés à sa catégorie parente
    */
-  private deleteCategoryInArray(parentCategory: CategoryComponent, category: CategoryComponent) {
+  private deleteCategoryInArray(parentCategory: CategoryComponent, category: CategoryComponent, moveChildren: boolean) {
     // Cherche la categorie à supprimer 'category' dans les enfant de la categorie parent passer en paramètre
     // Si la categorie à supprimer est trouvé -> parentCategory est bien le parent de category -> Index = position de catégorie
     // Sinon -> category n'est pas un enfant direct de parentCategory ->  Index = -1
@@ -225,19 +309,20 @@ export class ItemService {
 
       parentCategory.categories.splice(index, 1);
 
-      // On ajoute les sous-catégories de la categorie supprimer à sa categorie parente
-      if (category.categories != null && category.categories.length > 0) {
-        const c2 = category.categories.length;
-        for (let j = 0; j < c2; j++) {
-          parentCategory.categories.push(category.categories[j]);
+      if ( moveChildren ) {
+        // On ajoute les sous-catégories de la categorie supprimer à sa categorie parente
+        if (category.categories != null && category.categories.length > 0) {
+          const c2 = category.categories.length;
+          for (let j = 0; j < c2; j++) {
+            parentCategory.categories.push(category.categories[j]);
+          }
         }
-      }
-      // On ajoute les items de la categorie supprimer à sa categorie parente
-      if (category.items != null && category.items.length > 0) {
-        const c2 = category.items.length;
-        console.log('c2 ->' + c2);
-        for (let j = 0; j < c2; j++) {
-          parentCategory.items.push(category.items[j]);
+        // On ajoute les items de la categorie supprimer à sa categorie parente
+        if (category.items != null && category.items.length > 0) {
+          const c2 = category.items.length;
+          for (let j = 0; j < c2; j++) {
+            parentCategory.items.push(category.items[j]);
+          }
         }
       }
       this.emitCategoryStorage();
@@ -248,7 +333,7 @@ export class ItemService {
 
         // Recherche de la categorie parent de category de façon récursive dans les enfants de parentCategory
         if (parentCategory.categories[i] !== null) {
-          this.deleteCategoryInArray(parentCategory.categories[i], category);
+          this.deleteCategoryInArray(parentCategory.categories[i], category, moveChildren);
         }
       }
     }
