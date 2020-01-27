@@ -18,12 +18,14 @@ export class ItemComponent implements OnInit {
   private maxlengthItemName = '15';
   private renameItemForm: FormGroup;
   private moveItemForm: FormGroup;
+  private deleteItemForm: FormGroup;
 
   constructor(private itemService: ItemService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
     this.initRenameItemForm();
     this.initMoveItemForm();
+    this.initDeleteItemForm()
   }
 
   initRenameItemForm() {
@@ -35,6 +37,12 @@ export class ItemComponent implements OnInit {
   initMoveItemForm() {
     this.moveItemForm = this.formBuilder.group({
       categoryMove: ['', [Validators.required]]
+    });
+  }
+
+  initDeleteItemForm() {
+    this.deleteItemForm = this.formBuilder.group({
+      checkbox: [false, [Validators.pattern('true')]]
     });
   }
 
@@ -79,5 +87,13 @@ export class ItemComponent implements OnInit {
     let categoryList = this.itemService.getFullCategoriesInOneArray(null);
     categoryList = removeInOneArray(categoryList, this.id);
     return categoryList;
+  }
+
+  onSubmitDeleteItemForm() {
+    this.itemService.deleteItem(this).catch(
+        () => {
+          this.router.navigate(['error']);
+        }
+    );
   }
 }

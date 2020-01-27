@@ -216,7 +216,22 @@ export class ItemService {
               console.log(reason);
             }
         );
+  }
 
+  deleteItem(item: ItemComponent) {
+    const id = String(item.id);
+    const token = localStorage.getItem('auth');
+    const params = {id, token};
+
+    return this.httpClient.delete(this.host + '/items/delete-item', {params})
+        .toPromise().then(
+            () => {
+              this.deleteItemInArray(this.categoryStorage, item.id);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
   }
 
 
@@ -414,7 +429,7 @@ export class ItemService {
   }
 
   /*
-    Rename par 'name' l'item correspondant à 'idItem' dans les items de la catégorie passer en paramètre.
+    Renomme par 'name' l'item correspondant à 'idItem' dans les items de la catégorie passer en paramètre.
     Si l'item n'est pas trouvé, il est cherché dans les enfants de 'category' puis dans les enfants de ses enfants
     Et ainsi de suite de façon récurssive, c'est pourquoi l'item doit bien être présent (de façon direct ou non) dans category
    */
@@ -442,6 +457,11 @@ export class ItemService {
     }
   }
 
+  /*
+    Supprime l'item correspondant à 'idItem' dans les items de la catégorie passer en paramètre.
+    Si l'item n'est pas trouvé, il est cherché dans les enfants de 'category' puis dans les enfants de ses enfants
+    Et ainsi de suite de façon récurssive, c'est pourquoi l'item doit bien être présent (de façon direct ou non) dans category
+   */
   private deleteItemInArray(categoryStorage: CategoryComponent, id: bigint) {
 
     if (categoryStorage.items !== null && categoryStorage.items.length > 0) {

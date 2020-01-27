@@ -113,6 +113,8 @@
   </div>
 </div>
 
+
+
 <!-- Move Item Modal-->
 <div class="modal fade" [id]="'moveItemModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -137,6 +139,41 @@
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
           <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitMoveItemForm()" [disabled]="!moveItemForm.valid">Déplacer {{ name }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- delete item Modal-->
+<div class="modal fade" [id]="'deleteItemModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3">
+          Supprimer <span class="font-weight-bolder">{{ name }}</span> ?
+        </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form [formGroup]="deleteItemForm">
+        <div class="modal-body">
+          <div>Etes-vous sur de vouloir supprimer <span class="font-weight-bolder">{{ name }}</span> ?</div>
+          <div class="text-danger">Tous les exemplaires de cet objet ainsi que les prets qui y sont associés seront également supprimés.</div>
+          <div>
+            <input class="mr-2" type="checkbox" formControlName="checkbox">
+            <span class="font-weight-bolder">Cocher</span>
+            la croix puis cliquez sur
+            <span class="font-weight-bolder">Supprimer</span>
+            pour continuer...
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitDeleteItemForm()" [disabled]="!deleteItemForm.valid">Supprimer</button>
         </div>
       </form>
     </div>
