@@ -3,7 +3,6 @@ import {ItemComponent} from '../item/item.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ItemService} from '../../item.service';
 import {Router} from '@angular/router';
-import {ListItemComponent} from '../list-item.component';
 
 @Component({
   selector: 'app-category',

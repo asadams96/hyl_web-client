@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {CategoryComponent} from './list-item/category/category.component';
 import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
-import {FormBuilder} from '@angular/forms';
 import {isUndefined} from 'util';
 
 @Injectable({
@@ -48,7 +47,7 @@ export class ItemService {
       category = this.categoryStorage;
       if (!isUndefined(category)) { categories.push(this.categoryStorage); }
     }
-    if (!isUndefined(category)) {
+    if (!isUndefined(category) && category.categories != null) {
       const c = category.categories.length;
 
       for (let i = 0; i < c; i++) {
@@ -179,6 +178,20 @@ export class ItemService {
     searchParentFrom(this.categoryStorage);
     return parentCategory;
 
+  }
+
+  renameItem(item: ItemComponent, name: string) {
+    const id = item.id;
+
+    return this.httpClient.post(this.host + '/items/rename-item', {id, name})
+        .toPromise().then(
+            () => {
+              this.renameItemInArray(this.categoryStorage, name, id);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
   }
 
 
@@ -373,6 +386,35 @@ export class ItemService {
       }
     }
 
+  }
+
+  /*
+    Rename par 'name' l'item correspondant à 'idItem' dans les items de la catégorie passer en paramètre.
+    Si l'item n'est pas trouvé, il est cherché dans les enfants de 'category' puis dans les enfants de ses enfants
+    Et ainsi de suite de façon récurssive, c'est pourquoi l'item doit bien être présent (de façon direct ou non) dans category
+   */
+  private renameItemInArray(category: CategoryComponent, name: string, idItem: bigint) {
+    if (category.items !== null && category.items.length > 0) {
+      const index = category.items.findIndex(pItem => {
+        return Number(idItem) === Number(pItem.id);
+      });
+      if (index !== -1) {
+        category.items[index].name = name;
+        this.emitCategoryStorage();
+      } else {
+        if (category.categories !== null && category.categories.length > 0) {
+          for (const pCategory of category.categories) {
+            this.renameItemInArray(pCategory, name, idItem);
+          }
+        }
+      }
+    } else {
+      if (category.categories !== null && category.categories.length > 0) {
+        for (const pCategory of category.categories) {
+          this.renameItemInArray(pCategory, name, idItem);
+        }
+      }
+    }
   }
 
   /*

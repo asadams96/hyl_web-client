@@ -37,7 +37,7 @@
   </div>
   <!-- Category Body -->
    <div class="collapse" [id]="'collapseCategory'+id">
-    <div class="card-body">
+    <div class="card-body bg-light">
       <div class="card-deck" *ngIf="items != null && items.length > 0">
         <app-item *ngFor="let item of items"
                   [id]="item.id"
@@ -200,7 +200,6 @@
           <div class="form-group">
             <select class="form-control custom-select text-muted" formControlName="categoryMove" id="categoryMove">
               <option value="" disabled="disabled" hidden="hidden">Choisir la catégorie de destination</option>
-              <!--<option value="-1" >Inventaire</option>-->
               <option *ngFor="let pCategory of getFullCategoriesInOneArray()" [value]="pCategory.id">{{ pCategory.name }}</option>
             </select>
           </div>

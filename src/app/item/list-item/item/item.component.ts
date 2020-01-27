@@ -15,11 +15,29 @@ export class ItemComponent implements OnInit {
   @Input() name: string;
   @Input() description: string;
   @Input() urlItem: string;
+  private maxlengthItemName = '5';
+  private renameItemForm: FormGroup;
 
-  constructor(private itemService: ItemService, private formBuilder: FormBuilder/*, private router: Router*/) { }
+  constructor(private itemService: ItemService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
+    this.initRenameItemForm();
   }
 
+  initRenameItemForm() {
+    this.renameItemForm = this.formBuilder.group({
+      name: ['', [Validators.required]]
+    });
+  }
 
+  onSubmitRenameItemForm() {
+    this.itemService.renameItem(this, this.renameItemForm.controls.name.value).then(
+        () => {
+          this.initRenameItemForm();
+        },
+        () => {
+          this.router.navigate(['/error']);
+        }
+    );
+  }
 }
