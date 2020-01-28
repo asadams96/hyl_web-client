@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ItemService} from '../../item.service';
 import {CategoryComponent} from '../category/category.component';
+import {SubItemComponent} from './sub-item/sub-item.component';
 
 @Component({
   selector: 'app-item',
@@ -15,6 +16,7 @@ export class ItemComponent implements OnInit {
   @Input() name: string;
   @Input() description: string;
   @Input() urlItem: string;
+  @Input() subItems: SubItemComponent[];
   private maxlengthItemName = '15';
   private renameItemForm: FormGroup;
   private moveItemForm: FormGroup;
@@ -25,7 +27,7 @@ export class ItemComponent implements OnInit {
   ngOnInit() {
     this.initRenameItemForm();
     this.initMoveItemForm();
-    this.initDeleteItemForm()
+    this.initDeleteItemForm();
   }
 
   initRenameItemForm() {

@@ -16,7 +16,8 @@
               [id]="item.id"
               [name]="item.name"
               [description]="item.description"
-              [urlItem]="item.urlItem">
+              [urlItem]="item.urlItem"
+              [subItems]="item.subItems">
     </app-item>
   </div>
   <hr *ngIf="category.items != null && category.items.length > 0" />

@@ -1,9 +1,9 @@
-<div class="card shadow mb-4">
+<div class="card shadow m-1 mb-2 mt-2">
   <!-- Card Header - Dropdown -->
   <div class="card-header bg-gradient-light py-0 d-flex flex-row align-items-center">
-    <div class="col-lg-11 col-md-11">
-      <a style="text-decoration: none" [href]="'#collapseCategory'+id" class="d-block py-3" data-toggle="collapse" role="button" aria-expanded="true">
-        <h5 class="m-0 font-weight-bold font-italic text-gray-800 text-truncate">{{ name }}</h5>
+    <div class="col-lg-11 col-md-11 px-0">
+      <a style="text-decoration: none" [href]="'#collapseCategory'+id" class="d-block pt-2" data-toggle="collapse" role="button" aria-expanded="true">
+        <h5 class="font-weight-bold font-italic text-gray-800 text-truncate">{{ name }}</h5>
       </a>
     </div>
 
@@ -37,15 +37,17 @@
   </div>
   <!-- Category Body -->
    <div class="collapse" [id]="'collapseCategory'+id">
-    <div class="card-body bg-light">
+    <div class="card-body bg-light py-1">
       <div class="card-deck" *ngIf="items != null && items.length > 0">
         <app-item *ngFor="let item of items"
                   [id]="item.id"
                   [name]="item.name"
                   [description]="item.description"
-                  [urlItem]="item.urlItem">
+                  [urlItem]="item.urlItem"
+                  [subItems]="item.subItems">
         </app-item>
       </div>
+      <hr class="m-2" *ngIf="items != null && items.length > 0 && categories != null && categories.length > 0" />
       <div class="card-deck" *ngIf="categories != null && categories.length > 0">
         <app-category *ngFor="let category of categories"
                       [id]="category.id"

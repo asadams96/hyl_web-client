@@ -32,7 +32,6 @@ export class ItemService {
           this.categoryStorage.name = 'Inventaire';
           this.categoryStorage.categories = categoryData.categories ? categoryData.categories : [];
           this.categoryStorage.items = categoryData.items ? categoryData.items : [];
-          this.emitCategoryStorage();
         },
         reason => {
           console.log(reason);
