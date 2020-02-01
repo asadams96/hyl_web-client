@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {CategoryComponent} from './list-item/category/category.component';
 import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
 import {isUndefined} from 'util';
+import {SubItemComponent} from './list-item/item/sub-item/sub-item.component';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,11 @@ export class ItemService {
   }
 
 
+  checkSubItemRef(reference: string) {
+    const token = localStorage.getItem('auth');
+    const params = {reference, token};
+    return this.httpClient.get(this.host + '/check-reference', {params});
+  }
 
   getItemsFormatInCategory(pCategoryStorage: CategoryComponent) {
     const token = localStorage.getItem('auth');
@@ -226,6 +232,29 @@ export class ItemService {
         .toPromise().then(
             () => {
               this.deleteItemInArray(this.categoryStorage, item.id);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
+  }
+
+  createSubItem(item: ItemComponent, reference: string, fileToUpload: File[]) {
+    const token = localStorage.getItem('auth');
+    const idItem = item.id;
+    const data = { token, reference, idItem };
+
+    const formData: FormData = new FormData();
+    const c = fileToUpload.length;
+    for (let i = 0; i < c; i++) {
+      formData.append('files', fileToUpload[i], fileToUpload[i].name);
+    }
+    formData.append('data', JSON.stringify(data));
+
+    return this.httpClient.post<SubItemComponent>(this.host + '/items/add-subitem', formData)
+        .toPromise<SubItemComponent>().then(
+            newSubItem => {
+              this.addNewSubItemToArray(this.categoryStorage, newSubItem, idItem);
             },
             reason => {
               console.log(reason);
@@ -484,6 +513,33 @@ export class ItemService {
         }
       }
     }
+  }
+
+  private addNewSubItemToArray(category: CategoryComponent, newSubItem: SubItemComponent, idItem: bigint) {
+
+    if (category.items != null && category.items.length > 0) {
+      const index = category.items.findIndex(item => {
+        return Number(idItem) === Number(item.id);
+      });
+      if ( index !== -1 ) {
+        if (category.items[index].subItems === null) { category.items[index].subItems = []; }
+        category.items[index].subItems.push(newSubItem);
+        this.emitCategoryStorage();
+      } else {
+        if (category.categories != null && category.categories.length > 0) {
+          for (const pCategory of category.categories) {
+            this.addNewSubItemToArray(pCategory, newSubItem, idItem);
+          }
+        }
+      }
+    } else {
+      if (category.categories != null && category.categories.length > 0) {
+        for (const pCategory of category.categories) {
+          this.addNewSubItemToArray(pCategory, newSubItem, idItem);
+        }
+      }
+    }
+
   }
 
   /*
