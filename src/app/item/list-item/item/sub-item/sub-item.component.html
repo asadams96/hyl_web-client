@@ -23,7 +23,7 @@
                 <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#renameModal'+id+getClassNameFirstLetter()" href="#">
                     Renommer <span class="font-weight-bolder">{{ reference }}</span>
                 </a>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteModal'+reference" href="#">
+                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteModal'+id+getClassNameFirstLetter()" href="#">
                     Supprimer <span class="font-weight-bolder">{{ reference }}</span>
                 </a>
             </div>
@@ -72,3 +72,6 @@
 <!-- ****************************************************** MODALS ************************************************* -->
 <!-- RENAME SUBITEM -->
 <app-rename-modal [whoRename]="this"></app-rename-modal>
+
+<!-- DELETE SUBITEM -->
+<app-del-modal [whoDelete]="this"></app-del-modal>

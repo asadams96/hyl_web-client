@@ -295,6 +295,22 @@ export class ItemService {
         );
   }
 
+  deleteSubItem(subItem: SubItemComponent) {
+    const id = String(subItem.id);
+    const token = localStorage.getItem('auth');
+    const params = {id, token};
+
+    return this.httpClient.delete(this.host + '/items/delete-sub-item', {params})
+        .toPromise().then(
+            () => {
+              this.deleteSubItemInArray(this.categoryStorage, subItem.id);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
+  }
+
   /*
    * Cherche à ajouter newCategory à l'array categories ou bien à une de ses sous catégorie (récurisivité) de façon a ne pas avoir à
    * recharcher tout l'array avec une interaction avec le back et éviter la transmission de donner inutile
@@ -599,6 +615,36 @@ export class ItemService {
       if (category.categories !== null && category.categories.length > 0) {
         for (const pCategory of category.categories) {
           this.renameSubItemInArray(pCategory, reference, id);
+        }
+      }
+    }
+  }
+
+  private deleteSubItemInArray(category: CategoryComponent, id: bigint) {
+    if (category.items != null && category.items.length > 0) {
+      const c = category.items.length;
+
+      for (let i = 0; i < c; i++) {
+        const index = category.items[i].subItems.findIndex(subItem => {
+          return Number(id) === Number(subItem.id);
+        });
+
+        if (index !== -1) {
+          category.items[i].subItems.splice(index, 1);
+          this.emitCategoryStorage();
+          break;
+        } else {
+          if (category.categories !== null && category.categories.length > 0) {
+            for (const pCategory of category.categories) {
+              this.deleteSubItemInArray(pCategory, id);
+            }
+          }
+        }
+      }
+    } else {
+      if (category.categories !== null && category.categories.length > 0) {
+        for (const pCategory of category.categories) {
+          this.deleteSubItemInArray(pCategory, id);
         }
       }
     }

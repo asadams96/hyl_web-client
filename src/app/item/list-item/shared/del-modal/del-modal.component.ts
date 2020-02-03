@@ -4,6 +4,7 @@ import {CategoryComponent} from '../../category/category.component';
 import {ItemComponent} from '../../item/item.component';
 import {ItemService} from '../../../item.service';
 import {Router} from '@angular/router';
+import {SubItemComponent} from '../../item/sub-item/sub-item.component';
 
 @Component({
   selector: 'app-del-modal',
@@ -12,7 +13,7 @@ import {Router} from '@angular/router';
 })
 export class DelModalComponent implements OnInit {
 
-  @Input() whoDelete: CategoryComponent | ItemComponent;
+  @Input() whoDelete: CategoryComponent | ItemComponent | SubItemComponent;
 
   private deleteForm: FormGroup;
 
@@ -38,6 +39,12 @@ export class DelModalComponent implements OnInit {
       );
     } else if ( this.whoDelete instanceof CategoryComponent ) {
       this.itemService.deleteCategory(this.whoDelete).catch(
+          () => {
+            this.router.navigate(['/error']);
+          }
+      );
+    } else if ( this.whoDelete instanceof SubItemComponent ) {
+      this.itemService.deleteSubItem(this.whoDelete).catch(
           () => {
             this.router.navigate(['/error']);
           }
