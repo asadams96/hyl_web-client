@@ -2,18 +2,18 @@ import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/form
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {isBoolean} from 'util';
-import {ItemService} from '../../item/item.service';
+import {ItemService} from '../../../item/item.service';
 
-export function CheckAtomicSubItemRef(itemService: ItemService): AsyncValidatorFn {
-    return (refControl: AbstractControl): Promise<ValidationErrors> | Observable<ValidationErrors> | null => {
+export function CheckAtomicCategoryName(itemService: ItemService): AsyncValidatorFn {
+    return (nameControl: AbstractControl): Promise<ValidationErrors> | Observable<ValidationErrors> | null => {
 
-        if ( refControl && refControl.value && refControl.value.length > 5 ) {
-            return itemService.checkSubItemRef(refControl.value).pipe(
+        if ( nameControl && nameControl.value && nameControl.value.length > 2 ) {
+            return itemService.checkCategoryName(nameControl.value).pipe(
                 map(
                     next => {
                         if ( isBoolean(Boolean(next)) ) {
                             if ( Boolean(next) ) {
-                                return {checkatomicref: true};
+                                return {checkatomiccategoryname: true};
                             } else {
                                 return null;
                             }
@@ -21,7 +21,7 @@ export function CheckAtomicSubItemRef(itemService: ItemService): AsyncValidatorF
                     }
                 )
             ).toPromise().catch(reason => {
-                return {failatomicref: true};
+                return {failatomiccategoryname: true};
             });
         } else {
             return new Promise((resolve) => {

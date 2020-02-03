@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ItemService} from '../item.service';
 import {CategoryComponent} from './category/category.component';
-import {Observable, Subscription} from 'rxjs';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {FormBuilder} from '@angular/forms';
 import {Router} from '@angular/router';
 
 @Component({
@@ -12,25 +12,17 @@ import {Router} from '@angular/router';
 })
 export class ListItemComponent implements OnInit {
 
-   @Input() category: CategoryComponent = new CategoryComponent(this.itemService, new FormBuilder(), this.router);
+    // Evite bug en attendant les infos venant du service
+   @Input() category: CategoryComponent = new CategoryComponent();
    private categorySubscription: Subscription;
 
-    private createCategoryForm: FormGroup;
-    private createItemForm: FormGroup;
-    private maxlengthCategoryName = '15';
-    private maxlengthItemName = '15';
-    private maxlengthItemDescription = '50';
-
-  constructor(private itemService: ItemService, private formBuilder: FormBuilder, private router: Router) {
-      this.category.items = [];
-      this.category.categories = [];
-  }
+  constructor(private itemService: ItemService,
+              private formBuilder: FormBuilder,
+              private router: Router) {}
 
   ngOnInit() {
       this.initCategorySuscription();
       this.fillMainCategory();
-      this.initCreateCategoryForm();
-      this.initCreateItemForm();
   }
 
   private initCategorySuscription() {
@@ -41,56 +33,11 @@ export class ListItemComponent implements OnInit {
       );
   }
 
-  private initCreateCategoryForm() {
-      this.createCategoryForm = this.formBuilder.group({
-          name: ['', [Validators.required]]
-      });
-  }
-
-  private initCreateItemForm() {
-      this.createItemForm = this.formBuilder.group({
-          name: ['', [Validators.required]],
-          description: ['', [Validators.required]],
-          categoryItem: ['null', [Validators.required]]
-      });
-  }
-
   private fillMainCategory() {
-      this.itemService.getItemsFormatInCategory(this.category).catch(
+      this.itemService.getItemsFormatInCategory().catch(
           () => {
               this.router.navigate(['/error']);
           }
       );
-  }
-
-  private onSubmitCreateCategoryForm() {
-     this.itemService.createChildCategory(this.category, this.createCategoryForm.controls.name.value).then(
-         () => {
-            this.initCreateCategoryForm();
-         },
-         () => {
-             this.router.navigate(['error']);
-         }
-     );
-  }
-
-  private onSubmitCreateItemForm() {
-      const idCategory = this.createItemForm.controls.categoryItem.value;
-      const name = this.createItemForm.controls.name.value;
-      const description = this.createItemForm.controls.description.value;
-
-      this.itemService.createItem(idCategory, name, description).then(
-          () => {
-              this.initCreateItemForm();
-          },
-          () => {
-              this.router.navigate(['error']);
-          }
-      );
-  }
-
-
-  getFullCategoriesInOneArray(): CategoryComponent[] {
-      return this.itemService.getFullCategoriesInOneArray(null);
   }
 }

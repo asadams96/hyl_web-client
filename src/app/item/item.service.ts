@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {CategoryComponent} from './list-item/category/category.component';
 import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
@@ -21,23 +21,33 @@ export class ItemService {
     this.categoryStorageSubject.next([this.categoryStorage].slice()[0]);
   }
 
+  checkCategoryName(name: string) {
+    const token = localStorage.getItem('auth');
+    const params = {name, token};
+    return this.httpClient.get(this.host + '/check-category-name', {params});
+  }
+
+  checkItemName(name: string) {
+    const token = localStorage.getItem('auth');
+    const params = {name, token};
+    return this.httpClient.get(this.host + '/check-item-name', {params});
+  }
 
   checkSubItemRef(reference: string) {
     const token = localStorage.getItem('auth');
     const params = {reference, token};
-    return this.httpClient.get(this.host + '/check-reference', {params});
+    return this.httpClient.get(this.host + '/check-sub-ref', {params});
   }
 
-  getItemsFormatInCategory(pCategoryStorage: CategoryComponent) {
+  getItemsFormatInCategory() {
     const token = localStorage.getItem('auth');
     const params = {token};
     return this.httpClient.get<CategoryComponent>(this.host + '/items', {params}).toPromise().then(
         categoryData => {
-          this.categoryStorage = pCategoryStorage;
+          this.categoryStorage = categoryData;
           this.categoryStorage.id = null;
           this.categoryStorage.name = 'Inventaire';
-          this.categoryStorage.categories = categoryData.categories ? categoryData.categories : [];
-          this.categoryStorage.items = categoryData.items ? categoryData.items : [];
+          this.emitCategoryStorage();
         },
         reason => {
           console.log(reason);
@@ -131,10 +141,18 @@ export class ItemService {
     );
   }
 
-  createItem(idCategory: bigint, name: string, description: string) {
+  createItem(idCategory: bigint, name: string, description: string, reference: string, fileToUpload: File[]) {
     const token = localStorage.getItem('auth');
+    const data = {token, name, description, idCategory, reference};
 
-    return this.httpClient.post<ItemComponent>(this.host + '/items/add-item', {token, name, description, idCategory})
+    const formData: FormData = new FormData();
+    const c = fileToUpload.length;
+    for (let i = 0; i < c; i++) {
+      formData.append('files', fileToUpload[i], fileToUpload[i].name);
+    }
+    formData.append('data', JSON.stringify(data));
+
+    return this.httpClient.post<ItemComponent>(this.host + '/items/add-item', formData)
         .toPromise<ItemComponent>().then(
             newItem => {
               this.addNewItemToArray(this.categoryStorage, newItem, idCategory);
@@ -559,5 +577,4 @@ export class ItemService {
       }
     }
   }
-
 }

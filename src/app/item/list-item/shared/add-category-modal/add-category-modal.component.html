@@ -1,0 +1,51 @@
+<div class="modal fade" [id]="'addCategoryModal'+category.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Ajouter une categorie
+                    <span *ngIf="!formWithType">dans l'</span>
+                    <span *ngIf="formWithType">à </span>
+                    <span class="font-weight-bolder">{{ category.name }}</span> ?
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form [formGroup]="createCategoryForm">
+                <div class="modal-body text-center pt-0">
+                    <div [ngClass]="{'invisible': createCategoryForm.controls.name.valid }" class="text-left mb-1 mt-1">
+                        <div *ngIf="createCategoryForm.controls.name.errors?.minlength" class="alert-danger">
+                            <small>Le nom de la categorie doit faire au moins {{ minlengthCategoryName }} caractères</small>
+                        </div>
+                        <div *ngIf="createCategoryForm.controls.name.errors?.checkatomiccategoryname" class="alert-danger">
+                            <small>Vous utilisez déjà ce nom pour une de vos categories</small>
+                        </div>
+                        <div *ngIf="createCategoryForm.controls.name.errors?.failatomiccategoryname" class="alert-danger">
+                            <small>Une erreur de communication s'est produite</small>
+                        </div>
+                        <div *ngIf="createCategoryForm.controls.name.errors === null || createCategoryForm.controls.name.errors.required"
+                             [ngClass]="{'invisible': createCategoryForm.controls.name.valid || createCategoryForm.controls.name.errors.required}">
+                            <small>.</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control form-control-user" formControlName="name" id="nameCreate" type="text"
+                               placeholder="Saisir le nom de la nouvelle catégorie" [maxlength]="maxlengthCategoryName">
+                    </div>
+                    <div class="form-group" *ngIf="formWithType">
+                        <select  class="form-control custom-select" formControlName="type" id="type">
+                            <option value="" disabled hidden>Choisir le type de la catégorie à ajouter</option>
+                            <option value="C">Enfant</option>
+                            <option value="P">Parent</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateCategoryForm()" [disabled]="!createCategoryForm.valid">Ajouter la catégorie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

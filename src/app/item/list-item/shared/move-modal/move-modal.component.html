@@ -1,0 +1,28 @@
+<div class="modal fade" [id]="'moveModal'+whoMove.id+whoMove.getClassNameFirstLetter()" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel5">
+                    Déplacer <span class="font-weight-bolder">{{ whoMove.name }}</span> ?
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form [formGroup]="moveForm">
+                <div class="modal-body text-center mt-3">
+                    <div class="form-group">
+                        <select class="form-control custom-select text-muted" formControlName="categoryMove" id="categoryMove">
+                            <option value="" disabled="disabled" hidden="hidden">Choisir la catégorie de destination</option>
+                            <option *ngFor="let pCategory of getFullCategoriesInOneArray()" [value]="pCategory.id">{{ pCategory.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitMoveForm()" [disabled]="!moveForm.valid">Déplacer {{ whoMove.name }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

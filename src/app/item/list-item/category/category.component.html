@@ -23,13 +23,13 @@
           Ajouter une catégorie
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#renameCategoryModal'+id" href="#">
+        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#renameModal'+id+getClassNameFirstLetter()" href="#">
           Renommer <span class="font-weight-bolder">{{ name }}</span>
         </a>
-        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#moveCategoryModal'+id" href="#">
+        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#moveModal'+id+getClassNameFirstLetter()" href="#">
           Déplacer <span class="font-weight-bolder">{{ name }}</span>
         </a>
-        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteCategoryModal'+id" href="#">
+        <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteModal'+id+getClassNameFirstLetter()" href="#">
           Supprimer <span class="font-weight-bolder">{{ name }}</span>
         </a>
       </div>
@@ -61,160 +61,18 @@
 </div>
 
 <!-- *************************************************************** MODALS **************************************** -->
-<!-- Add category Modal-->
-<div class="modal fade" [id]="'addCategoryModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
-          Ajouter une categorie à <span class="font-weight-bolder">{{ name }}</span> ?
-        </h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <form [formGroup]="createCategoryForm">
-      <div class="modal-body text-center">
-          <div class="form-group">
-           <input class="form-control form-control-user" formControlName="name" id="nameCreate" type="text"
-                  placeholder="Saisir le nom de la nouvelle catégorie" [maxlength]="maxlengthCategoryName">
-          </div>
-          <div class="form-group">
-            <select  class="form-control custom-select" formControlName="type" id="type">
-              <option value="" disabled hidden>Choisir le type de catégorie à ajouter</option>
-              <option value="C">Catégorie de type enfant</option>
-              <option value="P">Catégorie de type parent</option>
-            </select>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-        <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateCategoryForm()" [disabled]="!createCategoryForm.valid">Ajouter la catégorie</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
+<!-- ADD CATEGORY -->
+<app-add-category-modal [category]="this" [formWithType]="true"></app-add-category-modal>
 
+<!-- RENAME CATEGORY -->
+<app-rename-modal [whoRename]="this"></app-rename-modal>
 
+<!-- DELETE CATEGORY -->
+<app-del-modal [whoDelete]="this"></app-del-modal>
 
-<!-- rename category Modal-->
-<div class="modal fade" [id]="'renameCategoryModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel2">
-          Renommer <span class="font-weight-bolder">{{ name }}</span> ?
-        </h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <form [formGroup]="renameCategoryForm">
-        <div class="modal-body text-center">
-          <div class="form-group">
-            <input class="form-control form-control-user" formControlName="name" id="nameRename" type="text"
-                   placeholder="Saisir le nouveau nom de '{{ name }}'" [maxlength]="maxlengthCategoryName">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitRenameCategoryForm()" [disabled]="!renameCategoryForm.valid">Renommer</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+<!-- ADD ITEM -->
+<app-add-item-modal [id]="this.id" [nameTitle]="this.name"></app-add-item-modal>
 
+<!-- MOVE CATEGORY -->
+<app-move-modal [whoMove]="this"></app-move-modal>
 
-
-<!-- delete category Modal-->
-<div class="modal fade" [id]="'deleteCategoryModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel3">
-          Supprimer <span class="font-weight-bolder">{{ name }}</span> ?
-        </h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-        <div class="modal-body text-center">
-         Les objets et sous-catégories contenu dans
-          <span class="font-weight-bolder">{{ name }}</span>
-          seront transférés dans sa catégorie parent.
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onDeleteCategory()">Supprimer</button>
-        </div>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- Add item Modal-->
-<div class="modal fade" [id]="'addItemModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel4">
-          Ajouter un nouvel objet dans <span class="font-weight-bolder">{{ name }}</span> ?
-        </h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <form [formGroup]="createItemForm">
-        <div class="modal-body text-center">
-          <div class="form-group">
-            <input class="form-control form-control-user" formControlName="name" id="nameCreateItem" type="text"
-                   placeholder="Saisir le nom du nouvel objet" [maxlength]="maxlengthItemName" />
-          </div>
-          <div class="form-group">
-            <input class="form-control form-control-user" formControlName="description" id="descriptionCreateItem" type="text"
-                   placeholder="Saisir une description de l'objet" [maxlength]="maxlengthItemDescription" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()" [disabled]="!createItemForm.valid">Ajouter un nouvel objet</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- Move Category Modal-->
-<div class="modal fade" [id]="'moveCategoryModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel5">
-          Déplacer <span class="font-weight-bolder">{{ name }}</span> ?
-        </h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <form [formGroup]="moveCategoryForm">
-        <div class="modal-body text-center">
-          <div class="form-group">
-            <select class="form-control custom-select text-muted" formControlName="categoryMove" id="categoryMove">
-              <option value="" disabled="disabled" hidden="hidden">Choisir la catégorie de destination</option>
-              <option *ngFor="let pCategory of getFullCategoriesInOneArray()" [value]="pCategory.id">{{ pCategory.name }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-          <button class="btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitMoveCategoryForm()" [disabled]="!moveCategoryForm.valid">Déplacer {{ name }}</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>

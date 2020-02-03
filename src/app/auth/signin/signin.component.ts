@@ -4,7 +4,7 @@ import {isString} from 'util';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {SigninForm} from './signin-form';
-import {CharacterRepetition} from '../../shared/form-validators/character-repetition.validator';
+import {CharacterRepetition} from '../../shared/form-validators/sync/character-repetition.validator';
 
 @Component({
   selector: 'app-signin',

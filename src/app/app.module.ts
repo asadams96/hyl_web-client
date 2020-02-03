@@ -20,6 +20,12 @@ import {ItemService} from './item/item.service';
 import { CategoryComponent } from './item/list-item/category/category.component';
 import { ItemComponent } from './item/list-item/item/item.component';
 import { SubItemComponent } from './item/list-item/item/sub-item/sub-item.component';
+import { AddItemModalComponent } from './item/list-item/shared/add-item-modal/add-item-modal.component';
+import { AddCategoryModalComponent } from './item/list-item/shared/add-category-modal/add-category-modal.component';
+import { MoveModalComponent } from './item/list-item/shared/move-modal/move-modal.component';
+import { DelModalComponent } from './item/list-item/shared/del-modal/del-modal.component';
+import { RenameModalComponent } from './item/list-item/shared/rename-modal/rename-modal.component';
+import { AddSubitemModalComponent } from './item/list-item/item/add-subitem-modal/add-subitem-modal.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
@@ -43,7 +49,13 @@ const appRoutes: Routes = [
     ListItemComponent,
     CategoryComponent,
     ItemComponent,
-    SubItemComponent
+    SubItemComponent,
+    AddItemModalComponent,
+    AddCategoryModalComponent,
+    MoveModalComponent,
+    DelModalComponent,
+    RenameModalComponent,
+    AddSubitemModalComponent,
   ],
   imports: [
     BrowserModule,
