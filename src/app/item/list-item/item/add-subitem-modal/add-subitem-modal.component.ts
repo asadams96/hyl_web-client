@@ -19,6 +19,7 @@ export class AddSubitemModalComponent implements OnInit {
 
   private createSubItemForm: FormGroup;
   private maxlengthSubItemReference = '15';
+  private minlengthSubItemReference = '6';
 
   private filesToUpload: File[] = null;
   private imgPreview: (string|ArrayBuffer)[] = null;
@@ -80,7 +81,7 @@ export class AddSubitemModalComponent implements OnInit {
 
   initCreateSubItemForm() {
     this.createSubItemForm = this.formBuilder.group({
-      reference: ['', [Validators.minLength(6)], [CheckAtomicSubItemRef(this.itemService)]],
+      reference: ['', [Validators.minLength(Number(this.minlengthSubItemReference))], [CheckAtomicSubItemRef(this.itemService)]],
       files: ['']
     });
   }

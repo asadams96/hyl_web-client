@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {ClassNameFirstLetter} from '../../../../shared/functions/class-name-first-letter';
 
 @Component({
   selector: 'app-sub-item',
@@ -7,12 +8,17 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class SubItemComponent implements OnInit {
 
+  @Input() id: bigint;
   @Input() reference: string;
   @Input() urlImages: string[];
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  getClassNameFirstLetter(this): string {
+    return ClassNameFirstLetter(this);
   }
 
 }

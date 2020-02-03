@@ -280,6 +280,20 @@ export class ItemService {
         );
   }
 
+  renameSubItem(subItem: SubItemComponent, reference: string) {
+    const id = subItem.id;
+    const token = localStorage.getItem('auth');
+
+    return this.httpClient.post(this.host + '/items/rename-subitem', {token, id, reference})
+        .toPromise().then(
+            () => {
+              this.renameSubItemInArray(this.categoryStorage, reference, id);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
+  }
 
   /*
    * Cherche à ajouter newCategory à l'array categories ou bien à une de ses sous catégorie (récurisivité) de façon a ne pas avoir à
@@ -557,7 +571,37 @@ export class ItemService {
         }
       }
     }
+  }
 
+  private renameSubItemInArray(category: CategoryComponent, reference: string, id: bigint) {
+
+    if (category.items != null && category.items.length > 0) {
+      const c = category.items.length;
+
+      for (let i = 0; i < c; i++) {
+        const index = category.items[i].subItems.findIndex(subItem => {
+          return Number(id) === Number(subItem.id);
+        });
+
+        if (index !== -1) {
+          category.items[i].subItems[index].reference = reference;
+          this.emitCategoryStorage();
+          break;
+        } else {
+          if (category.categories !== null && category.categories.length > 0) {
+            for (const pCategory of category.categories) {
+              this.renameSubItemInArray(pCategory, reference, id);
+            }
+          }
+        }
+      }
+    } else {
+      if (category.categories !== null && category.categories.length > 0) {
+        for (const pCategory of category.categories) {
+          this.renameSubItemInArray(pCategory, reference, id);
+        }
+      }
+    }
   }
 
   /*

@@ -13,7 +13,7 @@
                 <div class="modal-body text-center pt-2 pb-1">
                     <div [ngClass]="{'invisible': createSubItemForm.valid }" class="text-left mb-2">
                         <div *ngIf="createSubItemForm.controls.reference.errors?.minlength" class="alert-danger">
-                            <small>La référence doit faire au moins 6 caractères</small>
+                            <small>La référence doit faire au moins {{ minlengthSubItemReference }} caractères</small>
                         </div>
                         <div *ngIf="createSubItemForm.controls.reference.errors?.checkatomicref" class="alert-danger">
                             <small>Vous utilisez déjà cette référence pour un de vos objets</small>

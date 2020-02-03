@@ -38,7 +38,10 @@
       <!-- SUBITEM -->
       <div class="card-deck">
       <app-sub-item *ngFor="let subItem of subItems"
-                    [reference]="subItem.reference"></app-sub-item>
+                    [id]="subItem.id"
+                    [reference]="subItem.reference"
+                    [urlImages]="subItem.urlImages">
+      </app-sub-item>
       </div>
       <!-- EXEMPLE DIAPORAMA POSSIBLE -> Si diapora modifier urlItem: string -> urlItem: string[]
       Ou diaporama pour les subItem ??

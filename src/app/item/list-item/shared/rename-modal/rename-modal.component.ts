@@ -6,6 +6,8 @@ import {ItemService} from '../../../item.service';
 import {Router} from '@angular/router';
 import {CheckAtomicCategoryName} from '../../../../shared/form-validators/async/atomic-category-name.async-validator';
 import {CheckAtomicItemName} from '../../../../shared/form-validators/async/atomic-item-name.async-validator';
+import {SubItemComponent} from '../../item/sub-item/sub-item.component';
+import {CheckAtomicSubItemRef} from '../../../../shared/form-validators/async/atomic-subitem-ref.async-validator';
 
 @Component({
   selector: 'app-rename-modal',
@@ -14,7 +16,7 @@ import {CheckAtomicItemName} from '../../../../shared/form-validators/async/atom
 })
 export class RenameModalComponent implements OnInit {
 
-  @Input() whoRename: CategoryComponent | ItemComponent;
+  @Input() whoRename: CategoryComponent | ItemComponent | SubItemComponent;
 
   private renameForm: FormGroup;
 
@@ -22,6 +24,8 @@ export class RenameModalComponent implements OnInit {
   private minlengthCategoryName = '3';
   private maxlengthItemName = '15';
   private minlengthItemName = '3';
+  private minlengthSubItemReference = '6';
+  private maxlengthSubItemReference = '15';
 
   private minlength = '';
   private maxlength = '';
@@ -48,6 +52,11 @@ export class RenameModalComponent implements OnInit {
       this.maxlength = this.maxlengthItemName;
       this.validators = [Validators.required, Validators.minLength(Number(this.minlength))];
       this.asyncValidators = [CheckAtomicItemName(this.itemService)];
+    } else if ( this.whoRename instanceof SubItemComponent) {
+      this.minlength = this.minlengthSubItemReference;
+      this.maxlength = this.maxlengthSubItemReference;
+      this.validators = [Validators.required, Validators.minLength(Number(this.minlength))];
+      this.asyncValidators = [CheckAtomicSubItemRef(this.itemService)];
     }
   }
 
@@ -57,7 +66,7 @@ export class RenameModalComponent implements OnInit {
     });
   }
 
-  onSubmitDeleteForm() {
+  onSubmitRenameForm() {
     if ( this.whoRename instanceof CategoryComponent) {
       this.itemService.renameCategory(this.whoRename, this.renameForm.controls.name.value).then(
           value =>  {
@@ -69,6 +78,15 @@ export class RenameModalComponent implements OnInit {
       );
     } else if ( this.whoRename instanceof ItemComponent) {
       this.itemService.renameItem(this.whoRename, this.renameForm.controls.name.value).then(
+          () => {
+            this.initRenameForm();
+          },
+          () => {
+            this.router.navigate(['/error']);
+          }
+      );
+    } else if ( this.whoRename instanceof SubItemComponent) {
+      this.itemService.renameSubItem(this.whoRename, this.renameForm.controls.name.value).then(
           () => {
             this.initRenameForm();
           },

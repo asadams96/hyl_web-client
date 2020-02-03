@@ -16,20 +16,14 @@
             <!-- Menu annimé -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" [attr.aria-labelledby]="'dropdownItem'+id">
                 <div class="dropdown-header">{{ reference }}</div>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#addSubItemModal'+reference" href="#">
-                    Ajouter un exemplaire
-                </a>
                 <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#removeSubItemModal'+reference" href="#">
-                    Supprimer un exemplaire
+                    Ajouter un pret
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#renameItemModal'+reference" href="#">
+                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#renameModal'+id+getClassNameFirstLetter()" href="#">
                     Renommer <span class="font-weight-bolder">{{ reference }}</span>
                 </a>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#moveItemModal'+reference" href="#">
-                    Déplacer <span class="font-weight-bolder">{{ reference }}</span>
-                </a>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteItemModal'+reference" href="#">
+                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteModal'+reference" href="#">
                     Supprimer <span class="font-weight-bolder">{{ reference }}</span>
                 </a>
             </div>
@@ -74,3 +68,7 @@
         </div>
     </div>
 </div>
+
+<!-- ****************************************************** MODALS ************************************************* -->
+<!-- RENAME SUBITEM -->
+<app-rename-modal [whoRename]="this"></app-rename-modal>
