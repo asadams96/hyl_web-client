@@ -10,7 +10,8 @@ import {ItemComponent} from '../item.component';
 @Component({
   selector: 'app-add-subitem-modal',
   templateUrl: './add-subitem-modal.component.html',
-  styleUrls: ['./add-subitem-modal.component.scss']
+  styleUrls: ['./add-subitem-modal.component.scss'],
+  providers: [ImgOperationService]
 })
 export class AddSubitemModalComponent implements OnInit {
 
