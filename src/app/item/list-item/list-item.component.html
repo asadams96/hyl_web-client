@@ -21,24 +21,33 @@
 </div>
 <hr />
 <div *ngIf="category != null">
-  <div class="card-deck" *ngIf="category.items != null && category.items.length > 0">
-    <app-item *ngFor="let item of category.items"
-              [id]="item.id"
-              [name]="item.name"
-              [description]="item.description"
-              [urlItem]="item.urlItem"
-              [subItems]="item.subItems">
-    </app-item>
+  <div *ngIf="category.items != null && category.items.length > 0">
+    <div *ngFor="let item0 of category.items; let i = index">
+      <div *ngIf="(i+1) % 6 === 0 || i === 0" class="card-deck justify-content-center">
+        <app-item *ngFor="let item of category.items.slice(i, i+5)"
+                  [id]="item.id"
+                  [name]="item.name"
+                  [description]="item.description"
+                  [urlItem]="item.urlItem"
+                  [subItems]="item.subItems">
+        </app-item>
+      </div>
+    </div>
   </div>
-  <hr *ngIf="category.items != null && category.items.length > 0" />
-  <div class="card-deck" *ngIf="category.categories != null && category.categories.length > 0">
-    <app-category *ngFor="let category of category.categories"
-                  [id]="category.id"
-                  [name]="category.name"
-                  [categories]="category.categories"
-                  [items]="category.items">
-    </app-category>
+  <hr *ngIf="category.items != null && category.items.length > 0" class="mt-5"/>
+  <div *ngIf="category.categories != null && category.categories.length > 0">
+    <div *ngFor="let category0 of category.categories; let i = index">
+      <div *ngIf="(i+1) % 6 === 0 || i === 0" class="card-deck justify-content-center">
+        <app-category *ngFor="let pCategory of category.categories.slice(i, i+5)"
+                      [id]="pCategory.id"
+                      [name]="pCategory.name"
+                      [categories]="pCategory.categories"
+                      [items]="pCategory.items">
+        </app-category>
+      </div>
+    </div>
   </div>
+  <div class="mt-5"></div>
 </div>
 
 <!-- ******************************************************** MODALS ************************************************-->
