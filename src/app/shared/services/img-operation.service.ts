@@ -86,7 +86,7 @@ export class ImgOperationService {
 
   // Méthode étant appélé par les balises <img> sur l'évenement 'load'
   onLoadImg(htmlImageElement: HTMLImageElement, imgData: string) {
-    this.setMaxSizeOfImage(htmlImageElement);
+    this.setMaxSizeOfImage(htmlImageElement, 220, 200);
     this.removeDisplayNone(htmlImageElement);
     this.addClosingIconOnImage(htmlImageElement, imgData);
   }
@@ -96,11 +96,11 @@ export class ImgOperationService {
     --> Cela permet, quel que soit l'orientation de l'image (portrait ou paysage) qu'elle soit toujours  contenu dans un carré
     qui ici a pour dimension 220x220 et sans être déformé -> Sorte de miniature.
    */
-  setMaxSizeOfImage(htmlImageElement: HTMLImageElement) {
+  setMaxSizeOfImage(htmlImageElement: HTMLImageElement, height: number, width: number) {
     if ( htmlImageElement.naturalHeight >= htmlImageElement.naturalWidth ) {
-      htmlImageElement.height = 220;
+      htmlImageElement.height = height;
     } else {
-      htmlImageElement.width = 220;
+      htmlImageElement.width = width;
     }
   }
 

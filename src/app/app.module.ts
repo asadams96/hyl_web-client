@@ -26,7 +26,10 @@ import { MoveModalComponent } from './item/list-item/shared/move-modal/move-moda
 import { DelModalComponent } from './item/list-item/shared/del-modal/del-modal.component';
 import { RenameModalComponent } from './item/list-item/shared/rename-modal/rename-modal.component';
 import { AddSubitemModalComponent } from './item/list-item/item/add-subitem-modal/add-subitem-modal.component';
-
+import { ExpandSubitemModalComponent } from './item/list-item/item/sub-item/expand-subitem-modal/expand-subitem-modal.component';
+import * as bootstrap from 'bootstrap';
+import * as $ from 'jquery';
+import { TrackingSheetComponent } from './item/list-item/item/sub-item/tracking-sheet/tracking-sheet.component';
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
   { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard] },
@@ -56,6 +59,8 @@ const appRoutes: Routes = [
     DelModalComponent,
     RenameModalComponent,
     AddSubitemModalComponent,
+    ExpandSubitemModalComponent,
+    TrackingSheetComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,8 +4,6 @@ const  javascriptBaseFiles = [
   'assets/front-template/vendor/bootstrap/js/bootstrap.min.js',
   'assets/front-template/vendor/jquery-easing/jquery.easing.min.js',
   'assets/front-template/vendor/fontawesome-free/js/all.min.js',
-  'assets/front-template/vendor/datatables/jquery.dataTables.min.js',
-  'assets/front-template/vendor/datatables/dataTables.bootstrap4.min.js',
   'assets/front-template/vendor/chart.js/Chart.min.js',
   'assets/front-template/js/sb-admin-2.min.js'
 ];
@@ -13,6 +11,8 @@ const  javascriptSituationalFiles = [
    'assets/front-template/js/demo/chart-pie-demo.js',
    'assets/front-template/js/demo/chart-area-demo.js',
    'assets/front-template/js/demo/chart-bar-demo.js',
+    'assets/front-template/vendor/datatables/jquery.dataTables.min.js',
+    'assets/front-template/vendor/datatables/dataTables.bootstrap4.min.js',
    'assets/front-template/js/demo/datatables-demo.js'
  ];
 const cssFiles = [
@@ -33,7 +33,7 @@ export class FileReader {
     this.readJavascript([javascriptSituationalFiles[2]]);
   }
   public static readJavascriptDatatablesFiles() {
-    this.readJavascript([javascriptSituationalFiles[3]]);
+    this.readJavascript([javascriptSituationalFiles[3], javascriptSituationalFiles[4], javascriptSituationalFiles[5]]);
   }
   private static readJavascript(scripts: Array<string>) {
     const countMax = scripts.length;

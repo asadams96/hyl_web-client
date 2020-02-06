@@ -40,7 +40,9 @@
       <app-sub-item *ngFor="let subItem of subItems"
                     [id]="subItem.id"
                     [reference]="subItem.reference"
-                    [urlImages]="subItem.urlImages">
+                    [urlImages]="subItem.urlImages"
+                    [description]="this.description"
+                    [trackingSheets]="subItem.trackingSheets">
       </app-sub-item>
       </div>
       <!-- EXEMPLE DIAPORAMA POSSIBLE -> Si diapora modifier urlItem: string -> urlItem: string[]
