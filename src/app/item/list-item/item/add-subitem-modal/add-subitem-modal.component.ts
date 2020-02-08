@@ -6,6 +6,7 @@ import {ItemService} from '../../../item.service';
 import {ImgOperationService} from '../../../../shared/services/img-operation.service';
 import {Router} from '@angular/router';
 import {ItemComponent} from '../item.component';
+import {SubItemComponent} from '../sub-item/sub-item.component';
 
 @Component({
   selector: 'app-add-subitem-modal',
@@ -15,7 +16,8 @@ import {ItemComponent} from '../item.component';
 })
 export class AddSubitemModalComponent implements OnInit {
 
-  @Input() item: ItemComponent;
+  @Input() object: ItemComponent | SubItemComponent;
+  firstLoadEditSubItem = true;
 
   private createSubItemForm: FormGroup;
   private maxlengthSubItemReference = '15';
@@ -40,8 +42,15 @@ export class AddSubitemModalComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
+    this.checkClass();
     this.initSubscriptions();
     this.initCreateSubItemForm();
+  }
+
+  checkClass() {
+    if ( !(this.object instanceof ItemComponent) && !(this.object instanceof SubItemComponent) ) {
+      this.router.navigate(['/error']);
+    }
   }
 
   initSubscriptions() {
@@ -80,23 +89,49 @@ export class AddSubitemModalComponent implements OnInit {
   }
 
   initCreateSubItemForm() {
-    this.createSubItemForm = this.formBuilder.group({
-      reference: ['', [Validators.minLength(Number(this.minlengthSubItemReference))], [CheckAtomicSubItemRef(this.itemService)]],
-      files: ['']
-    });
+    const validators = [Validators.minLength(Number(this.minlengthSubItemReference))];
+    const asyncValidators = [];
+    if (this.object instanceof ItemComponent) {
+      asyncValidators.push(CheckAtomicSubItemRef(this.itemService));
+      this.createSubItemForm = this.formBuilder.group({
+        reference: ['', validators, asyncValidators],
+        checkbox: [false, [Validators.pattern('true')]],
+        files: ['']
+      });
+    } else if (this.object instanceof SubItemComponent) {
+      asyncValidators.push(CheckAtomicSubItemRef(this.itemService, this.object.reference));
+      this.createSubItemForm = this.formBuilder.group({
+        reference: [this.object.reference, validators, asyncValidators],
+        checkbox: [false, [Validators.pattern('true')]],
+        files: ['']
+      });
+    }
   }
 
   onSubmitCreateSubItemForm() {
     const reference = this.createSubItemForm.controls.reference.value;
-    this.itemService.createSubItem(this.item, reference, this.filesToUpload).then(
-        value => {
-          this.initCreateSubItemForm();
-          this.imgOperationService.reset();
-        },
-        reason => {
-          this.router.navigate(['/error']);
-        }
-    );
+    if (this.object instanceof ItemComponent) {
+      this.itemService.createSubItem(this.object, reference, this.filesToUpload).then(
+          value => {
+            this.initCreateSubItemForm();
+            this.imgOperationService.reset();
+          },
+          reason => {
+            this.router.navigate(['/error']);
+          }
+      );
+    } else if (this.object instanceof SubItemComponent) {
+      this.itemService.updateSubItem(this.object, reference, this.filesToUpload).then(
+          value => {
+            this.imgOperationService.reset();
+            this.initCreateSubItemForm();
+            this.firstLoadEditSubItem = true;
+          },
+          reason => {
+            this.router.navigate(['/error']);
+          }
+      );
+    }
 
   }
 
@@ -112,7 +147,13 @@ export class AddSubitemModalComponent implements OnInit {
 
   // Déclenchement -> Si le modal d'ajout d'exemplaire est fermé -> Vidage des images chargées
   onCancelCreateSubItemForm() {
-    this.imgOperationService.onCancelCreateSubItemForm();
+    if (this.object instanceof ItemComponent) {
+      this.imgOperationService.onCancelCreateSubItemForm();
+    } else if (this.object instanceof SubItemComponent) {
+      this.imgOperationService.reset();
+      this.initCreateSubItemForm();
+      this.firstLoadEditSubItem = true;
+    }
   }
 
   /* Déclenchement -> Lors de l'ouverture du modal -> Lors du déclanchement de l'évènement 'focus'
@@ -125,11 +166,21 @@ export class AddSubitemModalComponent implements OnInit {
      -> Asynchrone donc une image de 25ko chargera plus vite qu'une de 500ko quel que soit sa position -> Décalage entre les deux arrays
    */
   checkIfModalCreateSubItemAlreadyUsed() {
-    this.imgOperationService.checkIfServiceHaveAlreadyUsed();
+    if ( this.firstLoadEditSubItem && this.object instanceof SubItemComponent ) {
+      this.loadFilesFromUrl(this.object);
+    } else {
+      this.imgOperationService.checkIfServiceHaveAlreadyUsed();
+    }
   }
 
   // Renvoi la taille (en octect) de l'array contenant les fichiers (images) 'this.filesToUpload'
   getFilesSize(): number {
     return this.imgOperationService.getFilesSize();
+  }
+
+  loadFilesFromUrl(subitem: SubItemComponent) {
+      this.imgOperationService.loadFilesFromUrl(subitem.urlImages);
+      this.firstLoadEditSubItem = false;
+
   }
 }

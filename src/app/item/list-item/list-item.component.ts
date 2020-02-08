@@ -16,6 +16,9 @@ export class ListItemComponent implements OnInit {
    @Input() category: CategoryComponent = new CategoryComponent();
    private categorySubscription: Subscription;
 
+   addCategoryModal = false;
+   addItemModal = false;
+
   constructor(private itemService: ItemService,
               private formBuilder: FormBuilder,
               private router: Router) {}
@@ -39,5 +42,19 @@ export class ListItemComponent implements OnInit {
               this.router.navigate(['/error']);
           }
       );
+  }
+
+  private addCategoryClick() {
+      this.addCategoryModal = true;
+      setTimeout( () => {
+          $('#addCategoryModal' + this.category.id).modal('show');
+      }, 500);
+  }
+
+  private addItemClick() {
+      this.addItemModal = true;
+      setTimeout( () => {
+          $('#addItemModal' + this.category.id).modal('show');
+      }, 500);
   }
 }

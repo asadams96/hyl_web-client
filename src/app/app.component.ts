@@ -6,7 +6,7 @@ import {FileReader} from './confs/file-reader';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
 
   ngOnInit() {
     FileReader.readCssFiles();

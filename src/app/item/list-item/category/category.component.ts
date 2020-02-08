@@ -16,12 +16,54 @@ export class CategoryComponent implements OnInit {
   @Input() categories: Array<CategoryComponent>;
   @Input() items: Array<ItemComponent>;
 
+  addCategoryModal = false;
+  renameCategoryModal = false;
+  deleteCategoryModal = false;
+  addItemModal = false;
+  moveCategoryModal = false;
+
   constructor() {}
 
   ngOnInit() {}
 
   getClassNameFirstLetter(this): string {
     return ClassNameFirstLetter(this);
+  }
+
+  addCategoryClick() {
+    this.addCategoryModal = true;
+    setTimeout( () => {
+      $('#addCategoryModal' + this.id).modal('show');
+    }, 500);
+    return false;
+  }
+  renameCategoryClick() {
+    this.renameCategoryModal = true;
+    setTimeout( () => {
+      $('#renameModal' + this.id + this.getClassNameFirstLetter() ).modal('show');
+    }, 500);
+    return false;
+  }
+  deleteCategoryClick() {
+    this.deleteCategoryModal = true;
+    setTimeout( () => {
+      $('#deleteModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+    }, 500);
+    return false;
+  }
+  addItemClick() {
+    this.addItemModal = true;
+    setTimeout( () => {
+      $('#addItemModal' + this.id ).modal('show');
+    }, 500);
+    return false;
+  }
+  moveCategoryClick() {
+    this.moveCategoryModal = true;
+    setTimeout( () => {
+      $('#moveModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+    }, 500);
+    return false;
   }
 
 }

@@ -1,13 +1,8 @@
 <div class="card shadow m-1">
     <!-- Card Header - Dropdown -->
     <div class="card-header bg-gray-100 py-0 d-flex flex-row align-items-center">
-        <div class="col-lg-11 col-md-11 px-0">
-            <!--
-            <a style="text-decoration: none" [href]="'#collapseItem'+reference" class="d-block py-1 text-truncate" data-toggle="collapse" role="button" aria-expanded="true">
-                <small class="font-weight-bold font-italic text-info">{{ reference }}</small>
-            </a>
-            -->
-            <a [id]="'expandSubItemModalA'+id" class="text-decoration-none" data-toggle="modal" [attr.data-target]="'#expandSubItemModal'+id" href="#">
+        <div class="col-lg-11 col-md-11 px-0 text-truncate">
+            <a [id]="'expandSubItemModalA'+id" (click)="expandSubitemModalOn()" class="text-decoration-none" data-toggle="modal" href="#">
                 <small class="font-weight-bold font-italic text-info">{{ reference }}</small>
             </a>
         </div>
@@ -21,14 +16,14 @@
             <!-- Menu annimé -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" [attr.aria-labelledby]="'dropdownItem'+id">
                 <div class="dropdown-header">{{ reference }}</div>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#removeSubItemModal'+reference" href="#">
-                    Ajouter un pret
+                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#addLoadModal'+reference" href="#">
+                    <span class="font-weight-bolder">Ajouter</span> un pret
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#renameModal'+id+getClassNameFirstLetter()" href="#">
+                <a class="dropdown-item" (click)="renameSubItemClick()" href="#">
                     <span class="font-weight-bolder">Renommer</span>
                 </a>
-                <a class="dropdown-item" data-toggle="modal" [attr.data-target]="'#deleteModal'+id+getClassNameFirstLetter()" href="#">
+                <a class="dropdown-item" (click)="deleteSubItemClick()" href="#">
                     <span class="font-weight-bolder">Supprimer</span>
                 </a>
             </div>
@@ -76,10 +71,10 @@
 
 <!-- ****************************************************** MODALS ************************************************* -->
 <!-- RENAME SUBITEM -->
-<app-rename-modal [whoRename]="this"></app-rename-modal>
+<app-rename-modal *ngIf="renameSubItemModal" [whoRename]="this"></app-rename-modal>
 
 <!-- DELETE SUBITEM -->
-<app-del-modal [whoDelete]="this"></app-del-modal>
+<app-del-modal *ngIf="deleteSubItemModal" [whoDelete]="this"></app-del-modal>
 
 <!-- EXPAND SUBITEM -->
-<app-expand-subitem-modal [subitem]="this" [description]="this.description"></app-expand-subitem-modal>
+<app-expand-subitem-modal *ngIf="expandSubitem" [subitem]="this" [description]="this.description"></app-expand-subitem-modal>

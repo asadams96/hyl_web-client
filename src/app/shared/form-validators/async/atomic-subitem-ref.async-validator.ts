@@ -4,10 +4,10 @@ import {map} from 'rxjs/operators';
 import {isBoolean} from 'util';
 import {ItemService} from '../../../item/item.service';
 
-export function CheckAtomicSubItemRef(itemService: ItemService): AsyncValidatorFn {
+export function CheckAtomicSubItemRef(itemService: ItemService, exception?: string): AsyncValidatorFn {
     return (refControl: AbstractControl): Promise<ValidationErrors> | Observable<ValidationErrors> | null => {
 
-        if ( refControl && refControl.value && refControl.value.length > 5 ) {
+        if ( refControl && refControl.value && refControl.value.length > 5 && (!exception || exception !== refControl.value)) {
             return itemService.checkSubItemRef(refControl.value).pipe(
                 map(
                     next => {

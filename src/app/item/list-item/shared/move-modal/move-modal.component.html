@@ -1,4 +1,5 @@
-<div class="modal fade" [id]="'moveModal'+whoMove.id+whoMove.getClassNameFirstLetter()" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" [id]="'moveModal'+whoMove.id+whoMove.getClassNameFirstLetter()" tabindex="-1"
+     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,7 +7,7 @@
                     Déplacer <span class="font-weight-bolder">{{ whoMove.name }}</span> ?
                 </h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                    <span aria-hidden="true"><i class="fas fa-window-close text-danger" ></i></span>
                 </button>
             </div>
             <form [formGroup]="moveForm">

@@ -1,5 +1,6 @@
 <!-- Add item Modal-->
-<div class="modal fade" (focus)="checkIfModalCreateSubItemAlreadyUsed()" [id]="'addItemModal'+id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" (focus)="checkIfModalCreateSubItemAlreadyUsed()" [id]="'addItemModal'+id" tabindex="-1"
+     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +10,7 @@
                     <span class="font-weight-bolder">{{ nameTitle }}</span> ?
                 </h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                    <span aria-hidden="true"><i class="fas fa-window-close text-danger" ></i></span>
                 </button>
             </div>
             <form [formGroup]="createItemForm">

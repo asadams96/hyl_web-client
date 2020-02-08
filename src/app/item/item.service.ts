@@ -311,6 +311,61 @@ export class ItemService {
         );
   }
 
+  updateSubItem(subitem: SubItemComponent, reference: string, filesToUpload: File[]) {
+    const token = localStorage.getItem('auth');
+    const idSubItem = subitem.id;
+
+    const filesToDel: string[] = [];
+    const newFileToUpload: File[] = [];
+    const cs = subitem.urlImages.length;
+    const cf = filesToUpload.length;
+
+    // Add to filesToDel
+    for (let i = 0; i < cs; i++) {
+      let present = false;
+      for (let j = 0; j < cf; j++) {
+        if (subitem.urlImages[i].name === filesToUpload[j].name) {
+          present = true;
+        }
+      }
+      if (!present) {
+        filesToDel.push(subitem.urlImages[i].name);
+      }
+    }
+    // Add to newFileToUpload
+    for (let i = 0; i < cf; i++) {
+      let present = false;
+      for (let j = 0; j < cs; j++) {
+        if ( filesToUpload[i].name  === subitem.urlImages[j].name) {
+          present = true;
+        }
+      }
+      if (!present && !filesToDel.includes(filesToUpload[i].name)) {
+        newFileToUpload.push((filesToUpload[i]));
+      }
+    }
+
+    // FormData
+    const data = { token, reference, idSubItem, filesToDel };
+    const formData: FormData = new FormData();
+    formData.append('data', JSON.stringify(data));
+    const c1 = newFileToUpload.length;
+    for (let j = 0; j < c1; j++) {
+      formData.append('files', newFileToUpload[j], newFileToUpload[j].name);
+    }
+
+    // return la requete sous forme de promise
+    return this.httpClient.post<SubItemComponent>(this.host + '/items/edit-subitem', formData)
+        .toPromise<SubItemComponent>().then(
+            updateSubItem => {
+              this.replaceSubItemInArray(this.categoryStorage, updateSubItem);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
+  }
+
   /*
    * Cherche à ajouter newCategory à l'array categories ou bien à une de ses sous catégorie (récurisivité) de façon a ne pas avoir à
    * recharcher tout l'array avec une interaction avec le back et éviter la transmission de donner inutile
@@ -490,7 +545,6 @@ export class ItemService {
       if (index !== -1) {
         if ( mainCategory.categories[index].items === null ) { mainCategory.categories[index].items = []; }
         mainCategory.categories[index].items.push(newItem);
-        console.log('ADD ITEM');
         this.emitCategoryStorage();
       } else {
         const c = mainCategory.categories.length;
@@ -645,6 +699,36 @@ export class ItemService {
       if (category.categories !== null && category.categories.length > 0) {
         for (const pCategory of category.categories) {
           this.deleteSubItemInArray(pCategory, id);
+        }
+      }
+    }
+  }
+
+  private replaceSubItemInArray(category: CategoryComponent, updateSubItem: SubItemComponent) {
+    if (category.items != null && category.items.length > 0) {
+      const c = category.items.length;
+
+      for (let i = 0; i < c; i++) {
+        const index = category.items[i].subItems.findIndex(subItem => {
+          return Number(updateSubItem.id) === Number(subItem.id);
+        });
+
+        if (index !== -1) {
+          category.items[i].subItems[index] = updateSubItem;
+          this.emitCategoryStorage();
+          break;
+        } else {
+          if (category.categories !== null && category.categories.length > 0) {
+            for (const pCategory of category.categories) {
+              this.replaceSubItemInArray(pCategory, updateSubItem);
+            }
+          }
+        }
+      }
+    } else {
+      if (category.categories !== null && category.categories.length > 0) {
+        for (const pCategory of category.categories) {
+          this.replaceSubItemInArray(pCategory, updateSubItem);
         }
       }
     }

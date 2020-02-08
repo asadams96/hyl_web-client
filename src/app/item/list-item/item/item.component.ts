@@ -15,11 +15,41 @@ export class ItemComponent implements OnInit {
   @Input() urlItem: string;
   @Input() subItems: SubItemComponent[];
 
+  renameItemModal = false;
+  moveItemModal = false;
+  deleteItemModal = false;
+  addSubItemModal = false;
+
   constructor() { }
 
   ngOnInit() {}
 
   getClassNameFirstLetter(this): string {
     return ClassNameFirstLetter(this);
+  }
+
+  renameItemClick() {
+    this.renameItemModal = true;
+    setTimeout( () => {
+      $('#renameModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+    }, 500);
+  }
+  moveItemClick() {
+    this.moveItemModal = true;
+    setTimeout( () => {
+      $('#moveModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+    }, 500);
+  }
+  deleteItemClick() {
+    this.deleteItemModal = true;
+    setTimeout( () => {
+      $('#deleteModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+    }, 500);
+  }
+  addSubItemClick() {
+    this.addSubItemModal = true;
+    setTimeout( () => {
+      $('#addSubItemModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+    }, 500);
   }
 }

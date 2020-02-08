@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import {CheckFilesUploadFormat} from '../form-validators/sync/file-upload-format.validator';
 import {CheckFilesUploadSize} from '../form-validators/sync/file-upload-size.validator';
 import {Subject} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImgOperationService {
+  host = 'http://localhost:8080';
+  imgFolder = 'hyl-img-subitem';
+  path = this.host + '/' + this.imgFolder + '/';
 
   private filesToUpload: File[] = null;
   private imgPreview: (string|ArrayBuffer)[] = null;
@@ -25,11 +29,11 @@ export class ImgOperationService {
     {format: 'png', mime: 'image/png'}
   ];
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   emitImageServiceSubjects() {
-    this.filesToUploadSubject.next(this.filesToUpload.slice());
-    this.imgPreviewSubject.next(this.imgPreview.slice());
+    if ( this.filesToUpload ) { this.filesToUploadSubject.next(this.filesToUpload.slice()); }
+    if ( this.imgPreview ) { this.imgPreviewSubject.next(this.imgPreview.slice()); }
   }
 
   emitFormatUnsuppErrFileSubject() {
@@ -143,8 +147,8 @@ export class ImgOperationService {
     });
 
     if (index !== -1) {
-      this.imgPreview.splice(index, 1);
-      this.filesToUpload.splice(index, 1);
+      if (this.imgPreview) { this.imgPreview.splice(index, 1); }
+      if ( this.filesToUpload) { this.filesToUpload.splice(index, 1); }
       this.emitImageServiceSubjects();
     }
     // Désactive le lien <a> (la croix rouge)
@@ -199,5 +203,29 @@ export class ImgOperationService {
     this.filesToUpload = [];
      // Reset le reset
     this.onCancelCreateSubItemForm();
+  }
+
+  loadFilesFromUrl(urlImages: {url: string, name: string}[]) {
+    if (this.imgPreview === null) { this.imgPreview = []; }
+    for (const url of urlImages) {
+      console.log('urlImage.name->' + url.name + '| UrlImage.url->' + url.url);
+      // @ts-ignore
+      this.httpClient.get<Blob>(this.path + url.url, {responseType: 'blob'}).toPromise().then(
+          value => {
+            value.lastModifiedDate = new Date();
+            value.name = url.name;
+
+            if ( !this.filesToUpload ) { this.filesToUpload = []; }
+            if ( !this.imgPreview ) { this.imgPreview = []; }
+
+            this.filesToUpload.push( value as File);
+            this.addToImgPreview(value as File);
+            this.emitImageServiceSubjects();
+          },
+          reason => {
+            console.log('ERROR ->loadFilesFromUrl->' + reason.message);
+          }
+      );
+    }
   }
 }

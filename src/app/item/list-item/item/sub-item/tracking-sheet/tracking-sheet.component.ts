@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {SubItemComponent} from '../sub-item.component';
 import {FileReader} from '../../../../../confs/file-reader';
 
@@ -7,7 +7,7 @@ import {FileReader} from '../../../../../confs/file-reader';
   templateUrl: './tracking-sheet.component.html',
   styleUrls: ['./tracking-sheet.component.scss']
 })
-export class TrackingSheetComponent implements OnInit {
+export class TrackingSheetComponent implements OnInit, AfterViewInit {
 
   @Input() subitem: SubItemComponent;
 
@@ -15,25 +15,24 @@ export class TrackingSheetComponent implements OnInit {
 
   ngOnInit() {
     FileReader.readJavascriptDatatablesFiles();
-
-    const modal = $('#expandSubItemModalA' + this.subitem.id).get()[0];
-    this.clickEventForSortDesc(modal);
-    this.datatablesPluginCssAdjustment(modal);
   }
 
-  clickEventForSortDesc(modal: HTMLElement) {
-    const idStr = '#thDate' + this.subitem.id + this.subitem.getClassNameFirstLetter();
-    modal.addEventListener('click', event);
-    function event() {
-      $(idStr).get()[0].click();
-      modal.removeEventListener('click', event);
-    }
+  ngAfterViewInit(): void {
+    this.datatablesPluginCssAdjustment();
   }
 
-  datatablesPluginCssAdjustment(modal: HTMLElement) {
+  sortDateTable() {
+    $('#thDate' + this.subitem.id + this.subitem.getClassNameFirstLetter()).get()[0].click();
+  }
+
+  datatablesPluginCssAdjustment() {
+    const modal = $('#expandSubItemModal' + this.subitem.id).get()[0];
     const subitem = this.subitem;
+    const trackingSheetComponent = this;
     modal.addEventListener('focus', event);
     function event() {
+      trackingSheetComponent.sortDateTable();
+
       ////// HAUT-GAUCHE - SELECTION DU NOMBRE D'ITEM A AFFICHER
       const div = document.getElementById('dataTable_length');
       const label = div.getElementsByTagName('label');
