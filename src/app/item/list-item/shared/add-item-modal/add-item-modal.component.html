@@ -26,7 +26,7 @@
                             <small>Une erreur de communication s'est produite</small>
                         </div>
                         <div *ngIf="createItemForm.controls.name.errors === null || createItemForm.controls.name.errors.required"
-                             [ngClass]="{'invisible': createItemForm.controls.name.valid || createItemForm.controls.name.errors.required}">
+                             [ngClass]="{'invisible': true}">
                             <small>.</small>
                         </div>
                     </div>

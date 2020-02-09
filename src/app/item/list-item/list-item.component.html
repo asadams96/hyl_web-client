@@ -25,8 +25,8 @@
 <div *ngIf="category != null">
   <div class="mt-5" *ngIf="category.items != null && category.items.length > 0">
     <div *ngFor="let item0 of category.items; let i = index">
-      <div *ngIf="(i+1) % 6 === 0 || i === 0" class="card-deck justify-content-center">
-        <app-item *ngFor="let item of category.items.slice(i, i+6)"
+      <div *ngIf="i % 4 === 0 || i === 0" class="card-deck justify-content-center">
+        <app-item *ngFor="let item of category.items.slice(i, i+4)"
                   [id]="item.id"
                   [name]="item.name"
                   [description]="item.description"
@@ -39,7 +39,7 @@
   <hr *ngIf="category.items != null && category.items.length > 0" class="mt-5"/>
   <div  class="mt-5" *ngIf="category.categories != null && category.categories.length > 0">
     <div *ngFor="let category0 of category.categories; let i = index">
-      <div *ngIf="(i+1) % 4 === 0 || i === 0" class="card-deck justify-content-center">
+      <div *ngIf="i % 4 === 0 || i === 0" class="card-deck justify-content-center">
         <app-category *ngFor="let pCategory of category.categories.slice(i, i+4)"
                       [id]="pCategory.id"
                       [name]="pCategory.name"

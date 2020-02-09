@@ -31,6 +31,7 @@
               "src/assets/front-template/css/sb-admin-2.min.css",
               "src/assets/front-template/vendor/fontawesome-free/css/all.min.css",
               "src/assets/front-template/scss/sb-admin-2.scss",
+              "src/assets/front-template/vendor/jquery-confirm/jquery-confirm.min.css",
               "src/styles.scss"
             ],
             "scripts": []

@@ -208,7 +208,6 @@ export class ImgOperationService {
   loadFilesFromUrl(urlImages: {url: string, name: string}[]) {
     if (this.imgPreview === null) { this.imgPreview = []; }
     for (const url of urlImages) {
-      console.log('urlImage.name->' + url.name + '| UrlImage.url->' + url.url);
       // @ts-ignore
       this.httpClient.get<Blob>(this.path + url.url, {responseType: 'blob'}).toPromise().then(
           value => {

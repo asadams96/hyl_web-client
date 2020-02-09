@@ -147,13 +147,7 @@ export class AddSubitemModalComponent implements OnInit {
 
   // Déclenchement -> Si le modal d'ajout d'exemplaire est fermé -> Vidage des images chargées
   onCancelCreateSubItemForm() {
-    if (this.object instanceof ItemComponent) {
-      this.imgOperationService.onCancelCreateSubItemForm();
-    } else if (this.object instanceof SubItemComponent) {
-      this.imgOperationService.reset();
-      this.initCreateSubItemForm();
-      this.firstLoadEditSubItem = true;
-    }
+    this.imgOperationService.onCancelCreateSubItemForm();
   }
 
   /* Déclenchement -> Lors de l'ouverture du modal -> Lors du déclanchement de l'évènement 'focus'

@@ -7,13 +7,17 @@
             <table class="table table-bordered" id="dataTable">
                 <thead class="thead-light">
                 <tr [id]="'trHead' + subitem.id + subitem.getClassNameFirstLetter()">
+                    <th><i [id]="'deleteAllTrackingSheet' + subitem.id.toString()" class="fas fa-trash"></i></th>
                     <th [id]="'thDate' + subitem.id + subitem.getClassNameFirstLetter()" >Date<i class="ml-3 fas fa-sort"></i></th>
                     <th>Commentaire<i class="ml-3 fas fa-sort"></i></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody [id]="'tbody'+subitem.id">
                 <tr *ngFor="let sheet of subitem.trackingSheets; let i = index">
-                    <td [ngClass]="{'bg-light': i%2 === 1}"  [attr.data-sort]="sheet.date">
+                    <td [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}">
+                        <span (click)="onCLickDeleteTrackingSheet(this, sheet)"><i class="fas fa-trash"></i></span>
+                    </td>
+                    <td [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}"  [attr.data-sort]="sheet.date">
                         <small>{{ sheet.date | date: 'dd/MM/yyyy' }}</small>
                     </td>
                     <td [ngClass]="{'bg-light': i%2 === 1}">

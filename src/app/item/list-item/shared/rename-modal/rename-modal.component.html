@@ -38,7 +38,7 @@
                             <small>Une erreur de communication s'est produite</small>
                         </div>
                         <div *ngIf="renameForm.controls.name.errors === null || renameForm.controls.name.errors.required"
-                             [ngClass]="{'invisible': renameForm.valid || renameForm.controls.name.errors.required}">
+                             [ngClass]="{'invisible': true}">
                             <small>.</small>
                         </div>
                     </div>

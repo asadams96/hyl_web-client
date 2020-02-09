@@ -8,13 +8,14 @@ const  javascriptBaseFiles = [
   'assets/front-template/js/sb-admin-2.min.js'
 ];
 const  javascriptSituationalFiles = [
-   'assets/front-template/js/demo/chart-pie-demo.js',
-   'assets/front-template/js/demo/chart-area-demo.js',
-   'assets/front-template/js/demo/chart-bar-demo.js',
-    'assets/front-template/vendor/datatables/jquery.dataTables.min.js',
-    'assets/front-template/vendor/datatables/dataTables.bootstrap4.min.js',
-   'assets/front-template/js/demo/datatables-demo.js'
- ];
+  'assets/front-template/js/demo/chart-pie-demo.js',
+  'assets/front-template/js/demo/chart-area-demo.js',
+  'assets/front-template/js/demo/chart-bar-demo.js',
+  'assets/front-template/vendor/datatables/jquery.dataTables.min.js',
+  'assets/front-template/vendor/datatables/dataTables.bootstrap4.min.js',
+  'assets/front-template/js/demo/datatables-demo.js',
+  'assets/front-template/vendor/jquery-confirm/jquery-confirm.min.js'
+];
 const cssFiles = [
    'https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i'
  ];
@@ -34,6 +35,9 @@ export class FileReader {
   }
   public static readJavascriptDatatablesFiles() {
     this.readJavascript([javascriptSituationalFiles[3], javascriptSituationalFiles[4], javascriptSituationalFiles[5]]);
+  }
+  public static readJavascriptJqueryConfirmFile() {
+    this.readJavascript([javascriptSituationalFiles[6]]);
   }
   private static readJavascript(scripts: Array<string>) {
     const countMax = scripts.length;

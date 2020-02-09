@@ -1,4 +1,4 @@
-<div #modal class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true" [id]="'expandSubItemModal'+subitem.id" data-backdrop="static" data-keyboard="false" >
     <div #modalLg class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -19,7 +19,8 @@
                         <li class="bg-gradient-light" *ngFor="let url of subitem.urlImages; let i = index" [attr.data-slide-to]="i"
                             [ngClass]="{'active': i === 0}" [attr.data-target]="'#carouselExampleIndicators'+subitem.id"></li>
                     </ol>
-                    <div [id]="'carouselSubItem'+subitem.id" #div [ngStyle]="{'height': height+'px'}" class="carousel-inner" (window:resize)="resize(modalLg, imgSubitemNext, div)">
+                    <div [id]="'carouselSubItem'+subitem.id" #div [ngStyle]="{'height': height+'px'}" class="carousel-inner"
+                         (window:resize)="resize(modalLg, imgSubitemNext, div)">
                         <div *ngFor="let urlImage of subitem.urlImages; let i = index"
                              [ngClass]="{'active' : i === 0}" class="carousel-item h-100 text-center">
                             <span id="img-helper1" class="align-middle d-inline-block h-100"></span>
@@ -41,11 +42,15 @@
                 <div class="d-flex justify-content-around">
                     <button class="btn btn-danger" (click)="delSubItem()">
                         <i class="fas fa-minus-circle mr-2"></i>
-                        <span class="font-weight-bolder">Supprimer</span>
+                        <span class="font-weight-bolder">Supprimer l'exemplaire</span>
                     </button>
                     <button class="btn btn-info" (click)="editSubItem()">
                         <i class="fas fa-edit mr-2"></i>
-                        <span class="font-weight-bolder">Éditer</span>
+                        <span class="font-weight-bolder">Éditer l'exemplaire</span>
+                    </button>
+                    <button class="btn btn-primary" (click)="addTrackingSheet()">
+                        <i class="fas fa-plus mr-2"></i>
+                        <span class="font-weight-bolder">Ajouter un commentaire</span>
                     </button>
                     <!--
                     <button class="btn btn-info" data-toggle="modal" data-dismiss="modal" (click)="renameSubItem(modal)"
@@ -62,5 +67,8 @@
     </div>
 </div>
 
-
+<!-- EDIT SUBITEM -->
 <app-add-subitem-modal *ngIf="editSubitem" [object]="subitem"></app-add-subitem-modal>
+
+<!-- ADD TRACKING SHEET -->
+<app-add-tracking-sheet-modal *ngIf="addTrackingSheetModal" [subitem]="subitem"></app-add-tracking-sheet-modal>

@@ -30,6 +30,8 @@ import { ExpandSubitemModalComponent } from './item/list-item/item/sub-item/expa
 import * as bootstrap from 'bootstrap';
 import * as $ from 'jquery';
 import { TrackingSheetComponent } from './item/list-item/item/sub-item/tracking-sheet/tracking-sheet.component';
+import { AddTrackingSheetModalComponent } from './item/list-item/item/sub-item/add-tracking-sheet-modal/add-tracking-sheet-modal.component';
+import {DatePipe} from '@angular/common';
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
   { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard] },
@@ -61,6 +63,7 @@ const appRoutes: Routes = [
     AddSubitemModalComponent,
     ExpandSubitemModalComponent,
     TrackingSheetComponent,
+    AddTrackingSheetModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +76,8 @@ const appRoutes: Routes = [
     AuthService,
     HttpClient,
     SigninComponent,
-    ItemService
+    ItemService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

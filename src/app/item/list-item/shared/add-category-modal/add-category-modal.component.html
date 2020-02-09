@@ -26,7 +26,7 @@
                             <small>Une erreur de communication s'est produite</small>
                         </div>
                         <div *ngIf="createCategoryForm.controls.name.errors === null || createCategoryForm.controls.name.errors.required"
-                             [ngClass]="{'invisible': createCategoryForm.controls.name.valid || createCategoryForm.controls.name.errors.required}">
+                             [ngClass]="{'invisible': true}">
                             <small>.</small>
                         </div>
                     </div>

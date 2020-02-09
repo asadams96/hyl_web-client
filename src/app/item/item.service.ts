@@ -5,6 +5,7 @@ import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
 import {isUndefined} from 'util';
 import {SubItemComponent} from './list-item/item/sub-item/sub-item.component';
+import {TrackingSheetComponent} from './list-item/item/sub-item/tracking-sheet/tracking-sheet.component';
 
 @Injectable({
   providedIn: 'root'
@@ -359,6 +360,44 @@ export class ItemService {
         .toPromise<SubItemComponent>().then(
             updateSubItem => {
               this.replaceSubItemInArray(this.categoryStorage, updateSubItem);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
+  }
+
+  createTrackingSheet(subitem: SubItemComponent, comment: string) {
+    const token = localStorage.getItem('auth');
+    const idSubItem = subitem.id;
+
+    return this.httpClient.post<SubItemComponent>(this.host + '/items/add-tracking-sheet', {token, idSubItem, comment})
+        .toPromise<SubItemComponent>().then(
+            updateSubitem => {
+              this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
+            },
+            reason => {
+              console.log(reason);
+            }
+        );
+  }
+
+  deleteTrackingSheets(trackingSheets: { id: bigint; date: Date; comment: string }[]) {
+    const token = localStorage.getItem('auth');
+    const ids: Array<string> = [];
+    if ( trackingSheets ) {
+      for (const trackingSheet of trackingSheets) {
+        ids.push(String(trackingSheet.id));
+      }
+    }
+    const params = {ids, token};
+
+    return this.httpClient.delete<SubItemComponent>(this.host + '/items/delete-tracking-sheets', {params})
+        .toPromise<SubItemComponent>().then(
+            updateSubitem => {
+              for (const id of ids) {
+                this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
+              }
             },
             reason => {
               console.log(reason);

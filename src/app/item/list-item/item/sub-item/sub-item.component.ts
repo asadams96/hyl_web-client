@@ -13,7 +13,7 @@ export class SubItemComponent implements OnInit {
   @Input() reference: string;
   @Input() urlImages: {url: string, name: string}[];
   @Input() description: string;
-  @Input() trackingSheets: {date: Date, comment: string}[];
+  @Input() trackingSheets: {id: bigint, date: Date, comment: string}[];
 
   expandSubitem = false;
   deleteSubItemModal = false;

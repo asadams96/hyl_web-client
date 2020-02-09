@@ -16,6 +16,7 @@ export class ExpandSubitemModalComponent implements OnInit {
   path = this.host + '/' + this.imgFolder + '/';
 
   editSubitem = false;
+  addTrackingSheetModal = false;
 
   @Input() subitem: SubItemComponent;
   @Input() description: string;
@@ -70,9 +71,6 @@ export class ExpandSubitemModalComponent implements OnInit {
       }
 
       $('#addSubItemModal' + this.subitem.id + this.subitem.getClassNameFirstLetter()).modal('show');
-
-
-
     }, 500);
 
 
@@ -91,6 +89,8 @@ export class ExpandSubitemModalComponent implements OnInit {
   }*/
 
   delSubItem() {
+    $('#expandSubItemModal' + this.subitem.id ).modal('hide');
+
     const closingListenerDelModal = [
       document.getElementById('crossDelModal' + this.subitem.id.toString() + this.subitem.getClassNameFirstLetter()),
       document.getElementById('cancelDelModal' + this.subitem.id.toString() + this.subitem.getClassNameFirstLetter()),
@@ -100,6 +100,29 @@ export class ExpandSubitemModalComponent implements OnInit {
     for (const htmlElement of closingListenerDelModal) {
       this.clickEvent(this, htmlElement);
     }
+
+    setTimeout( () => {
+      $('#deleteModal' + this.subitem.id + this.subitem.getClassNameFirstLetter()).modal('show');
+    }, 500);
+  }
+
+  addTrackingSheet() {
+    this.addTrackingSheetModal = true;
+    $('#expandSubItemModal' + this.subitem.id ).modal('hide');
+
+    setTimeout( () => {
+      const closingListenerDelModal = [
+        document.getElementById('crossAddTrackingSheetModal' + this.subitem.id.toString()),
+        document.getElementById('cancelAddTrackingSheetModal' + this.subitem.id.toString()),
+        document.getElementById('submitAddTrackingSheetModal' + this.subitem.id.toString())
+      ];
+
+      for (const htmlElement of closingListenerDelModal) {
+        this.clickEvent(this, htmlElement);
+      }
+      $('#addTrackingSheetModal' + this.subitem.id).modal('show');
+    }, 500);
+
   }
 
   clickEvent(expandSubitemModalComponent: ExpandSubitemModalComponent, htmlElement: HTMLElement) {
@@ -107,7 +130,6 @@ export class ExpandSubitemModalComponent implements OnInit {
       const expandSubitemModal = $('#expandSubItemModal' + expandSubitemModalComponent.subitem.id);
       if ( !expandSubitemModal.get()[0].className.includes('show') ) {
         setTimeout(() => {
-          expandSubitemModalComponent.editSubitem = false;
           expandSubitemModal.modal('show');
         }, 500);
       }
