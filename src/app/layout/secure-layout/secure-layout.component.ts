@@ -3,7 +3,7 @@ import {Routes} from '@angular/router';
 import {ListItemComponent} from '../../item/list-item/list-item.component';
 
 export const SECURE_ROUTES: Routes = [
-  {path: 'items', component: ListItemComponent}
+  {path: 'inventaire', component: ListItemComponent}
 ];
 
 @Component({

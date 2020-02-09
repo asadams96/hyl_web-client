@@ -17,12 +17,10 @@ export class SidebarComponent implements OnInit {
     const cssClass = 'css-adjustment';
     const sidebar = document.getElementById('sidebarToggle');
     const toAdjust = [
-      document.getElementById('dashboard'),
-      document.getElementById('components'),
-      document.getElementById('utilities'),
-      document.getElementById('pages'),
-      document.getElementById('charts'),
-      document.getElementById('tables')
+      document.getElementById('items'),
+      document.getElementById('loans'),
+      document.getElementById('profil'),
+      document.getElementById('signout')
     ];
     const c = toAdjust.length;
 
