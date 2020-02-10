@@ -3,20 +3,20 @@
   <div class="col-lg-8">
     <div class="p-5">
       <div class="text-center">
-        <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+        <h1 class="h4 text-gray-900 mb-4">Créer un compte</h1>
       </div>
-      <hr />
+      <hr class="mb-1"/>
       <form class="user" [formGroup]="signupForm" (ngSubmit)="onSubmitForm()" >
 
         <!-- Message d'erreur général -->
         <p class="text-center text-danger" *ngIf="signupError">{{ signupError }}</p>
 
         <!-- 1er tandem horizontal (civilité + mail) -->
-        <div class="form-group row">
+        <div class="form-group row mb-1">
           <!-- Civilité -->
-          <div class="col-sm-4 mb-3 mb-sm-0" style="padding-top: 0.33em">
-            <div class="alert-success" *ngIf="signupForm.controls.civility.valid">
-              <small>Civilité optionnel</small>
+          <div class="col-sm-4 mb-3 mb-sm-0 pt-2" style="padding-top: 0.33em">
+            <div class="invisible">
+              <small>.</small>
             </div>
             <select formControlName="civility" class="form-control custom-select" id="selectCivility">
               <option value="M">Homme</option>
@@ -26,172 +26,164 @@
           </div>
           <!-- Email -->
           <div class="col-sm-8">
-            <div [ngClass]="{'alert-danger': !signupForm.controls.email.valid && signupForm.controls.email.errors !== null,
-            'alert-success': signupForm.controls.email.errors === null}"  *ngIf="!signupForm.controls.email.valid">
-
-              <small *ngIf="signupForm.controls.email.errors !== null && signupForm.controls.email.errors.required">
-                Adresse email requise
-              </small>
-              <small *ngIf="signupForm.controls.email.errors !== null && signupForm.controls.email.errors.pattern">
-                Adresse email invalide
-              </small>
-              <small *ngIf="signupForm.controls.email.errors !== null
-                            && !signupForm.controls.email.errors.pattern
-                            && signupForm.controls.email.errors.characterrepetition">
-                Répétition de caractère interdite
-              </small>
-              <small *ngIf="signupForm.controls.email.errors !== null && signupForm.controls.email.errors.checkatomicemail">
-                Adresse email déjà utilisée
-              </small>
-              <small *ngIf="signupForm.controls.email.errors !== null
-                            && !signupForm.controls.email.errors.pattern
-                            && !signupForm.controls.email.errors.characterrepetition
-                            && signupForm.controls.email.errors.failatomicemail">
-                Échec de la vérification, réessayez plus tard.
-              </small>
-              <!-- Evite l'impression de tremblement lors du réaffichage de la prochaine div lorsque qu'il n'y a aucune
-              plus aucune div (=aucune erreur) mais etat formulaire invalide  car on attend le validateur asynchrone
-              pour savoir si l'adresse est valide ou non -->
-              <small *ngIf="signupForm.controls.email.errors === null">.</small>
+          <div [ngClass]="{'invisible': signupForm.controls.email.valid }" class="mb-1 pl-1 pr-1">
+            <div *ngIf="signupForm.controls.email.errors?.pattern" class="alert-danger">
+              <small class="ml-1">Adresse email invalide</small>
             </div>
-            <div class="alert-success" *ngIf="signupForm.controls.email.valid">
-              <small>Adresse email valide</small>
+            <div  class="alert-danger" *ngIf="!signupForm.controls.email.errors?.pattern
+                                              && signupForm.controls.email.errors?.characterrepetition">
+              <small class="ml-1">Répétition de caractère interdite</small>
+            </div>
+            <div *ngIf="signupForm.controls.email.errors?.checkatomicemail" class="alert-danger">
+              <small class="ml-1">Adresse email déjà utilisée</small>
+            </div>
+            <div class="alert-danger" *ngIf="!signupForm.controls.email.errors?.pattern
+                                              && !signupForm.controls.email.errors?.characterrepetition
+                                              && signupForm.controls.email.errors?.failatomicemail">
+              <small class="ml-1">Échec de la vérification, réessayez plus tard.</small>
+            </div>
+              <div *ngIf="signupForm.controls.email.errors === null || signupForm.controls.email.errors?.required"
+                   [ngClass]="{'invisible': true}">
+                <small>.</small>
+              </div>
             </div>
             <input type="email" formControlName="email" class="form-control form-control-user"
-                   id="exampleInputEmail" placeholder="une-adresse@email.fr" maxlength="50">
+                   id="exampleInputEmail" placeholder="une-adresse@email.fr*" maxlength="50">
           </div>
         </div>
 
         <!-- 2e tandem horizontal (prénom + nom) -->
-        <div class="form-group row">
+        <div class="form-group row mb-1">
           <!-- Prénom -->
           <div class="col-sm-6 mb-3 mb-sm-0">
-            <div class="alert-danger" *ngIf="signupForm.controls.name.errors">
-              <small *ngIf="signupForm.controls.name.errors.required">Prénom requis</small>
-              <small *ngIf="signupForm.controls.name.errors.pattern">Caractères non autorisés</small>
-
-              <small *ngIf="!signupForm.controls.name.errors.pattern && signupForm.controls.name.errors.minlength">
-                3 caractères minimum requis
-              </small>
-              <small *ngIf="!signupForm.controls.name.errors.pattern
-                            && !signupForm.controls.name.errors.minlength
-                            && signupForm.controls.name.errors.leftwhitespace">
-                Espacement à gauche interdit
-              </small>
-              <small *ngIf="!signupForm.controls.name.errors.pattern
-                            && !signupForm.controls.name.errors.minlength
-                            && signupForm.controls.name.errors.rightwhitespace">
-                Espacement à doite interdit
-              </small>
-              <small *ngIf="!signupForm.controls.name.errors.pattern
-                            && !signupForm.controls.name.errors.minlength
-                            && signupForm.controls.name.errors.witespacerepetition">
-                Espacement interdit
-              </small>
-              <small *ngIf="!signupForm.controls.name.errors.pattern
-                        && !signupForm.controls.name.errors.leftwhitespace
-                        && !signupForm.controls.name.errors.rightwhitespace
-                        && !signupForm.controls.name.errors.witespacerepetition
-                        &&  signupForm.controls.name.errors.characterrepetition">
-                Répétition de caractère interdite
-              </small>
-            </div>
-            <div class="alert-success" *ngIf="signupForm.controls.name.valid">
-              <small>Prénom valide</small>
+            <div [ngClass]="{'invisible': signupForm.controls.name.valid }" class="mb-1 pl-1 pr-1">
+              <div *ngIf="signupForm.controls.name.errors?.pattern" class="alert-danger">
+                <small class="ml-1">Caractères non autorisés</small>
+              </div>
+              <div *ngIf="!signupForm.controls.name.errors?.pattern && signupForm.controls.name.errors?.minlength" class="alert-danger">
+                <small class="ml-1">3 caractères minimum requis</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.name.errors?.pattern
+                                                && !signupForm.controls.name.errors?.minlength
+                                                && signupForm.controls.name.errors?.leftwhitespace">
+                <small class="ml-1">Espacement à gauche interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.name.errors?.pattern
+                                                && !signupForm.controls.name.errors?.minlength
+                                                && signupForm.controls.name.errors?.rightwhitespace">
+                <small class="ml-1">Espacement à doite interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.name.errors?.pattern
+                                                && !signupForm.controls.name.errors?.minlength
+                                                && signupForm.controls.name.errors?.witespacerepetition">
+                <small class="ml-1">Espacement interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.name.errors?.pattern
+                                              && !signupForm.controls.name.errors?.leftwhitespace
+                                              && !signupForm.controls.name.errors?.rightwhitespace
+                                              && !signupForm.controls.name.errors?.witespacerepetition
+                                              &&  signupForm.controls.name.errors?.characterrepetition">
+                <small class="ml-1 small">Répétition de caractère interdite</small>
+              </div>
+              <div *ngIf="signupForm.controls.name.errors === null || signupForm.controls.name.errors?.required"
+                   [ngClass]="{'invisible': true}">
+                <small>.</small>
+              </div>
             </div>
             <input type="text" formControlName="name" class="form-control form-control-user"
-                   id="exampleFirstName" placeholder="Prénom" maxlength="15">
+                   id="exampleFirstName" placeholder="Prénom*" maxlength="15">
           </div>
           <!-- Nom -->
           <div class="col-sm-6">
-            <div class="alert-danger" *ngIf="signupForm.controls.surname.errors">
-              <small *ngIf="signupForm.controls.surname.errors.required">
-                Nom requis
-              </small>
-              <small *ngIf="signupForm.controls.surname.errors.pattern">
-                Caractères non autorisés
-              </small>
-              <small *ngIf="!signupForm.controls.surname.errors.pattern && signupForm.controls.surname.errors.minlength">
-                3 caractères minimum requis
-              </small>
-              <small *ngIf="!signupForm.controls.surname.errors.pattern && !signupForm.controls.surname.errors.minlength
-              && signupForm.controls.surname.errors.leftwhitespace">
-                Espacement à gauche interdit
-              </small>
-              <small *ngIf="!signupForm.controls.surname.errors.pattern
-                             && !signupForm.controls.surname.errors.minlength
-                             && signupForm.controls.surname.errors.rightwhitespace">
-                Espacement à doite interdit
-              </small>
-              <small *ngIf="!signupForm.controls.surname.errors.pattern && !signupForm.controls.surname.errors.minlength
-               && signupForm.controls.surname.errors.witespacerepetition">
-                Espacement interdit
-              </small>
-              <small *ngIf="!signupForm.controls.surname.errors.pattern
-                            && !signupForm.controls.surname.errors.leftwhitespace
-                            && !signupForm.controls.surname.errors.rightwhitespace
-                            && !signupForm.controls.surname.errors.witespacerepetition
-                            && signupForm.controls.surname.errors.characterrepetition">
-                Répétition de caractère interdite
-              </small>
-            </div>
-            <div class="alert-success" *ngIf="signupForm.controls.surname.valid">
-              <small>Nom valide</small>
+            <div [ngClass]="{'invisible': signupForm.controls.surname.valid }" class="mb-1 pl-1 pr-1">
+              <div *ngIf="signupForm.controls.surname.errors?.pattern" class="alert-danger">
+                <small class="ml-1">Caractères non autorisés</small>
+              </div>
+              <div *ngIf="!signupForm.controls.surname.errors?.pattern && signupForm.controls.surname.errors?.minlength" class="alert-danger">
+                <small class="ml-1">3 caractères minimum requis</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.surname.errors?.pattern
+                                              && !signupForm.controls.surname.errors?.minlength
+                                              && signupForm.controls.surname.errors?.leftwhitespace">
+                <small class="ml-1">Espacement à gauche interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.surname.errors?.pattern
+                                         && !signupForm.controls.surname.errors?.minlength
+                                         && signupForm.controls.surname.errors?.rightwhitespace">
+                <small class="ml-1">Espacement à doite interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.surname.errors?.pattern
+                                                && !signupForm.controls.surname.errors?.minlength
+                                                && signupForm.controls.surname.errors?.witespacerepetition">
+                <small class="ml-1">Espacement interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.surname.errors?.pattern
+                                                && !signupForm.controls.surname.errors?.leftwhitespace
+                                                && !signupForm.controls.surname.errors?.rightwhitespace
+                                                && !signupForm.controls.surname.errors?.witespacerepetition
+                                                && signupForm.controls.surname.errors?.characterrepetition">
+                <small class="ml-1">Répétition de caractère interdite</small>
+              </div>
+              <div *ngIf="signupForm.controls.surname.errors === null || signupForm.controls.surname.errors?.required"
+                   [ngClass]="{'invisible': true}">
+                <small>.</small>
+              </div>
             </div>
             <input type="text" formControlName="surname" class="form-control form-control-user"
-                   id="exampleLastName" placeholder="Nom" maxlength="30">
+                   id="exampleLastName" placeholder="Nom*" maxlength="30">
           </div>
         </div>
 
         <!-- 3e tandem horizontal (pseudo + téléphone portable) -->
-        <div class="form-group row">
+        <div class="form-group row mb-1">
           <!-- Pseudo -->
           <div class="col-sm-6 mb-3 mb-sm-0">
-            <div class="alert-danger" *ngIf="signupForm.controls.pseudo.errors">
-              <small *ngIf="signupForm.controls.pseudo.errors.required">Pseudo requis</small>
-              <small *ngIf="signupForm.controls.pseudo.errors.minlength">3 caratères minimum requis</small>
-              <small *ngIf="!signupForm.controls.pseudo.errors.pattern
-                            && !signupForm.controls.pseudo.errors.minlength
-                            && signupForm.controls.pseudo.errors.leftwhitespace">
-                Espacement à gauche interdit
-              </small>
-              <small *ngIf="!signupForm.controls.pseudo.errors.pattern
-                             && !signupForm.controls.pseudo.errors.minlength
-                             && signupForm.controls.pseudo.errors.rightwhitespace">
-                Espacement à doite interdit
-              </small>
-              <small *ngIf="!signupForm.controls.pseudo.errors.pattern
-                            && !signupForm.controls.pseudo.errors.minlength
-                            && signupForm.controls.pseudo.errors.witespacerepetition">
-                Espacement interdit
-              </small>
-              <small *ngIf="!signupForm.controls.pseudo.errors.leftwhitespace
-                             && !signupForm.controls.pseudo.errors.rightwhitespace
-                             && !signupForm.controls.pseudo.errors.witespacerepetition
-                             && signupForm.controls.pseudo.errors.characterrepetition">
-                Répétition de caractère interdite
-              </small>
-            </div>
-            <div class="alert-success" *ngIf="signupForm.controls.pseudo.valid">
-              <small>Pseudo valide</small>
+            <div [ngClass]="{'invisible': signupForm.controls.pseudo.valid }" class="mb-1 pl-1 pr-1">
+              <div class="alert-danger">
+                <small *ngIf="signupForm.controls.pseudo.errors?.minlength">3 caratères minimum requis</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.pseudo.errors?.pattern
+                                                && !signupForm.controls.pseudo.errors?.minlength
+                                                && signupForm.controls.pseudo.errors?.leftwhitespace">
+                <small class="ml-1">Espacement à gauche interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.pseudo.errors?.pattern
+                                               && !signupForm.controls.pseudo.errors?.minlength
+                                               && signupForm.controls.pseudo.errors?.rightwhitespace">
+                <small class="ml-1">Espacement à doite interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.pseudo.errors?.pattern
+                                                && !signupForm.controls.pseudo.errors?.minlength
+                                                && signupForm.controls.pseudo.errors?.witespacerepetition">
+                <small class="ml-1">Espacement interdit</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.pseudo.errors?.leftwhitespace
+                                               && !signupForm.controls.pseudo.errors?.rightwhitespace
+                                               && !signupForm.controls.pseudo.errors?.witespacerepetition
+                                               && signupForm.controls.pseudo.errors?.characterrepetition">
+                <small class="ml-1">Répétition de caractère interdite</small>
+              </div>
+              <div *ngIf="signupForm.controls.pseudo.errors === null || signupForm.controls.pseudo.errors?.required"
+                   [ngClass]="{'invisible': true}">
+                <small>.</small>
+              </div>
             </div>
             <input type="text" formControlName="pseudo" class="form-control form-control-user"
-                   id="exampleInputPseudo" placeholder="Pseudo" maxlength="15">
+                   id="exampleInputPseudo" placeholder="Pseudo*" maxlength="15">
           </div>
           <!-- Téléphone -->
           <div class="col-sm-6">
-            <div class="alert-danger" *ngIf="signupForm.controls.cellphone.errors">
-              <small *ngIf="signupForm.controls.cellphone.errors.localFormat">Format 06xx ou 07xx requis</small>
-              <small *ngIf="signupForm.controls.cellphone.errors.numberFormat">Format 10 chiffres requis</small>
-          </div>
-            <div class="alert-success"
-                 *ngIf="signupForm.controls.cellphone.valid &&
-                  (signupForm.controls.cellphone.value === null || signupForm.controls.cellphone.value === '')">
-              <small>Téléphone (optionnel)</small>
-            </div>
-            <div class="alert-success" *ngIf="signupForm.controls.cellphone.valid &&
-            signupForm.controls.cellphone.value !== null && signupForm.controls.cellphone.value !== ''">
-              <small>Téléphone valide</small>
+            <div [ngClass]="{'invisible': signupForm.controls.cellphone.valid }" class="mb-1 pl-1 pr-1">
+              <div class="alert-danger" *ngIf="signupForm.controls.cellphone.errors?.localFormat">
+                <small class="ml-1">Format 06xx ou 07xx requis</small>
+              </div>
+              <div class="alert-danger" *ngIf="signupForm.controls.cellphone.errors?.numberFormat">
+                <small class="ml-1">Format 10 chiffres requis</small>
+              </div>
+              <div *ngIf="signupForm.controls.cellphone.errors === null"
+                   [ngClass]="{'invisible': true}">
+                <small>.</small>
+              </div>
             </div>
             <input type="text" formControlName="cellphone" class="form-control form-control-user"
                    id="exampleInputCellphone" placeholder="0612345678" maxlength="10">
@@ -199,44 +191,41 @@
         </div>
 
         <!-- 4e tandem horizontal (mdp et mdp2) -->
-        <div class="form-group row">
+        <div class="form-group row mb-1">
           <!-- Mdp -->
           <div class="col-sm-6 mb-3 mb-sm-0">
-            <div class="alert-danger" *ngIf="!signupForm.controls.password.valid">
-              <small *ngIf="signupForm.controls.password.errors && signupForm.controls.password.errors.required">
-                Mot de passe requis
-              </small>
-              <small *ngIf="signupForm.controls.password.errors && signupForm.controls.password.errors.minlength">
-                8 caractères minimum requis
-              </small>
-            </div>
-            <div class="alert-success" *ngIf="signupForm.controls.password.valid">
-              <small>Mot de passe valide</small>
+            <div [ngClass]="{'invisible': signupForm.controls.password.valid }" class="mb-1 pl-1 pr-1">
+              <div class="alert-danger" *ngIf="signupForm.controls.password.errors?.minlength">
+                <small class="ml-1">8 caractères minimum requis</small>
+              </div>
+              <div *ngIf="signupForm.controls.password.errors === null || signupForm.controls.password.errors?.required"
+                   [ngClass]="{'invisible': true}">
+                <small>.</small>
+              </div>
             </div>
             <input type="password" formControlName="password" class="form-control form-control-user"
-                   id="exampleInputPassword" placeholder="Mot de passe" maxlength="25">
+                   id="exampleInputPassword" placeholder="Mot de passe*" maxlength="25">
           </div>
           <!-- Mdp2 -->
           <div class="col-sm-6">
-            <div class="alert-danger" *ngIf="!signupForm.controls.password2.valid">
-              <small *ngIf="signupForm.controls.password2.errors && signupForm.controls.password2.errors.required">
-                Validation mot de passe requise
-              </small>
-              <small *ngIf="signupForm.controls.password2.errors && signupForm.controls.password2.errors.mustmatchpassword">
-                Répétition incorrect
-              </small>
-            </div>
-            <div class="alert-success" *ngIf="signupForm.controls.password2.valid">
-              <small>Répétition valide</small>
+            <div [ngClass]="{'invisible': signupForm.controls.password2.valid }" class="mb-1 pl-1 pr-1">
+              <div class="alert-danger" *ngIf="signupForm.controls.password2.errors?.mustmatchpassword">
+                <small class="ml-1">Répétition incorrect</small>
+              </div>
+              <div *ngIf="signupForm.controls.password2.errors === null || signupForm.controls.password2.errors?.required"
+                   [ngClass]="{'invisible': true}">
+                <small>.</small>
+              </div>
             </div>
             <input type="password" formControlName="password2" class="form-control form-control-user"
-                   id="exampleRepeatPassword" placeholder="Mot de passe">
+                   id="exampleRepeatPassword" placeholder="Mot de passe*">
           </div>
         </div>
 
         <!-- Submit -->
+        <hr class="mt-4 mb-4"/>
         <button type="submit" class="btn btn-primary btn-user btn-block" [disabled]="!signupForm.valid">
-          Register Account
+          Créer un compte
         </button>
         <!--
         <hr>
@@ -248,12 +237,13 @@
         </a>
         -->
       </form>
-      <hr>
       <!--
       <div class="text-center">
         <a class="small" href="forgot-password.html">Forgot Password?</a>
       </div>
       -->
+      <!-- Lien vers la connexion-->
+      <hr class="mt-4"/>
       <div class="text-center">
         <a class="small" routerLink="/signin">Already have an account? Login!</a>
       </div>
