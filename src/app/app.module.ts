@@ -32,6 +32,7 @@ import * as $ from 'jquery';
 import { TrackingSheetComponent } from './item/list-item/item/sub-item/tracking-sheet/tracking-sheet.component';
 import { AddTrackingSheetModalComponent } from './item/list-item/item/sub-item/add-tracking-sheet-modal/add-tracking-sheet-modal.component';
 import {DatePipe} from '@angular/common';
+import { ProfilComponent } from './user/profil/profil.component';
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
   { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard] },
@@ -64,6 +65,7 @@ const appRoutes: Routes = [
     ExpandSubitemModalComponent,
     TrackingSheetComponent,
     AddTrackingSheetModalComponent,
+    ProfilComponent,
   ],
   imports: [
     BrowserModule,

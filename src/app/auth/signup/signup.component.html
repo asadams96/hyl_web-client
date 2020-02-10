@@ -1,15 +1,20 @@
 <div class="row">
-  <div class="col-lg-4 d-none d-lg-block bg-register-image"></div>
+  <div [ngClass]="{'col-lg-2': userSignupForm,
+                   'col-lg-4 d-none d-lg-block bg-register-image': !userSignupForm}"></div>
   <div class="col-lg-8">
     <div class="p-5">
-      <div class="text-center">
-        <h1 class="h4 text-gray-900 mb-4">Créer un compte</h1>
+      <div [ngClass]="{'text-center': !userSignupForm,
+                       'd-flex justify-content-between' : userSignupForm}">
+        <h1 class="h4 text-gray-900">
+          <span *ngIf="!userSignupForm">Créer un compte</span>
+          <span *ngIf="userSignupForm">Mon compte</span>
+        </h1>
+        <div *ngIf="userSignupForm">
+          <span *ngIf="editUserSuccesMsg" class="ml-2 text-success">{{editUserSuccesMsg}}</span>
+        </div>
       </div>
       <hr class="mb-1"/>
       <form class="user" [formGroup]="signupForm" (ngSubmit)="onSubmitForm()" >
-
-        <!-- Message d'erreur général -->
-        <p class="text-center text-danger" *ngIf="signupError">{{ signupError }}</p>
 
         <!-- 1er tandem horizontal (civilité + mail) -->
         <div class="form-group row mb-1">
@@ -222,10 +227,16 @@
           </div>
         </div>
 
+        <div *ngIf="userSignupForm" class="text-right mt-4">
+          <small>Cocher pour déverrouiller le bouton d'édition</small>
+          <input class="mr-2 ml-2" type="checkbox" formControlName="checkbox">
+        </div>
+
         <!-- Submit -->
         <hr class="mt-4 mb-4"/>
         <button type="submit" class="btn btn-primary btn-user btn-block" [disabled]="!signupForm.valid">
-          Créer un compte
+          <span *ngIf="!userSignupForm">Créer un compte</span>
+          <span *ngIf="userSignupForm">Éditer mon compte</span>
         </button>
         <!--
         <hr>
@@ -243,9 +254,9 @@
       </div>
       -->
       <!-- Lien vers la connexion-->
-      <hr class="mt-4"/>
-      <div class="text-center">
-        <a class="small" routerLink="/signin">Already have an account? Login!</a>
+      <hr *ngIf="!userSignupForm" class="mt-4"/>
+      <div *ngIf="!userSignupForm" class="text-center">
+        <a class="small" routerLink="/signin">Déjà inscrit ? Se connecter</a>
       </div>
     </div>
   </div>

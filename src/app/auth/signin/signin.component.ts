@@ -15,6 +15,7 @@ export class SigninComponent implements OnInit {
 
   private signinForm: FormGroup;
   protected signinError: string;
+  private disabledForm = false;
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -46,6 +47,10 @@ export class SigninComponent implements OnInit {
         if (error && String(error.status)[0] === '4') {
           if (error.status === 401) {
             this.signinError = 'Identifiant ou mot de passe invalide...';
+            this.disabledForm = true;
+            setTimeout( () => {
+              this.disabledForm = false;
+            }, 5000);
           } else {
             this.signinError = 'Une erreur s\'est produite...';
           }
@@ -59,9 +64,13 @@ export class SigninComponent implements OnInit {
     if ( token ) {
       this.authService.auth = token;
       localStorage.setItem('auth', token);
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/items']);
     } else {
       this.router.navigate(['/error']);
     }
+  }
+
+  disabled() {
+    return !this.signinForm.valid || this.disabledForm;
   }
 }

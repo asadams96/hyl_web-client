@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, RoutesRecognized} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {MustMatchPassword} from '../../shared/form-validators/sync/must-match-password.validator';
 import {CheckCellPhoneControle} from '../../shared/form-validators/sync/cellphone-format.validator';
 import {CharacterRepetition} from '../../shared/form-validators/sync/character-repetition.validator';
-import {isString} from 'util';
+import {error, isString} from 'util';
 import {SigninComponent} from '../signin/signin.component';
 import {SignupForm} from './signup-form';
 import {CheckAtomicEmail} from '../../shared/form-validators/async/atomic-email.async-validator';
 import {CheckNoWiteSpace} from '../../shared/form-validators/sync/no-whitespace.validator';
+import {UserService} from '../../user/user.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,40 +19,83 @@ import {CheckNoWiteSpace} from '../../shared/form-validators/sync/no-whitespace.
 })
 export class SignupComponent implements OnInit {
 
+  parent: string;
+  userSignupForm: SignupForm;
+  editUserSuccesMsg: string;
+
   public signupForm: FormGroup = null;
-  protected signupError: string;
 
   constructor(private router: Router,
               private authService: AuthService,
+              private userService: UserService,
               private formBuilder: FormBuilder,
               private signinComponent: SigninComponent) { }
 
   ngOnInit() {
-    this.initForm();
+    this.initDesignateParent();
+    this.initForm(null);
   }
 
-  initForm() {
+  initDesignateParent() {
+    if (this.router.url === '/signup') {
+      this.parent = 'signup';
+    } else if (this.router.url === '/profil') {
+      this.parent = 'profil';
+      this.userService.getLocalUser().then(
+          userSignupForm => {
+            this.userSignupForm = userSignupForm;
+            this.initForm(this.userSignupForm);
+          }
+      );
+    }
+  }
+
+  initForm(userSignupForm: SignupForm) {
+    let email = '';
+    let pseudo = '';
+    let surname = '';
+    let name = '';
+    let civility = '';
+    let cellphone = '';
+    const passValidators = [Validators.minLength(8), MustMatchPassword()];
+    if ( userSignupForm ) {
+      email = userSignupForm.email;
+      pseudo = userSignupForm.pseudo;
+      surname = userSignupForm.surname;
+      name = userSignupForm.name;
+      civility = userSignupForm.civility ? userSignupForm.civility : '';
+      cellphone = userSignupForm.cellphone;
+    } else {
+      passValidators.push(Validators.required);
+    }
+
     this.signupForm = this.formBuilder.group({
 
-      email: ['', [Validators.required, CharacterRepetition(3),
-                    Validators.pattern('^[a-z0-9._-]{3,99}@[a-z0-9._-]{3,99}\.[a-z]{2,}$')], [CheckAtomicEmail(this.authService)]],
+      email: [email, [ Validators.required, CharacterRepetition(3),
+                    Validators.pattern('^[a-z0-9._-]{3,99}@[a-z0-9._-]{3,99}\.[a-z]{2,}$')], [CheckAtomicEmail(this.authService, email)]],
 
-      pseudo: ['', [Validators.required, CheckNoWiteSpace(), Validators.minLength(3), CharacterRepetition(3)]],
+      pseudo: [pseudo, [Validators.required, CheckNoWiteSpace(), Validators.minLength(3), CharacterRepetition(3)]],
 
-      surname: ['', [Validators.required, CheckNoWiteSpace(), CharacterRepetition(3),
+      surname: [surname, [Validators.required, CheckNoWiteSpace(), CharacterRepetition(3),
                       Validators.pattern('[a-zA-Z -]*'), Validators.minLength(3)]],
 
-      name: ['', [Validators.required, CheckNoWiteSpace(), CharacterRepetition(3),
+      name: [name, [Validators.required, CheckNoWiteSpace(), CharacterRepetition(3),
                   Validators.pattern('[a-zA-Z-]*'), Validators.minLength(3)]],
 
-      civility: ['', []],
+      civility: [civility, []],
 
-      cellphone: ['', [CheckCellPhoneControle()]],
+      cellphone: [cellphone, [CheckCellPhoneControle()]],
 
-      password: ['', [Validators.required, Validators.minLength(8), MustMatchPassword()]],
+      password: ['', passValidators],
 
-      password2: ['', [Validators.required, MustMatchPassword()]],
+      password2: ['', [MustMatchPassword()]],
     });
+
+    if ( userSignupForm ) {
+      this.signupForm.addControl('checkbox',
+          this.formBuilder.control(false, [Validators.pattern('true')]));
+    }
+
 
   }
 
@@ -59,20 +103,28 @@ export class SignupComponent implements OnInit {
     const formValue = this.signupForm.value;
     const signupForm = new SignupForm(formValue.email, formValue.pseudo, formValue.surname,
                                       formValue.name, formValue.civility, formValue.cellphone, formValue.password);
-    this.authService.signup(signupForm).subscribe(
-      next => {
-        if ( !isString(next) ) {
-          this.router.navigate(['/error']);
-        }
-        this.signinComponent.manualySignin( String(next) );
-      },
-      error => {
-        if (error && String(error.status)[0] === '4') {
-          this.signupError = 'Une erreur s\'est produite...';
-        } else if (error && String(error.status[0]) === '5') {
-          this.router.navigate(['/error']);
-        }
-      }
-    );
+    if ( this.userSignupForm ) {
+      this.userService.updateUser(signupForm).then(
+          () => {
+            this.initForm(signupForm);
+            this.editUserSuccesMsg = 'Les modifications ont bien été prises en compte';
+          },
+          () => {
+            this.router.navigate(['/error']);
+          }
+      );
+    } else {
+      this.authService.signup(signupForm).subscribe(
+          next => {
+            if (!isString(next)) {
+              this.router.navigate(['/error']);
+            }
+            this.signinComponent.manualySignin(String(next));
+          },
+          () => {
+              this.router.navigate(['/error']);
+          }
+      );
+    }
   }
 }

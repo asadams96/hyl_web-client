@@ -5,10 +5,10 @@ import {error, isBoolean} from 'util';
 import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 
-export function CheckAtomicEmail(authService: AuthService): AsyncValidatorFn {
+export function CheckAtomicEmail(authService: AuthService, exception?: string): AsyncValidatorFn {
   return (emailControl: AbstractControl): Promise<ValidationErrors> | Observable<ValidationErrors> | null => {
 
-    if ( emailControl && emailControl.value && emailControl.value.length > 9 ) {
+    if ( emailControl && emailControl.value && emailControl.value.length > 9  && (!exception || exception === '' || exception !== emailControl.value)) {
       return authService.checkEmail(emailControl.value).pipe(
         map(
           next => {
@@ -22,10 +22,12 @@ export function CheckAtomicEmail(authService: AuthService): AsyncValidatorFn {
           }
       )
     ).toPromise().catch(reason => {
-        console.log('TEST ERROR');
         return {failatomicemail: true};
       });
+    } else {
+        return new Promise((resolve) => {
+            resolve(null);
+        });
     }
-
   };
 }

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {Routes} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, Routes, RoutesRecognized} from '@angular/router';
 import {ListItemComponent} from '../../item/list-item/list-item.component';
+import {ProfilComponent} from '../../user/profil/profil.component';
 
 export const SECURE_ROUTES: Routes = [
-  {path: 'inventaire', component: ListItemComponent}
+  {path: 'inventaire', component: ListItemComponent},
+  {path: 'profil', component: ProfilComponent}
 ];
 
 @Component({
@@ -13,9 +15,23 @@ export const SECURE_ROUTES: Routes = [
 })
 export class SecureLayoutComponent implements OnInit {
 
-  constructor() { }
+  style: string;
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
+    this.initStyle();
   }
 
+  initStyle() {
+    this.router.events.subscribe((event: RoutesRecognized) => {
+      if (event && event.urlAfterRedirects) {
+        if (event.urlAfterRedirects === '/inventaire') {
+          this.style = 'inventaire';
+        } else if (event.urlAfterRedirects === '/profil') {
+          this.style = 'profil';
+        }
+      }
+    });
+  }
 }

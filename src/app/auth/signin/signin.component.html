@@ -4,7 +4,7 @@
   <div class="col-lg-6">
     <div class="p-5">
       <div class="text-center">
-        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+        <h1 class="h4 text-gray-900 mb-4">Connexion</h1>
       </div>
       <hr />
       <form class="user" [formGroup]="signinForm" (ngSubmit)="onSubmitForm()">
@@ -23,7 +23,7 @@
           </div>
         </div>
         -->
-        <button type="submit" class="btn btn-primary text-white btn-user btn-block" [disabled]="!signinForm.valid">
+        <button type="submit" class="btn btn-primary text-white btn-user btn-block" [disabled]="disabled()">
           Login
         </button>
         <!--
@@ -42,7 +42,7 @@
         <a class="small" href="#">Forgot Password?</a>
       </div> -->
       <div class="text-center">
-        <a class="small" routerLink="/signup">Create an Account!</a>
+        <a class="small" routerLink="/signup">Pas de compte ? S'inscrire</a>
       </div>
     </div>
   </div>

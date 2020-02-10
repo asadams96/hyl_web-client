@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     const isAuth: string = this.authService.auth;
     if (isAuth) {
       if (checkPathFromRoutes(url.path, PUBLIC_ROUTES)) {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/inventaire']);
       } else if (checkPathFromRoutes(url.path, SECURE_ROUTES)) {
         return true;
       }
