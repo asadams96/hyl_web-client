@@ -64,7 +64,7 @@ export class SigninComponent implements OnInit {
     if ( token ) {
       this.authService.auth = token;
       localStorage.setItem('auth', token);
-      this.router.navigate(['/items']);
+      this.router.navigate(['/inventaire']);
     } else {
       this.router.navigate(['/error']);
     }

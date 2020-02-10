@@ -24,6 +24,7 @@ export class SecureLayoutComponent implements OnInit {
   }
 
   initStyle() {
+    this.style = this.router.url.slice(1);
     this.router.events.subscribe((event: RoutesRecognized) => {
       if (event && event.urlAfterRedirects) {
         if (event.urlAfterRedirects === '/inventaire') {

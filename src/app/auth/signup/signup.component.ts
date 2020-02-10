@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router, RoutesRecognized} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {MustMatchPassword} from '../../shared/form-validators/sync/must-match-password.validator';
 import {CheckCellPhoneControle} from '../../shared/form-validators/sync/cellphone-format.validator';
 import {CharacterRepetition} from '../../shared/form-validators/sync/character-repetition.validator';
-import {error, isString} from 'util';
+import {isString} from 'util';
 import {SigninComponent} from '../signin/signin.component';
 import {SignupForm} from './signup-form';
 import {CheckAtomicEmail} from '../../shared/form-validators/async/atomic-email.async-validator';
