@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {isString} from 'util';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {SigninForm} from './signin-form';
@@ -36,12 +35,9 @@ export class SigninComponent implements OnInit {
     const formValue = this.signinForm.value;
     const newSignin = new SigninForm(formValue.email, formValue.password);
 
-    this.authService.signin(newSignin).subscribe(
-      response => {
-        if ( !isString(response) ) {
-          this.router.navigate(['/error']);
-        }
-        this.manualySignin(String(response));
+    this.authService.signin(newSignin).then(
+      value => {
+        this.router.navigate(['/inventaire']);
       },
       error => {
         if (error && String(error.status)[0] === '4') {
@@ -58,16 +54,6 @@ export class SigninComponent implements OnInit {
           this.router.navigate(['/error']);
         }
       });
-  }
-
-  public manualySignin(token: string) {
-    if ( token ) {
-      this.authService.auth = token;
-      localStorage.setItem('auth', token);
-      this.router.navigate(['/inventaire']);
-    } else {
-      this.router.navigate(['/error']);
-    }
   }
 
   disabled() {

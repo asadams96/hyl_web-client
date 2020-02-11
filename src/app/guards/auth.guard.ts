@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Routes, Router} from '@angular/router';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, Routes, UrlTree} from '@angular/router';
+import {Observable, Subscription} from 'rxjs';
 import {PUBLIC_ROUTES} from '../layout/public-layout/public-layout.component';
 import {SECURE_ROUTES} from '../layout/secure-layout/secure-layout.component';
 import {AuthService} from '../auth/auth.service';
@@ -8,28 +8,51 @@ import {AuthService} from '../auth/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild {
+
+  auth: string;
+  private authSubscription: Subscription;
 
   constructor(private router: Router, private authService: AuthService) {
+    this.initAuthSubscription();
+    this.authService.emitAuthSubject();
+  }
+
+  initAuthSubscription() {
+    this.authSubscription = this.authService.authSubject.subscribe(
+        (token: string) => {
+          this.auth = token;
+        }
+    );
   }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.guardService(route, route.firstChild.url[0].path);
+  }
+
+  canActivateChild(
+      childRoute: ActivatedRouteSnapshot,
+      state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.guardService(childRoute, childRoute.routeConfig.path);
+  }
 
 
-    const url = route.firstChild.url[0];
-    const isAuth: string = this.authService.auth;
-    if (isAuth) {
-      if (checkPathFromRoutes(url.path, PUBLIC_ROUTES)) {
+
+  guardService(route: ActivatedRouteSnapshot, url: (string)) {
+    if ( checkPathFromRoutes(url, [{path: 'error'}]) ) { return true; }
+
+    if (this.auth !== null && this.auth !== 'null') {
+      if (checkPathFromRoutes(url, PUBLIC_ROUTES)) {
         this.router.navigate(['/inventaire']);
-      } else if (checkPathFromRoutes(url.path, SECURE_ROUTES)) {
+      } else if (checkPathFromRoutes(url, SECURE_ROUTES)) {
         return true;
       }
     } else {
-      if (checkPathFromRoutes(url.path, PUBLIC_ROUTES)) {
+      if (checkPathFromRoutes(url, PUBLIC_ROUTES)) {
         return true;
-      } else if (checkPathFromRoutes(url.path, SECURE_ROUTES)) {
+      } else if (checkPathFromRoutes(url, SECURE_ROUTES)) {
         this.router.navigate(['/signin']);
       }
     }

@@ -1,0 +1,36 @@
+import {Component, OnInit} from '@angular/core';
+import {ImgOperationService} from '../shared/services/img-operation.service';
+import {Router} from '@angular/router';
+
+@Component({
+  selector: 'app-error-page',
+  templateUrl: './error-page.component.html',
+  styleUrls: ['./error-page.component.scss']
+})
+export class ErrorPageComponent implements OnInit {
+
+  host = 'http://localhost:8080';
+  folder = 'hyl-img-pages';
+  file = 'error.png';
+
+  constructor(private imgOperationService: ImgOperationService, private router: Router) { }
+
+  ngOnInit() { }
+
+  resize(img: HTMLImageElement, anchor: HTMLAnchorElement) {
+    const size = anchor.parentElement.parentElement.offsetWidth;
+    this.imgOperationService.setMaxSizeOfImage(img, size, size);
+
+    setTimeout(() => {
+      const size2 = anchor.parentElement.parentElement.offsetWidth;
+      if (size !== size2) {
+        this.imgOperationService.setMaxSizeOfImage(img, size2, size2);
+      }
+    }, 100);
+  }
+
+  redirect() {
+    this.router.navigate(['/']);
+    return false;
+  }
+}

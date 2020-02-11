@@ -27,18 +27,18 @@ import { DelModalComponent } from './item/list-item/shared/del-modal/del-modal.c
 import { RenameModalComponent } from './item/list-item/shared/rename-modal/rename-modal.component';
 import { AddSubitemModalComponent } from './item/list-item/item/add-subitem-modal/add-subitem-modal.component';
 import { ExpandSubitemModalComponent } from './item/list-item/item/sub-item/expand-subitem-modal/expand-subitem-modal.component';
-import * as bootstrap from 'bootstrap';
-import * as $ from 'jquery';
+import * as bootstrap from 'bootstrap'; // Ne pas supprimer
+import * as $ from 'jquery'; // Ne pas supprimer
 import { TrackingSheetComponent } from './item/list-item/item/sub-item/tracking-sheet/tracking-sheet.component';
 import { AddTrackingSheetModalComponent } from './item/list-item/item/sub-item/add-tracking-sheet-modal/add-tracking-sheet-modal.component';
 import {DatePipe} from '@angular/common';
 import { ProfilComponent } from './user/profil/profil.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 const appRoutes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
-  { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard] },
+  { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard], canActivateChild: [AuthGuard]},
   { path: '', component : SecureLayoutComponent , children: SECURE_ROUTES, canActivate: [AuthGuard] },
-  // TODO EDITER LA ROUTE PAR SIGNIN QUAND COMPOSANT SECURE CREE -> Evite bug pour le moment en simulant route /dashboard
-  {path: '**', component: SecureLayoutComponent}
+  {path: '**', redirectTo: '/signin'}
 ];
 
 @NgModule({
@@ -66,6 +66,7 @@ const appRoutes: Routes = [
     TrackingSheetComponent,
     AddTrackingSheetModalComponent,
     ProfilComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,7 +78,6 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     AuthService,
     HttpClient,
-    SigninComponent,
     ItemService,
     DatePipe
   ],

@@ -11,13 +11,9 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getLocalUser(): Promise<SignupForm> {
+  getLocalUser() {
     const params = {token: localStorage.getItem('auth')};
-    return this.httpClient.get<SignupForm>(this.host + '/get-user', {params}).toPromise().catch(
-        reason => {
-          console.log(reason);
-          return reason;
-        });
+    return this.httpClient.get<SignupForm>(this.host + '/get-user', {params}).toPromise();
   }
 
   updateUser(signupForm: SignupForm) {

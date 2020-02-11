@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 
@@ -16,9 +16,13 @@ export class SignoutComponent implements OnInit {
   }
 
   onLogout() {
-    this.authService.signout(localStorage.getItem('auth'));
-    localStorage.removeItem('auth');
-    this.authService.auth = null;
-    this.router.navigate(['/signin']);
+    this.authService.signout().then(
+        () => {
+          this.router.navigate(['/signin']);
+        },
+        () => {
+          this.router.navigate(['/error']);
+        }
+    );
   }
 }

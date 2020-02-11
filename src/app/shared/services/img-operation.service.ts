@@ -222,7 +222,7 @@ export class ImgOperationService {
             this.emitImageServiceSubjects();
           },
           reason => {
-            console.log('ERROR ->loadFilesFromUrl->' + reason.message);
+            console.log(reason.message);
           }
       );
     }

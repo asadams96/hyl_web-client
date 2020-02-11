@@ -5,7 +5,6 @@ import {AuthService} from '../auth.service';
 import {MustMatchPassword} from '../../shared/form-validators/sync/must-match-password.validator';
 import {CheckCellPhoneControle} from '../../shared/form-validators/sync/cellphone-format.validator';
 import {CharacterRepetition} from '../../shared/form-validators/sync/character-repetition.validator';
-import {isString} from 'util';
 import {SigninComponent} from '../signin/signin.component';
 import {SignupForm} from './signup-form';
 import {CheckAtomicEmail} from '../../shared/form-validators/async/atomic-email.async-validator';
@@ -19,7 +18,6 @@ import {UserService} from '../../user/user.service';
 })
 export class SignupComponent implements OnInit {
 
-  parent: string;
   userSignupForm: SignupForm;
   editUserSuccesMsg: string;
 
@@ -33,18 +31,24 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.initDesignateParent();
-    this.initForm(null);
   }
 
   initDesignateParent() {
+
     if (this.router.url === '/signup') {
-      this.parent = 'signup';
+      this.initForm(null);
+
     } else if (this.router.url === '/profil') {
-      this.parent = 'profil';
+      this.userSignupForm = new SignupForm('', '', '', '', '', '', '');
+      this.initForm(this.userSignupForm);
+
       this.userService.getLocalUser().then(
-          userSignupForm => {
+          (userSignupForm) => {
             this.userSignupForm = userSignupForm;
             this.initForm(this.userSignupForm);
+          },
+          reason => {
+            console.log(reason);
           }
       );
     }
@@ -114,12 +118,9 @@ export class SignupComponent implements OnInit {
           }
       );
     } else {
-      this.authService.signup(signupForm).subscribe(
-          next => {
-            if (!isString(next)) {
-              this.router.navigate(['/error']);
-            }
-            this.signinComponent.manualySignin(String(next));
+      this.authService.signup(signupForm).then(
+          () => {
+            this.router.navigate(['/inventaire']);
           },
           () => {
               this.router.navigate(['/error']);
