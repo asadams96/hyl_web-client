@@ -5,7 +5,6 @@ import {AuthService} from '../auth.service';
 import {MustMatchPassword} from '../../shared/form-validators/sync/must-match-password.validator';
 import {CheckCellPhoneControle} from '../../shared/form-validators/sync/cellphone-format.validator';
 import {CharacterRepetition} from '../../shared/form-validators/sync/character-repetition.validator';
-import {SigninComponent} from '../signin/signin.component';
 import {SignupForm} from './signup-form';
 import {CheckAtomicEmail} from '../../shared/form-validators/async/atomic-email.async-validator';
 import {CheckNoWiteSpace} from '../../shared/form-validators/sync/no-whitespace.validator';
@@ -26,8 +25,7 @@ export class SignupComponent implements OnInit {
   constructor(private router: Router,
               private authService: AuthService,
               private userService: UserService,
-              private formBuilder: FormBuilder,
-              private signinComponent: SigninComponent) { }
+              private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.initDesignateParent();
