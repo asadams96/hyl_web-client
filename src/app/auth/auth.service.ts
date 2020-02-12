@@ -47,12 +47,7 @@ export class AuthService {
         );
   }
 
-  checkEmail(email: string) {
-    const params = {email};
-    return this.httpClient.get(this.host + '/check-email', {params});
-  }
-
-    signout() {
+  signout() {
     return this.httpClient.post(this.host + '/signout', {token: this.auth}).toPromise().then(
         () => {
           this.setAuthState(null);
@@ -61,6 +56,15 @@ export class AuthService {
           console.log(reason);
         }
     );
+  }
+
+  forgotPassword(email: string) {
+      return this.httpClient.post(this.host + '/forgot-password', {email}).toPromise();
+  }
+
+  checkEmail(email: string) {
+      const params = {email};
+      return this.httpClient.get(this.host + '/check-email', {params});
   }
 
   private setAuthState(token: string) {

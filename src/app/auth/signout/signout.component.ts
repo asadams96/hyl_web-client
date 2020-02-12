@@ -18,10 +18,10 @@ export class SignoutComponent implements OnInit {
   onLogout() {
     this.authService.signout().then(
         () => {
-          this.router.navigate(['/signin']);
+          this.router.navigate(['/connexion']);
         },
         () => {
-          this.router.navigate(['/error']);
+          this.router.navigate(['/erreur']);
         }
     );
   }

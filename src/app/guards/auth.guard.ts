@@ -53,7 +53,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       if (checkPathFromRoutes(url, PUBLIC_ROUTES)) {
         return true;
       } else if (checkPathFromRoutes(url, SECURE_ROUTES)) {
-        this.router.navigate(['/signin']);
+        this.router.navigate(['/connexion']);
       }
     }
 

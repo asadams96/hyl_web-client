@@ -33,7 +33,7 @@ export class SignupComponent implements OnInit {
 
   initDesignateParent() {
 
-    if (this.router.url === '/signup') {
+    if (this.router.url === '/inscription') {
       this.initForm(null);
 
     } else if (this.router.url === '/profil') {
@@ -112,7 +112,7 @@ export class SignupComponent implements OnInit {
             this.editUserSuccesMsg = 'Les modifications ont bien été prises en compte';
           },
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else {
@@ -121,7 +121,7 @@ export class SignupComponent implements OnInit {
             this.router.navigate(['/inventaire']);
           },
           () => {
-              this.router.navigate(['/error']);
+              this.router.navigate(['/erreur']);
           }
       );
     }

@@ -73,7 +73,7 @@ export class RenameModalComponent implements OnInit {
             this.initRenameForm();
           },
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else if ( this.whoRename instanceof ItemComponent) {
@@ -82,7 +82,7 @@ export class RenameModalComponent implements OnInit {
             this.initRenameForm();
           },
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else if ( this.whoRename instanceof SubItemComponent) {
@@ -91,11 +91,11 @@ export class RenameModalComponent implements OnInit {
             this.initRenameForm();
           },
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else {
-      this.router.navigate(['/error']);
+      this.router.navigate(['/erreur']);
     }
   }
 

@@ -40,7 +40,7 @@ export class MoveModalComponent implements OnInit {
             this.initMoveForm();
           },
           reason => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else if (this.whoMove instanceof ItemComponent) {
@@ -49,11 +49,11 @@ export class MoveModalComponent implements OnInit {
             this.initMoveForm();
           },
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else {
-      this.router.navigate(['/error']);
+      this.router.navigate(['/erreur']);
     }
   }
 

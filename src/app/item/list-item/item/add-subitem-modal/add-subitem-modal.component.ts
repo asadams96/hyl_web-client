@@ -49,7 +49,7 @@ export class AddSubitemModalComponent implements OnInit {
 
   checkClass() {
     if ( !(this.object instanceof ItemComponent) && !(this.object instanceof SubItemComponent) ) {
-      this.router.navigate(['/error']);
+      this.router.navigate(['/erreur']);
     }
   }
 
@@ -117,7 +117,7 @@ export class AddSubitemModalComponent implements OnInit {
             this.imgOperationService.reset();
           },
           reason => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else if (this.object instanceof SubItemComponent) {
@@ -128,7 +128,7 @@ export class AddSubitemModalComponent implements OnInit {
             this.firstLoadEditSubItem = true;
           },
           reason => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     }

@@ -39,7 +39,7 @@ export class ListItemComponent implements OnInit {
   private fillMainCategory() {
       this.itemService.getItemsFormatInCategory().catch(
           () => {
-              this.router.navigate(['/error']);
+              this.router.navigate(['/erreur']);
           }
       );
   }

@@ -51,7 +51,7 @@ export class SigninComponent implements OnInit {
             this.signinError = 'Une erreur s\'est produite...';
           }
         } else if (error && String(error.status[0]) === '5') {
-          this.router.navigate(['/error']);
+          this.router.navigate(['/erreur']);
         }
       });
   }

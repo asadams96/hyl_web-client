@@ -34,11 +34,12 @@ import { AddTrackingSheetModalComponent } from './item/list-item/item/sub-item/a
 import {DatePipe} from '@angular/common';
 import { ProfilComponent } from './user/profil/profil.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/signin', pathMatch: 'full', canActivate: [AuthGuard]},
+  { path: '', redirectTo: '/connexion', pathMatch: 'full', canActivate: [AuthGuard]},
   { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard], canActivateChild: [AuthGuard]},
   { path: '', component : SecureLayoutComponent , children: SECURE_ROUTES, canActivate: [AuthGuard] },
-  {path: '**', redirectTo: '/signin'}
+  {path: '**', redirectTo: '/connexion'}
 ];
 
 @NgModule({
@@ -67,6 +68,7 @@ const appRoutes: Routes = [
     AddTrackingSheetModalComponent,
     ProfilComponent,
     ErrorPageComponent,
+    ForgotPassComponent,
   ],
   imports: [
     BrowserModule,

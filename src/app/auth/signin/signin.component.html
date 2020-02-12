@@ -10,10 +10,10 @@
       <form class="user" [formGroup]="signinForm" (ngSubmit)="onSubmitForm()">
         <p class="text-center text-danger" *ngIf="signinError">{{ signinError }}</p>
         <div class="form-group">
-          <input type="email" formControlName="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+          <input type="email" formControlName="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Adresse mail">
         </div>
         <div class="form-group">
-          <input type="password" formControlName="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+          <input type="password" formControlName="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Mot de passe">
         </div>
         <!--
         <div class="form-validators-group">
@@ -24,7 +24,7 @@
         </div>
         -->
         <button type="submit" class="btn btn-primary text-white btn-user btn-block" [disabled]="disabled()">
-          Login
+          Connexion
         </button>
         <!--
         <hr>
@@ -37,12 +37,12 @@
         -->
       </form>
       <hr>
-      <!--
+
       <div class="text-center">
-        <a class="small" href="#">Forgot Password?</a>
-      </div> -->
+        <a class="small" routerLink="/mdp-oublie">Mot de passe oublié ?</a>
+      </div>
       <div class="text-center">
-        <a class="small" routerLink="/signup">Pas de compte ? S'inscrire</a>
+        <a class="small" routerLink="/inscription">Pas de compte ? S'inscrire</a>
       </div>
     </div>
   </div>

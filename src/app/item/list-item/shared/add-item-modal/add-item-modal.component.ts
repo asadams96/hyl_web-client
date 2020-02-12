@@ -115,7 +115,7 @@ export class AddItemModalComponent implements OnInit {
           this.imgOperationService.reset();
         },
         reason => {
-          this.router.navigate(['error']);
+          this.router.navigate(['/erreur']);
         }
     );
   }

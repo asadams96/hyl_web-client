@@ -34,23 +34,23 @@ export class DelModalComponent implements OnInit {
     if ( this.whoDelete instanceof ItemComponent ) {
       this.itemService.deleteItem(this.whoDelete).catch(
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else if ( this.whoDelete instanceof CategoryComponent ) {
       this.itemService.deleteCategory(this.whoDelete).catch(
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else if ( this.whoDelete instanceof SubItemComponent ) {
       this.itemService.deleteSubItem(this.whoDelete).catch(
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else {
-      this.router.navigate(['/error']);
+      this.router.navigate(['/erreur']);
     }
   }
 

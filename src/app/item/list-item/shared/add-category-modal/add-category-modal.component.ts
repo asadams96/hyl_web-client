@@ -41,7 +41,7 @@ export class AddCategoryModalComponent implements OnInit {
             this.initCreateCategoryForm();
           },
           () => {
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else if ((String(this.formWithType && this.createCategoryForm.controls.type.value) === 'P')) {
@@ -51,11 +51,11 @@ export class AddCategoryModalComponent implements OnInit {
           },
           reason => {
             console.log(reason);
-            this.router.navigate(['/error']);
+            this.router.navigate(['/erreur']);
           }
       );
     } else {
-      this.router.navigate(['/error']);
+      this.router.navigate(['/erreur']);
     }
   }
 }
