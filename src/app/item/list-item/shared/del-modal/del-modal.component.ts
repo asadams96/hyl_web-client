@@ -33,19 +33,22 @@ export class DelModalComponent implements OnInit {
   onSubmitDeleteForm() {
     if ( this.whoDelete instanceof ItemComponent ) {
       this.itemService.deleteItem(this.whoDelete).catch(
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );
     } else if ( this.whoDelete instanceof CategoryComponent ) {
       this.itemService.deleteCategory(this.whoDelete).catch(
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );
     } else if ( this.whoDelete instanceof SubItemComponent ) {
       this.itemService.deleteSubItem(this.whoDelete).catch(
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );

@@ -20,7 +20,8 @@ export class SignoutComponent implements OnInit {
         () => {
           this.router.navigate(['/connexion']);
         },
-        () => {
+        reason => {
+          console.log(reason);
           this.router.navigate(['/erreur']);
         }
     );

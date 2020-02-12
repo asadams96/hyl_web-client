@@ -44,13 +44,15 @@ export class SigninComponent implements OnInit {
           if (error.status === 401) {
             this.signinError = 'Identifiant ou mot de passe invalide...';
             this.disabledForm = true;
-            setTimeout( () => {
+            const interval = setInterval( () => {
+              console.log('FALSE');
               this.disabledForm = false;
+              clearInterval(interval);
             }, 5000);
           } else {
             this.signinError = 'Une erreur s\'est produite...';
           }
-        } else if (error && String(error.status[0]) === '5') {
+        } else {
           this.router.navigate(['/erreur']);
         }
       });

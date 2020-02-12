@@ -38,7 +38,8 @@ export class ListItemComponent implements OnInit {
 
   private fillMainCategory() {
       this.itemService.getItemsFormatInCategory().catch(
-          () => {
+          reason => {
+              console.log(reason);
               this.router.navigate(['/erreur']);
           }
       );
@@ -46,15 +47,17 @@ export class ListItemComponent implements OnInit {
 
   private addCategoryClick() {
       this.addCategoryModal = true;
-      setTimeout( () => {
+      const interval = setInterval( () => {
           $('#addCategoryModal' + this.category.id).modal('show');
+          clearInterval(interval);
       }, 500);
   }
 
   private addItemClick() {
       this.addItemModal = true;
-      setTimeout( () => {
+      const interval = setInterval( () => {
           $('#addItemModal' + this.category.id).modal('show');
+          clearInterval(interval);
       }, 500);
   }
 }

@@ -40,7 +40,8 @@ export class AddCategoryModalComponent implements OnInit {
           () => {
             this.initCreateCategoryForm();
           },
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );

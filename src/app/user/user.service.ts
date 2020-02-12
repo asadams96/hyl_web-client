@@ -18,13 +18,6 @@ export class UserService {
 
   updateUser(signupForm: SignupForm) {
         const token = localStorage.getItem('auth');
-
-        return this.httpClient.patch(this.host + '/patch-user', {token, user: signupForm})
-            .toPromise().then(
-                () => {},
-                reason => {
-                    console.log(reason);
-                }
-            );
+        return this.httpClient.patch(this.host + '/patch-user', {token, user: signupForm}).toPromise();
     }
 }

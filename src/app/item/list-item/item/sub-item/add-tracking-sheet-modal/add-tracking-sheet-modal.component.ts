@@ -37,6 +37,7 @@ export class AddTrackingSheetModalComponent implements OnInit {
           this.initTrackingSheetForm();
         },
         reason => {
+          console.log(reason);
           this.router.navigate(['/erreur']);
         }
     );

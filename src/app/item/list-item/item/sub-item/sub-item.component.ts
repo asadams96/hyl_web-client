@@ -30,16 +30,18 @@ export class SubItemComponent implements OnInit {
 
   deleteSubItemClick() {
     this.deleteSubItemModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#deleteModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
     return false;
   }
 
   renameSubItemClick() {
     this.renameSubItemModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#renameModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
     return false;
   }
@@ -49,7 +51,7 @@ export class SubItemComponent implements OnInit {
     subitem.expandSubitem = true;
     subitem.deleteSubItemModal = true; // Acces au modal via un bouton dans le expandSubItem
 
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#expandSubItemModal' + this.id).modal('show');
 
       const expandSubitemClosingElement = [
@@ -61,6 +63,8 @@ export class SubItemComponent implements OnInit {
       function event() {
         subitem.expandSubitem = false;
       }
+
+      clearInterval(interval);
     }, 500 );
   }
 }

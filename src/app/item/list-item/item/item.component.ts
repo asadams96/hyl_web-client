@@ -30,26 +30,30 @@ export class ItemComponent implements OnInit {
 
   renameItemClick() {
     this.renameItemModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#renameModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
   }
   moveItemClick() {
     this.moveItemModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#moveModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
   }
   deleteItemClick() {
     this.deleteItemModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#deleteModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
   }
   addSubItemClick() {
     this.addSubItemModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#addSubItemModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
   }
 }

@@ -40,6 +40,7 @@ export class MoveModalComponent implements OnInit {
             this.initMoveForm();
           },
           reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );
@@ -48,7 +49,8 @@ export class MoveModalComponent implements OnInit {
           () => {
             this.initMoveForm();
           },
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );

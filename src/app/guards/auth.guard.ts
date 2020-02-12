@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
 
   guardService(route: ActivatedRouteSnapshot, url: (string)) {
-    if ( checkPathFromRoutes(url, [{path: 'error'}]) ) { return true; }
+    if ( checkPathFromRoutes(url, [{path: 'erreur'}]) ) { return true; }
 
     if (this.auth !== null && this.auth !== 'null') {
       if (checkPathFromRoutes(url, PUBLIC_ROUTES)) {

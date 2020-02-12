@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SigninForm} from './signin/signin-form';
 import {HttpClient} from '@angular/common/http';
-import {Subject} from 'rxjs';
+import {Subject, throwError} from 'rxjs';
 import {SignupForm} from './signup/signup-form';
 
 @Injectable({
@@ -25,9 +25,6 @@ export class AuthService {
         .toPromise().then(
         token => {
           this.setAuthState(token);
-        },
-        reason => {
-          console.log(reason);
         }
     );
   }
@@ -40,9 +37,6 @@ export class AuthService {
         .toPromise().then(
             token => {
               this.setAuthState(token);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -51,9 +45,6 @@ export class AuthService {
     return this.httpClient.post(this.host + '/signout', {token: this.auth}).toPromise().then(
         () => {
           this.setAuthState(null);
-        },
-        reason => {
-          console.log(reason);
         }
     );
   }

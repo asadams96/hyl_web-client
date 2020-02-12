@@ -49,9 +49,6 @@ export class ItemService {
           this.categoryStorage.id = null;
           this.categoryStorage.name = 'Inventaire';
           this.emitCategoryStorage();
-        },
-        reason => {
-          console.log(reason);
         }
     );
   }
@@ -90,9 +87,6 @@ export class ItemService {
       .toPromise<CategoryComponent>().then(
       newCategory => {
         this.addNewChildCategoryToArray([this.categoryStorage], newCategory, idParent);
-      },
-      reason => {
-        console.log(reason);
       }
     );
   }
@@ -105,9 +99,6 @@ export class ItemService {
       .toPromise<CategoryComponent>().then(
         newCategory => {
           this.addNewParentCategoryToArray(this.categoryStorage.categories, newCategory, idChild);
-        },
-        reason => {
-          console.log(reason);
         }
       );
   }
@@ -120,9 +111,6 @@ export class ItemService {
       .toPromise().then(
         () => {
           this.renameCategoryInArray(this.categoryStorage.categories, name, id);
-        },
-        reason => {
-          console.log(reason);
         }
       );
   }
@@ -135,9 +123,6 @@ export class ItemService {
     return this.httpClient.delete(this.host + '/items/delete-category', {params}).toPromise().then(
       () => {
         this.deleteCategoryInArray(this.categoryStorage, category, true);
-      },
-      reason => {
-        console.log(reason);
       }
     );
   }
@@ -157,9 +142,6 @@ export class ItemService {
         .toPromise<ItemComponent>().then(
             newItem => {
               this.addNewItemToArray(this.categoryStorage, newItem, idCategory);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -176,9 +158,6 @@ export class ItemService {
           this.deleteCategoryInArray(this.categoryStorage, categoryToMove, false);
           this.addNewChildCategoryToArray([this.categoryStorage], categoryToMove, idCategoryDestination);
 
-        },
-        reason => {
-          console.log(reason);
         }
     );
   }
@@ -217,9 +196,6 @@ export class ItemService {
         .toPromise().then(
             () => {
               this.renameItemInArray(this.categoryStorage, name, id);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -235,9 +211,6 @@ export class ItemService {
               this.deleteItemInArray(this.categoryStorage, id);
               this.addNewItemToArray(this.categoryStorage, item, idCategory);
 
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -251,9 +224,6 @@ export class ItemService {
         .toPromise().then(
             () => {
               this.deleteItemInArray(this.categoryStorage, item.id);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -274,9 +244,6 @@ export class ItemService {
         .toPromise<SubItemComponent>().then(
             newSubItem => {
               this.addNewSubItemToArray(this.categoryStorage, newSubItem, idItem);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -289,9 +256,6 @@ export class ItemService {
         .toPromise().then(
             () => {
               this.renameSubItemInArray(this.categoryStorage, reference, id);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -305,9 +269,6 @@ export class ItemService {
         .toPromise().then(
             () => {
               this.deleteSubItemInArray(this.categoryStorage, subItem.id);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -360,9 +321,6 @@ export class ItemService {
         .toPromise<SubItemComponent>().then(
             updateSubItem => {
               this.replaceSubItemInArray(this.categoryStorage, updateSubItem);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -375,9 +333,6 @@ export class ItemService {
         .toPromise<SubItemComponent>().then(
             updateSubitem => {
               this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -398,9 +353,6 @@ export class ItemService {
               for (const id of ids) {
                 this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
               }
-            },
-            reason => {
-              console.log(reason);
             }
         );
   }
@@ -413,13 +365,9 @@ export class ItemService {
   private addNewChildCategoryToArray(categories: CategoryComponent[], newCategory: CategoryComponent, idParent: bigint) {
 
     // Si ajout d'une propriété dans l'inventaire
-    console.log('idParent->' + String(idParent));
-    console.log('idParent === null ->' + String(idParent) === 'null');
     if (String(idParent) === 'null') {
-      console.log('idParent->' + idParent);
       if (categories[0].categories === null) { categories[0].categories = []; }
       categories[0].categories.push(newCategory);
-      console.log('ADD');
       this.emitCategoryStorage();
     } else {
 
@@ -433,7 +381,6 @@ export class ItemService {
       // Si index différent de -1 ->  catégorie parente trouvé -> Ajout de la nouvelle catégorie dans les enfants de la catégorie parente
       // Sinon on chercher la catégorie parente dans les enfants de l'array 'catégories' en paramètre et ainsi de suite de façon récurssive
       if (index !== -1) {
-        console.log('ADD');
         if (categories[index].categories === null) {
           categories[index].categories = [];
         }

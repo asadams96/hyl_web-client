@@ -117,6 +117,7 @@ export class AddSubitemModalComponent implements OnInit {
             this.imgOperationService.reset();
           },
           reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );
@@ -128,6 +129,7 @@ export class AddSubitemModalComponent implements OnInit {
             this.firstLoadEditSubItem = true;
           },
           reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );

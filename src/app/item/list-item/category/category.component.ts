@@ -32,36 +32,41 @@ export class CategoryComponent implements OnInit {
 
   addCategoryClick() {
     this.addCategoryModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#addCategoryModal' + this.id).modal('show');
+      clearInterval(interval);
     }, 500);
     return false;
   }
   renameCategoryClick() {
     this.renameCategoryModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#renameModal' + this.id + this.getClassNameFirstLetter() ).modal('show');
+      clearInterval(interval);
     }, 500);
     return false;
   }
   deleteCategoryClick() {
     this.deleteCategoryModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#deleteModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
     return false;
   }
   addItemClick() {
     this.addItemModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#addItemModal' + this.id ).modal('show');
+      clearInterval(interval);
     }, 500);
     return false;
   }
   moveCategoryClick() {
     this.moveCategoryModal = true;
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#moveModal' + this.id + this.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
     return false;
   }

@@ -12,6 +12,7 @@ export class ErrorPageComponent implements OnInit {
   host = 'http://localhost:8080';
   folder = 'hyl-img-pages';
   file = 'error.png';
+  errorLoad = false;
 
   constructor(private imgOperationService: ImgOperationService, private router: Router) { }
 
@@ -21,16 +22,21 @@ export class ErrorPageComponent implements OnInit {
     const size = anchor.parentElement.parentElement.offsetWidth;
     this.imgOperationService.setMaxSizeOfImage(img, size, size);
 
-    setTimeout(() => {
+    const interval = setInterval(() => {
       const size2 = anchor.parentElement.parentElement.offsetWidth;
       if (size !== size2) {
         this.imgOperationService.setMaxSizeOfImage(img, size2, size2);
       }
+      clearInterval(interval);
     }, 100);
   }
 
   redirect() {
     this.router.navigate(['/']);
     return false;
+  }
+
+  onError() {
+    this.errorLoad = true;
   }
 }

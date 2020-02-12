@@ -72,7 +72,8 @@ export class RenameModalComponent implements OnInit {
           value =>  {
             this.initRenameForm();
           },
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );
@@ -81,7 +82,8 @@ export class RenameModalComponent implements OnInit {
           () => {
             this.initRenameForm();
           },
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );
@@ -90,7 +92,8 @@ export class RenameModalComponent implements OnInit {
           () => {
             this.initRenameForm();
           },
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );

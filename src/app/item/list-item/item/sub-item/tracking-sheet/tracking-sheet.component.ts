@@ -139,8 +139,10 @@ export class TrackingSheetComponent implements OnInit, AfterViewInit {
   }
 
   deleteTrackingSheets( trackingSheets: {id: bigint, date: Date, comment: string}[] ) {
-    this.itemService.deleteTrackingSheets(trackingSheets).catch(() => {
-      this.router.navigate(['/erreur']);
+    this.itemService.deleteTrackingSheets(trackingSheets).catch(
+      reason => {
+        console.log(reason);
+        this.router.navigate(['/erreur']);
     });
   }
 }

@@ -111,7 +111,8 @@ export class SignupComponent implements OnInit {
             this.initForm(signupForm);
             this.editUserSuccesMsg = 'Les modifications ont bien été prises en compte';
           },
-          () => {
+          reason => {
+            console.log(reason);
             this.router.navigate(['/erreur']);
           }
       );
@@ -120,8 +121,9 @@ export class SignupComponent implements OnInit {
           () => {
             this.router.navigate(['/inventaire']);
           },
-          () => {
-              this.router.navigate(['/erreur']);
+          reason => {
+            console.log(reason);
+            this.router.navigate(['/erreur']);
           }
       );
     }

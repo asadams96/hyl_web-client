@@ -59,7 +59,7 @@ export class ExpandSubitemModalComponent implements OnInit {
     this.editSubitem = true;
     $('#expandSubItemModal' + this.subitem.id ).modal('hide');
 
-    setTimeout(() => {
+    const interval = setInterval(() => {
       const closingListenerAddSubItemModal = [
         $('#crossAddSubItemModal' + this.subitem.id.toString() + this.subitem.getClassNameFirstLetter()).get()[0],
         $('#cancelAddSubItemModal' + this.subitem.id.toString() + this.subitem.getClassNameFirstLetter()).get()[0],
@@ -71,6 +71,8 @@ export class ExpandSubitemModalComponent implements OnInit {
       }
 
       $('#addSubItemModal' + this.subitem.id + this.subitem.getClassNameFirstLetter()).modal('show');
+
+      clearInterval(interval);
     }, 500);
 
 
@@ -101,8 +103,9 @@ export class ExpandSubitemModalComponent implements OnInit {
       this.clickEvent(this, htmlElement);
     }
 
-    setTimeout( () => {
+    const interval = setInterval( () => {
       $('#deleteModal' + this.subitem.id + this.subitem.getClassNameFirstLetter()).modal('show');
+      clearInterval(interval);
     }, 500);
   }
 
@@ -110,7 +113,7 @@ export class ExpandSubitemModalComponent implements OnInit {
     this.addTrackingSheetModal = true;
     $('#expandSubItemModal' + this.subitem.id ).modal('hide');
 
-    setTimeout( () => {
+    const interval = setInterval( () => {
       const closingListenerDelModal = [
         document.getElementById('crossAddTrackingSheetModal' + this.subitem.id.toString()),
         document.getElementById('cancelAddTrackingSheetModal' + this.subitem.id.toString()),
@@ -121,6 +124,8 @@ export class ExpandSubitemModalComponent implements OnInit {
         this.clickEvent(this, htmlElement);
       }
       $('#addTrackingSheetModal' + this.subitem.id).modal('show');
+
+      clearInterval(interval);
     }, 500);
 
   }
@@ -129,8 +134,9 @@ export class ExpandSubitemModalComponent implements OnInit {
     function event() {
       const expandSubitemModal = $('#expandSubItemModal' + expandSubitemModalComponent.subitem.id);
       if ( !expandSubitemModal.get()[0].className.includes('show') ) {
-        setTimeout(() => {
+        const interval = setInterval(() => {
           expandSubitemModal.modal('show');
+          clearInterval(interval);
         }, 500);
       }
       htmlElement.removeEventListener('click', event);
