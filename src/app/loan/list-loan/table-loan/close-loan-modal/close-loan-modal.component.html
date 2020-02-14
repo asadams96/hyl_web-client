@@ -1,0 +1,58 @@
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true" [id]="'closeLoanModal'+(!singleLoan ? 'All': loans[0].id)"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel3">
+                    <span *ngIf="singleLoan">
+                        Clôturer le prêt ?
+                    </span>
+                    <span *ngIf="!singleLoan">
+                        Clôturer tous les prêts ?
+                    </span>
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-window-close text-danger" ></i></span>
+                </button>
+            </div>
+            <form [formGroup]="closeForm">
+                <div class="modal-body">
+                    <div *ngIf="singleLoan">
+                        <p class="font-weight-bolder text-danger text-center">Attention, vous êtes sur le point de clôturer un pret.</p>
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-info">Date de création :
+                                <span class="ml-lg-3 ml-md-3 ml-sm-3 font-weight-bolder">{{ loans[0].startDate | date: 'dd/MM/yyyy'}}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-info">Bénéficiaire :
+                                <span class="ml-lg-5 ml-md-5 ml-sm-5 font-weight-bolder">{{ loans[0].beneficiary }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-info">Référence objet :
+                                <span class="ml-lg-3 ml-md-3 ml-sm-3 font-weight-bolder">{{ loans[0].reference }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p *ngIf="!singleLoan" class="text-danger font-weight-bolder text-center">
+                        Attention, vous allez clôturer tous les prêts.
+                    </p>
+                    <div class="form-group mt-4 mb-4">
+                        <textarea class="form-control" formControlName="comment" id="commentClose" [maxlength]="maxlengthComment"
+                                  placeholder="{{ (!singleLoan ? 'Commenter les clôtures des prêts ?' :
+                                  'Commenter la clôture du pret ?') + ' (15 caracts min)' }}"> </textarea>
+                    </div>
+                    <div class="mt-2 text-right">
+                        Cocher pour déverrouiller le bouton
+                        <input class="mr-2 ml-2" type="checkbox" formControlName="checkbox">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" type="submit" data-dismiss="modal"
+                            (click)="onSubmitCloseLoanForm()" [disabled]="!closeForm.valid">
+                        Clôturer {{ singleLoan ? 'le prêt' : 'tous les prêts'}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

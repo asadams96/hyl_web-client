@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CheckAtomicSubItemRef} from '../../../../shared/form-validators/async/atomic-subitem-ref.async-validator';
 import {Subscription} from 'rxjs';
 import {ItemService} from '../../../item.service';
-import {ImgOperationService} from '../../../../shared/services/img-operation.service';
+import {ImgOperationService} from '../../../../shared/services/img-operation/img-operation.service';
 import {Router} from '@angular/router';
 import {ItemComponent} from '../item.component';
 import {SubItemComponent} from '../sub-item/sub-item.component';

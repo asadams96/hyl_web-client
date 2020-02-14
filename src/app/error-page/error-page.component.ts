@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ImgOperationService} from '../shared/services/img-operation.service';
+import {ImgOperationService} from '../shared/services/img-operation/img-operation.service';
 import {Router} from '@angular/router';
 
 @Component({

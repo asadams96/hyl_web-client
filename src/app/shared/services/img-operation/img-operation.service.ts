@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {CheckFilesUploadFormat} from '../form-validators/sync/file-upload-format.validator';
-import {CheckFilesUploadSize} from '../form-validators/sync/file-upload-size.validator';
+import {CheckFilesUploadFormat} from '../../form-validators/sync/file-upload-format.validator';
+import {CheckFilesUploadSize} from '../../form-validators/sync/file-upload-size.validator';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 

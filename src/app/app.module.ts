@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {PUBLIC_ROUTES, PublicLayoutComponent} from './layout/public-layout/public-layout.component';
 import {SECURE_ROUTES, SecureLayoutComponent} from './layout/secure-layout/secure-layout.component';
-import {RouterModule, Routes} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule, Routes} from '@angular/router';
 import { SidebarComponent } from './layout/secure-layout/sidebar/sidebar.component';
 import { FooterComponent } from './layout/secure-layout/footer/footer.component';
 import { TopbarComponent } from './layout/secure-layout/topbar/topbar.component';
@@ -35,6 +35,11 @@ import {DatePipe} from '@angular/common';
 import { ProfilComponent } from './user/profil/profil.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
+import { ListLoanComponent } from './loan/list-loan/list-loan.component';
+import { TableLoanComponent } from './loan/list-loan/table-loan/table-loan.component';
+import {LoanService} from './loan/loan.service';
+import { CloseLoanModalComponent } from './loan/list-loan/table-loan/close-loan-modal/close-loan-modal.component';
+
 const appRoutes: Routes = [
   { path: '', redirectTo: '/connexion', pathMatch: 'full', canActivate: [AuthGuard]},
   { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard], canActivateChild: [AuthGuard]},
@@ -69,19 +74,23 @@ const appRoutes: Routes = [
     ProfilComponent,
     ErrorPageComponent,
     ForgotPassComponent,
+    ListLoanComponent,
+    TableLoanComponent,
+    CloseLoanModalComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     ReactiveFormsModule,
     AuthService,
     HttpClient,
     ItemService,
-    DatePipe
+    DatePipe,
+    LoanService,
   ],
   bootstrap: [AppComponent]
 })

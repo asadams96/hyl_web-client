@@ -5,7 +5,6 @@ import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
 import {isUndefined} from 'util';
 import {SubItemComponent} from './list-item/item/sub-item/sub-item.component';
-import {TrackingSheetComponent} from './list-item/item/sub-item/tracking-sheet/tracking-sheet.component';
 
 @Injectable({
   providedIn: 'root'

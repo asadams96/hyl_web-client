@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SubItemComponent} from '../sub-item.component';
 import {FileReader} from '../../../../../confs/file-reader';
-import {ImgOperationService} from '../../../../../shared/services/img-operation.service';
+import {ImgOperationService} from '../../../../../shared/services/img-operation/img-operation.service';
 
 
 @Component({

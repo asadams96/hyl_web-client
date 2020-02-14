@@ -65,6 +65,6 @@ export class SubItemComponent implements OnInit {
       }
 
       clearInterval(interval);
-    }, 500 );
+    }, 250 );
   }
 }

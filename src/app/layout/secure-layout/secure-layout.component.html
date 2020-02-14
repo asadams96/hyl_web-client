@@ -6,7 +6,7 @@
     <div id="content">
       <!--<app-topbar></app-topbar>-->
 
-      <div [ngClass]="{'mx-2 px-sm-2 px-md-4 px-lg-4 px-xl-4': style === 'inventaire'}">
+      <div [ngClass]="{'mx-2 px-sm-2 px-md-4 px-lg-4 px-xl-4': style === 'inventaire' || style === 'prets'}">
         <router-outlet></router-outlet>
       </div>
     </div>
