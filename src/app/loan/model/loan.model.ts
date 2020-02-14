@@ -1,8 +1,5 @@
-import {SubItemComponent} from '../../item/list-item/item/sub-item/sub-item.component';
-
 export class LoanModel {
-// TODO ENLEVER NUMBER
-    constructor(public id: bigint|number,
+    constructor(public id: bigint,
                 public startDate: Date,
                 public endDate: Date,
                 public reference: string,

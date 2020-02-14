@@ -7,17 +7,6 @@ import {Subject} from 'rxjs';
   providedIn: 'root'
 })
 export class LoanService {
-
-  fakeLoansInProgress: LoanModel[] = [
-    new LoanModel(2, new Date(), null, 'TDTYGHUIJYVCR',
-        'Jean', 'Voici une information à laquelle il faut prêter attention', null, null)
-  ];
-  fakeLoansTerminated: LoanModel[] = [
-    new LoanModel(1, new Date(), new Date(), 'TDTYGHUIJYVCR',
-        'Jesus', 'Voici une deuxième information à laquelle il faut aussi prêter attention',
-        'Jesus à rendu l\'objet à temps et en bon état -> RAS', null)
-  ];
-
   private host = 'http://localhost:8080';
 
   private loansInProgress: LoanModel[];
@@ -51,6 +40,7 @@ export class LoanService {
   getLoansTerminated() {
     const token = localStorage.getItem('auth');
     const params = {token};
+
     return this.httpClient.get<LoanModel[]>(this.host + '/loans/terminated', {params}).toPromise().then(
         loans => {
           this.loansTerminated = loans;
@@ -70,17 +60,50 @@ export class LoanService {
         );
   }
 
-  private removeToLoansInProgressArray(loans: LoanModel[]) {
-    const c = loans.length;
-    for (let i = 0; i < c; i++) {
-      const index = this.loansInProgress.findIndex(loanInProgress => {
-        return loans[i].id === loanInProgress.id;
-      });
-      if (index !== -1) {
-        this.loansInProgress.splice(index, 1);
-      }
+  deleteLoans(loans: LoanModel[]) {
+    const ids: Array<string> = [];
+    for (const loan of loans) {
+      ids.push(String(loan.id));
     }
-    this.emitLoansInProgress();
+    const token = localStorage.getItem('auth');
+    const params = {ids, token};
+
+    return this.httpClient.delete(this.host + '/loans/delete-loans', {params}).toPromise().then(
+        () => {
+          this.removeToLoansInProgressArray(loans);
+          this.removeToLoansTerminatedArray(loans);
+        }
+    );
+  }
+
+  private removeToLoansInProgressArray(loans: LoanModel[]) {
+    if ( this.loansInProgress ) {
+      const c = loans.length;
+      for (let i = 0; i < c; i++) {
+        const index = this.loansInProgress.findIndex(loanInProgress => {
+          return loans[i].id === loanInProgress.id;
+        });
+        if (index !== -1) {
+          this.loansInProgress.splice(index, 1);
+        }
+      }
+      this.emitLoansInProgress();
+    }
+  }
+
+  private removeToLoansTerminatedArray(loans: LoanModel[]) {
+    if ( this.loansTerminated ) {
+      const c = loans.length;
+      for (let i = 0; i < c; i++) {
+        const index = this.loansTerminated.findIndex(loanTerminated => {
+          return loans[i].id === loanTerminated.id;
+        });
+        if (index !== -1) {
+          this.loansTerminated.splice(index, 1);
+        }
+      }
+      this.emitLoansTerminated();
+    }
   }
 
   private addToLoansTerminatedArray(loans: LoanModel[]) {

@@ -13,8 +13,10 @@ export class CloseLoanModalComponent implements OnInit {
 
   @Input() loans: LoanModel[];
   @Input() singleLoan: boolean;
+  @Input() goal: string;
+  @Input() etat: string;
 
-  closeForm: FormGroup;
+  loanForm: FormGroup;
   minlengthComment = '15';
   maxlengthComment = '150';
 
@@ -23,27 +25,39 @@ export class CloseLoanModalComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.initCloseLoanForm();
+    this.initLoanForm();
   }
 
-  initCloseLoanForm() {
-    this.closeForm = this.formBuilder.group({
-      comment: ['', [Validators.minLength(Number(this.minlengthComment))]],
+  initLoanForm() {
+    this.loanForm = this.formBuilder.group({
       checkbox: [false, [Validators.pattern('true')]]
     });
+    if (this.goal === 'close') {
+      this.loanForm.addControl
+      ('comment', this.formBuilder.control('', [Validators.minLength(Number(this.minlengthComment))]));
+    }
   }
 
-  onSubmitCloseLoanForm() {
-    for (const loan of this.loans) {
-      loan.comment = this.closeForm.controls.comment.value;
-      loan.endDate = new Date();
+  onSubmitLoanForm() {
+    if (this.goal === 'close') {
+      for (const loan of this.loans) {
+        loan.comment = this.loanForm.controls.comment.value;
+        loan.endDate = new Date();
+      }
+      this.loanService.closeLoans(this.loans).catch(
+          reason => {
+            console.log(reason);
+            this.router.navigate(['/erreur']);
+          }
+      );
+    } else if (this.goal === 'delete') {
+      this.loanService.deleteLoans(this.loans).catch(
+          reason => {
+            console.log(reason);
+            this.router.navigate(['/erreur']);
+          }
+      );
     }
-    this.loanService.closeLoans(this.loans).catch(
-        reason => {
-          console.log(reason);
-          this.router.navigate(['/erreur']);
-        }
-    );
   }
 
 }

@@ -21,9 +21,9 @@
     <div *ngIf="!loans || loans.length === 0" class="text-center">
         <h3 class="mt-5">Vous n'avez aucun prêt {{ etat }}</h3>
         <h5 *ngIf="etat === 'en cours'" class="mt-5">
-            Vous pouvez créer un prêt pour n'importe quel objet de votre
-            <a routerLink="/inventaire">inventaire</a> grâce au bouton ci-dessus
-            <i class="ml-3 fas fa-long-arrow-alt-up fa-2x"></i>
+            Vous pouvez <span class="font-weight-bolder">créer un prêt</span>
+            pour n'importe quel objet de votre <a routerLink="/inventaire">inventaire</a>
+            grâce au bouton ci-dessus <i class="ml-3 fas fa-long-arrow-alt-up fa-2x"></i>
         </h5>
         <h5 *ngIf="etat === 'terminés'" class="mt-5">
            Pour créer un prêt utilisez le bouton

@@ -54,7 +54,7 @@
                                     <span class="font-weight-bolder">Clôturer</span> tous les prêts
                                 </a>
                                 <div *ngIf="etat === 'en cours'" class="dropdown-divider"></div>
-                                <a class="dropdown-item" (click)="''" href="#">
+                                <a class="dropdown-item" href="#" data-toggle="modal" [attr.data-target]="'#deleteLoanModalAll'">
                                     <span class="font-weight-bolder">Supprimer</span> tous les prêts
                                 </a>
                             </div>
@@ -98,7 +98,7 @@
                                         <span class="font-weight-bolder">Clôturer</span> le prêt
                                     </a>
                                     <div *ngIf="etat === 'en cours'" class="dropdown-divider"></div>
-                                    <a class="dropdown-item" (click)="''" href="#" >
+                                    <a class="dropdown-item" href="#" data-toggle="modal" [attr.data-target]="'#deleteLoanModal'+loan.id">
                                         <span class="font-weight-bolder">Supprimer</span> le prêt
                                     </a>
                                 </div>
@@ -112,5 +112,18 @@
 </div>
 
 <!-- ************************************************** MODALS ***************************************************** -->
-<app-close-loan-modal [loans]="loans" [singleLoan]="false"></app-close-loan-modal>
-<app-close-loan-modal *ngFor="let loan of loans" [loans]="[loan]" [singleLoan]="true"></app-close-loan-modal>
+<!-- CLOSE LOAN -->
+<div *ngIf="etat === 'en cours'">
+    <app-close-loan-modal [loans]="loans" [singleLoan]="false" [goal]="'close'" [etat]="etat"></app-close-loan-modal>
+</div>
+
+<!-- CLOSE LOANS -->
+<div *ngIf="etat === 'en cours'">
+    <app-close-loan-modal *ngFor="let loan of loans" [loans]="[loan]" [singleLoan]="true" [goal]="'close'" [etat]="etat"></app-close-loan-modal>
+</div>
+
+<!-- DELETE LOAN -->
+<app-close-loan-modal [loans]="loans" [singleLoan]="false" [goal]="'delete'" [etat]="etat"></app-close-loan-modal>
+
+<!-- DELETE LOANS -->
+<app-close-loan-modal *ngFor="let loan of loans" [loans]="[loan]" [singleLoan]="true" [goal]="'delete'" [etat]="etat"></app-close-loan-modal>
