@@ -113,7 +113,7 @@ export class ItemService {
   renameCategory(category: CategoryComponent, name: string) {
     const id = category.id;
 
-    return this.httpClient.post(this.host + '/items/rename-category', {id, name})
+    return this.httpClient.patch(this.host + '/items/rename-category', {id, name})
       .toPromise().then(
         () => {
           this.renameCategoryInArray(this.categoryStorage.categories, name, id);
@@ -194,7 +194,7 @@ export class ItemService {
   renameItem(item: ItemComponent, name: string) {
     const id = item.id;
 
-    return this.httpClient.post(this.host + '/items/rename-item', {id, name})
+    return this.httpClient.patch(this.host + '/items/rename-item', {id, name})
         .toPromise().then(
             () => {
               this.renameItemInArray(this.categoryStorage, name, id);
@@ -206,7 +206,7 @@ export class ItemService {
     const id = item.id;
     const idCategory = idCatDest;
 
-    return this.httpClient.post(this.host + '/items/rename-item', {id, idCategory})
+    return this.httpClient.patch(this.host + '/items/move-item', {id, idCategory})
         .toPromise().then(
             () => {
               this.deleteItemInArray(this.categoryStorage, id);
@@ -250,7 +250,7 @@ export class ItemService {
   renameSubItem(subItem: SubItemComponent, reference: string) {
     const id = subItem.id;
 
-    return this.httpClient.post(this.host + '/items/rename-subitem', {id, reference})
+    return this.httpClient.patch(this.host + '/items/rename-subitem', {id, reference})
         .toPromise().then(
             () => {
               this.renameSubItemInArray(this.categoryStorage, reference, id);
@@ -313,7 +313,7 @@ export class ItemService {
     }
 
     // return la requete sous forme de promise
-    return this.httpClient.post<SubItemComponent>(this.host + '/items/edit-subitem', formData)
+    return this.httpClient.patch<SubItemComponent>(this.host + '/items/edit-subitem', formData)
         .toPromise<SubItemComponent>().then(
             updateSubItem => {
               this.replaceSubItemInArray(this.categoryStorage, updateSubItem);
