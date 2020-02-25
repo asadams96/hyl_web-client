@@ -17,9 +17,6 @@ export class JwtInterceptor implements HttpInterceptor {
                 }
             });
         }
-        for (const key of request.headers.keys()) {
-           console.log(key + '->' + request.headers.get(key));
-        }
         return next.handle(request);
     }
 }

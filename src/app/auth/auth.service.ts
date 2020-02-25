@@ -65,8 +65,5 @@ export class AuthService {
     this.auth = token;
     localStorage.setItem('auth', JSON.stringify(token));
     this.emitAuthSubject();
-
-    console.log('auth->' + this.auth);
-    console.log('local->' + localStorage.getItem('auth'));
   }
 }

@@ -222,7 +222,7 @@ export class ImgOperationService {
             this.emitImageServiceSubjects();
           },
           reason => {
-            console.log(reason.message);
+            console.log(reason);
           }
       );
     }
