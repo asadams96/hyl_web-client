@@ -52,7 +52,7 @@
                                             {{filesToUpload[i].name.length > 16 ? '...' : ''}}
                                         </small>
                                         <small>
-                                            {{(filesToUpload[i].size/1024 | number: '1.0-1') + ' Ko'}}
+                                            {{(filesToUpload[i].size/1024 | number: '1.0-0') + ' Ko'}}
                                         </small>
                                     </figcaption>
                                 </figure>
@@ -71,11 +71,11 @@
                     <div  *ngIf="sizeMaxErrFile"  class="text-left mb-2">
                         <p class="m-0 ml-1 alert-danger"><small>
                             Le poids de <span class="font-weight-bolder text-truncate">{{ sizeMaxErrFile.name }}</span> de
-                            <span class="font-weight-bolder">{{ sizeMaxErrFile.size/1024 | number: '1.0-1' }} Ko</span> fait dépasser la limite
-                            autorisée de <span class="font-weight-bolder">{{ filesSizeMax/1024/1024 | number: '1.0-0' }} Mo</span> par exemplaire d'item.
+                            <span class="font-weight-bolder">{{ sizeMaxErrFile.size/1024 | number: '1.0-0' }} Ko</span> fait dépasser la limite
+                            autorisée de <span class="font-weight-bolder">{{ filesSizeMax/1024 | number: '1.0-0' }} Ko</span> par exemplaire d'item.
                         </small></p>
                         <p class="m-0 ml-1 alert-danger"><small>
-                            Poids restant: <span class="font-weight-bolder">{{ (filesSizeMax - getFilesSize()) / 1024 | number: '1.0-1' }} Ko</span>
+                            Poids restant: <span class="font-weight-bolder">{{ (filesSizeMax - getFilesSize()) / 1024 | number: '1.0-0' }} Ko</span>
                         </small></p>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="ml-3 m-0 p-0">
                     <small class="text-success">
-                        Poids des images <i class="fas fa-long-arrow-alt-right"></i> {{getFilesSize()/1024/1024 | number: '1.0-2'}} / {{filesSizeMax/(1024*1024)}} Mo
+                        Poids des images <i class="fas fa-long-arrow-alt-right"></i> {{getFilesSize()/1024 | number: '1.0-0'}} / {{filesSizeMax/1024}} Ko
                     </small>
                 </div>
                 <div class="modal-footer justify-content-between">

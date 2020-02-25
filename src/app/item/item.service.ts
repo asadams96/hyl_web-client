@@ -23,27 +23,22 @@ export class ItemService {
   }
 
   checkCategoryName(name: string) {
-    const token = localStorage.getItem('auth');
-    const params = {name, token};
+    const params = {name};
     return this.httpClient.get(this.host + '/check-category-name', {params});
   }
 
   checkItemName(name: string) {
-    const token = localStorage.getItem('auth');
-    const params = {name, token};
+    const params = {name};
     return this.httpClient.get(this.host + '/check-item-name', {params});
   }
 
   checkSubItemRef(reference: string) {
-    const token = localStorage.getItem('auth');
-    const params = {reference, token};
+    const params = {reference};
     return this.httpClient.get(this.host + '/check-sub-ref', {params});
   }
 
   getItemsFormatInCategory() {
-    const token = localStorage.getItem('auth');
-    const params = {token};
-    return this.httpClient.get<CategoryComponent>(this.host + '/items', {params}).toPromise().then(
+    return this.httpClient.get<CategoryComponent>(this.host + '/items').toPromise().then(
         categoryData => {
           this.categoryStorage = categoryData;
           this.categoryStorage.id = null;
@@ -94,10 +89,9 @@ export class ItemService {
   }
 
   createChildCategory(parentCategory: CategoryComponent, name: string) {
-    const token = localStorage.getItem('auth');
     const idParent = parentCategory.id;
 
-    return this.httpClient.post<CategoryComponent>(this.host + '/items/add-child-category', {token, name, idParent})
+    return this.httpClient.post<CategoryComponent>(this.host + '/items/add-child-category', {name, idParent})
       .toPromise<CategoryComponent>().then(
       newCategory => {
         this.addNewChildCategoryToArray([this.categoryStorage], newCategory, idParent);
@@ -106,10 +100,9 @@ export class ItemService {
   }
 
   createParentCategory(childCategory: CategoryComponent, name: string) {
-    const token = localStorage.getItem('auth');
     const idChild = childCategory.id;
 
-    return this.httpClient.post<CategoryComponent>(this.host + '/items/add-parent-category', {token, name, idChild})
+    return this.httpClient.post<CategoryComponent>(this.host + '/items/add-parent-category', {name, idChild})
       .toPromise<CategoryComponent>().then(
         newCategory => {
           this.addNewParentCategoryToArray(this.categoryStorage.categories, newCategory, idChild);
@@ -119,9 +112,8 @@ export class ItemService {
 
   renameCategory(category: CategoryComponent, name: string) {
     const id = category.id;
-    const token = localStorage.getItem('auth');
 
-    return this.httpClient.post(this.host + '/items/rename-category', {token, id, name})
+    return this.httpClient.post(this.host + '/items/rename-category', {id, name})
       .toPromise().then(
         () => {
           this.renameCategoryInArray(this.categoryStorage.categories, name, id);
@@ -131,9 +123,8 @@ export class ItemService {
 
   deleteCategory(category: CategoryComponent) {
     const id = String(category.id);
-    const token = localStorage.getItem('auth');
 
-    const params = {id, token};
+    const params = {id};
     return this.httpClient.delete(this.host + '/items/delete-category', {params}).toPromise().then(
       () => {
         this.deleteCategoryInArray(this.categoryStorage, category, true);
@@ -142,8 +133,7 @@ export class ItemService {
   }
 
   createItem(idCategory: bigint, name: string, description: string, reference: string, fileToUpload: File[]) {
-    const token = localStorage.getItem('auth');
-    const data = {token, name, description, idCategory, reference};
+    const data = {name, description, idCategory, reference};
 
     const formData: FormData = new FormData();
     const c = fileToUpload.length;
@@ -163,9 +153,8 @@ export class ItemService {
   moveCategory(categoryToMove: CategoryComponent, idCategoryDestination: bigint) {
     const id = categoryToMove.id;
     const idParent = idCategoryDestination;
-    const token = localStorage.getItem('auth');
 
-    return this.httpClient.patch(this.host + '/items/move-category', {token, id, idParent})
+    return this.httpClient.patch(this.host + '/items/move-category', {id, idParent})
         .toPromise().then(
         value => {
 
@@ -204,9 +193,8 @@ export class ItemService {
 
   renameItem(item: ItemComponent, name: string) {
     const id = item.id;
-    const token = localStorage.getItem('auth');
 
-    return this.httpClient.post(this.host + '/items/rename-item', {token, id, name})
+    return this.httpClient.post(this.host + '/items/rename-item', {id, name})
         .toPromise().then(
             () => {
               this.renameItemInArray(this.categoryStorage, name, id);
@@ -217,9 +205,8 @@ export class ItemService {
   moveItem(item: ItemComponent, idCatDest: bigint) {
     const id = item.id;
     const idCategory = idCatDest;
-    const token = localStorage.getItem('auth');
 
-    return this.httpClient.post(this.host + '/items/rename-item', {token, id, idCategory})
+    return this.httpClient.post(this.host + '/items/rename-item', {id, idCategory})
         .toPromise().then(
             () => {
               this.deleteItemInArray(this.categoryStorage, id);
@@ -231,8 +218,7 @@ export class ItemService {
 
   deleteItem(item: ItemComponent) {
     const id = String(item.id);
-    const token = localStorage.getItem('auth');
-    const params = {id, token};
+    const params = {id};
 
     return this.httpClient.delete(this.host + '/items/delete-item', {params})
         .toPromise().then(
@@ -243,9 +229,8 @@ export class ItemService {
   }
 
   createSubItem(item: ItemComponent, reference: string, fileToUpload: File[]) {
-    const token = localStorage.getItem('auth');
     const idItem = item.id;
-    const data = { token, reference, idItem };
+    const data = {reference, idItem };
 
     const formData: FormData = new FormData();
     const c = fileToUpload.length;
@@ -264,9 +249,8 @@ export class ItemService {
 
   renameSubItem(subItem: SubItemComponent, reference: string) {
     const id = subItem.id;
-    const token = localStorage.getItem('auth');
 
-    return this.httpClient.post(this.host + '/items/rename-subitem', {token, id, reference})
+    return this.httpClient.post(this.host + '/items/rename-subitem', {id, reference})
         .toPromise().then(
             () => {
               this.renameSubItemInArray(this.categoryStorage, reference, id);
@@ -276,8 +260,7 @@ export class ItemService {
 
   deleteSubItem(subItem: SubItemComponent) {
     const id = String(subItem.id);
-    const token = localStorage.getItem('auth');
-    const params = {id, token};
+    const params = {id};
 
     return this.httpClient.delete(this.host + '/items/delete-sub-item', {params})
         .toPromise().then(
@@ -288,7 +271,6 @@ export class ItemService {
   }
 
   updateSubItem(subitem: SubItemComponent, reference: string, filesToUpload: File[]) {
-    const token = localStorage.getItem('auth');
     const idSubItem = subitem.id;
 
     const filesToDel: string[] = [];
@@ -322,7 +304,7 @@ export class ItemService {
     }
 
     // FormData
-    const data = { token, reference, idSubItem, filesToDel };
+    const data = { reference, idSubItem, filesToDel };
     const formData: FormData = new FormData();
     formData.append('data', JSON.stringify(data));
     const c1 = newFileToUpload.length;
@@ -340,10 +322,9 @@ export class ItemService {
   }
 
   createTrackingSheet(subitem: SubItemComponent, comment: string) {
-    const token = localStorage.getItem('auth');
     const idSubItem = subitem.id;
 
-    return this.httpClient.post<SubItemComponent>(this.host + '/items/add-tracking-sheet', {token, idSubItem, comment})
+    return this.httpClient.post<SubItemComponent>(this.host + '/items/add-tracking-sheet', {idSubItem, comment})
         .toPromise<SubItemComponent>().then(
             updateSubitem => {
               this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
@@ -352,14 +333,13 @@ export class ItemService {
   }
 
   deleteTrackingSheets(trackingSheets: { id: bigint; date: Date; comment: string }[]) {
-    const token = localStorage.getItem('auth');
     const ids: Array<string> = [];
     if ( trackingSheets ) {
       for (const trackingSheet of trackingSheets) {
         ids.push(String(trackingSheet.id));
       }
     }
-    const params = {ids, token};
+    const params = {ids};
 
     return this.httpClient.delete<SubItemComponent>(this.host + '/items/delete-tracking-sheets', {params})
         .toPromise<SubItemComponent>().then(

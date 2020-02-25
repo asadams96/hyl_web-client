@@ -12,12 +12,10 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   getLocalUser() {
-    const params = {token: localStorage.getItem('auth')};
-    return this.httpClient.get<SignupForm>(this.host + '/get-user', {params}).toPromise();
+    return this.httpClient.get<SignupForm>(this.host + '/get-user').toPromise();
   }
 
   updateUser(signupForm: SignupForm) {
-        const token = localStorage.getItem('auth');
-        return this.httpClient.patch(this.host + '/patch-user', {token, user: signupForm}).toPromise();
+        return this.httpClient.patch(this.host + '/patch-user', {user: signupForm}).toPromise();
     }
 }

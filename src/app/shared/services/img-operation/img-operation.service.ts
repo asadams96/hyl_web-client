@@ -21,7 +21,7 @@ export class ImgOperationService {
   formatUnsuppErrFileSubject = new Subject<File>();
   sizeMaxErrFileSubject = new Subject<File>();
 
-  filesSizeMax = 1048576; // 1 mo
+  filesSizeMax = environment.subitemImgSizeMax;
   formatSupportedStr = 'jpg, jpeg, png';
   private formatSupported = [
     {format: 'jpg', mime: 'image/jpeg'},

@@ -45,7 +45,6 @@ export class SigninComponent implements OnInit {
             this.signinError = 'Identifiant ou mot de passe invalide...';
             this.disabledForm = true;
             const interval = setInterval( () => {
-              console.log('FALSE');
               this.disabledForm = false;
               clearInterval(interval);
             }, 5000);
@@ -53,6 +52,7 @@ export class SigninComponent implements OnInit {
             this.signinError = 'Une erreur s\'est produite...';
           }
         } else {
+          console.log(error);
           this.router.navigate(['/erreur']);
         }
       });

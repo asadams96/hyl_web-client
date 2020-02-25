@@ -12,7 +12,7 @@ export class AuthService {
 
   private host = environment.apiUrl;
 
-  public auth = localStorage.getItem('auth') ? localStorage.getItem('auth') : null;
+  public auth = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')) : null;
   authSubject = new Subject<string>();
 
   constructor(private httpClient: HttpClient) { }
@@ -22,10 +22,12 @@ export class AuthService {
   }
 
   signin(signinForm: SigninForm) {
-    return this.httpClient.post<string>(this.host + '/signin', {email: signinForm.email, password: signinForm.password})
+      // @ts-ignore
+      // tslint:disable-next-line:max-line-length
+      return this.httpClient.post<any>(this.host + '/signin', {email: signinForm.email, password: signinForm.password}, {responseType: 'text'})
         .toPromise().then(
-        token => {
-          this.setAuthState(token);
+            token => {
+              this.setAuthState(token);
         }
     );
   }
@@ -43,7 +45,7 @@ export class AuthService {
   }
 
   signout() {
-    return this.httpClient.post(this.host + '/signout', {token: this.auth}).toPromise().then(
+    return this.httpClient.post(this.host + '/signout', {}).toPromise().then(
         () => {
           this.setAuthState(null);
         }
@@ -61,7 +63,10 @@ export class AuthService {
 
   private setAuthState(token: string) {
     this.auth = token;
-    localStorage.setItem('auth', token);
+    localStorage.setItem('auth', JSON.stringify(token));
     this.emitAuthSubject();
+
+    console.log('auth->' + this.auth);
+    console.log('local->' + localStorage.getItem('auth'));
   }
 }

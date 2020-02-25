@@ -28,10 +28,7 @@ export class LoanService {
   }
 
   getLoansInProgress() {
-    const token = localStorage.getItem('auth');
-    const params = {token};
-
-    return this.httpClient.get<LoanModel[]>(this.host + '/loans/in-progress', {params}).toPromise().then(
+    return this.httpClient.get<LoanModel[]>(this.host + '/loans/in-progress').toPromise().then(
         loans => {
           this.loansInProgress = loans;
           this.emitLoansInProgress();
@@ -40,10 +37,7 @@ export class LoanService {
   }
 
   getLoansTerminated() {
-    const token = localStorage.getItem('auth');
-    const params = {token};
-
-    return this.httpClient.get<LoanModel[]>(this.host + '/loans/terminated', {params}).toPromise().then(
+    return this.httpClient.get<LoanModel[]>(this.host + '/loans/terminated').toPromise().then(
         loans => {
           this.loansTerminated = loans;
           this.emitLoansTerminated();
@@ -52,8 +46,7 @@ export class LoanService {
   }
 
   closeLoans(loans: LoanModel[]) {
-    const token = localStorage.getItem('auth');
-    return this.httpClient.post(this.host + '/loans/close-loans', {token, loans})
+    return this.httpClient.post(this.host + '/loans/close-loans', {loans})
         .toPromise().then(
             () => {
               this.removeToLoansInProgressArray(loans);
@@ -67,8 +60,7 @@ export class LoanService {
     for (const loan of loans) {
       ids.push(String(loan.id));
     }
-    const token = localStorage.getItem('auth');
-    const params = {ids, token};
+    const params = {ids};
 
     return this.httpClient.delete(this.host + '/loans/delete-loans', {params}).toPromise().then(
         () => {
@@ -79,8 +71,7 @@ export class LoanService {
   }
 
   createLoan(loan: LoanModel) {
-    const token = localStorage.getItem('auth');
-    return this.httpClient.post<LoanModel>(this.host + '/loans/add-loan', {token, loan})
+    return this.httpClient.post<LoanModel>(this.host + '/loans/add-loan', {loan})
         .toPromise().then(
             (newLoan) => {
               this.addToLoansInProgressArray([newLoan]);
