@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SubItemComponent} from '../sub-item.component';
-import {FileReader} from '../../../../../confs/file-reader';
 import {ImgOperationService} from '../../../../../shared/services/img-operation/img-operation.service';
+import {environment} from '../../../../../../environments/environment';
 
 
 @Component({
@@ -11,9 +11,7 @@ import {ImgOperationService} from '../../../../../shared/services/img-operation/
 })
 export class ExpandSubitemModalComponent implements OnInit {
 
-  host = 'http://localhost:8080';
-  imgFolder = 'hyl-img-subitem';
-  path = this.host + '/' + this.imgFolder + '/';
+  private path = environment.apiUrl + '/' + environment.imgSubItemFolder + '/';
 
   editSubitem = false;
   addTrackingSheetModal = false;

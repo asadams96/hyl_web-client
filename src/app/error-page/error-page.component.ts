@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ImgOperationService} from '../shared/services/img-operation/img-operation.service';
 import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-error-page',
@@ -9,9 +10,7 @@ import {Router} from '@angular/router';
 })
 export class ErrorPageComponent implements OnInit {
 
-  host = 'http://localhost:8080';
-  folder = 'hyl-img-pages';
-  file = 'error.png';
+  private path = environment.apiUrl + '/' + environment.imgStaticFolder + '/error.png';
   errorLoad = false;
 
   constructor(private imgOperationService: ImgOperationService, private router: Router) { }

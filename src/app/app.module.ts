@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {ChangeDetectorRef, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {PUBLIC_ROUTES, PublicLayoutComponent} from './layout/public-layout/public-layout.component';
 import {SECURE_ROUTES, SecureLayoutComponent} from './layout/secure-layout/secure-layout.component';
-import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule, Routes} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import { SidebarComponent } from './layout/secure-layout/sidebar/sidebar.component';
 import { FooterComponent } from './layout/secure-layout/footer/footer.component';
 import { TopbarComponent } from './layout/secure-layout/topbar/topbar.component';
@@ -41,12 +41,14 @@ import {LoanService} from './loan/loan.service';
 import { CloseLoanModalComponent } from './loan/list-loan/table-loan/close-loan-modal/close-loan-modal.component';
 import { AddLoanModalComponent } from './loan/list-loan/add-loan-modal/add-loan-modal.component';
 
+
 const appRoutes: Routes = [
   { path: '', redirectTo: '/connexion', pathMatch: 'full', canActivate: [AuthGuard]},
   { path: '', component : PublicLayoutComponent , children: PUBLIC_ROUTES, canActivate: [AuthGuard], canActivateChild: [AuthGuard]},
   { path: '', component : SecureLayoutComponent , children: SECURE_ROUTES, canActivate: [AuthGuard] },
   {path: '**', redirectTo: '/connexion'}
 ];
+
 
 @NgModule({
   declarations: [

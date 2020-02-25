@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SignupForm} from '../auth/signup/signup-form';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  private host = 'http://localhost:8080';
+  private host = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) { }
 

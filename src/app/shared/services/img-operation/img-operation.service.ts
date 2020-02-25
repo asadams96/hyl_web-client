@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CheckFilesUploadFormat} from '../../form-validators/sync/file-upload-format.validator';
 import {CheckFilesUploadSize} from '../../form-validators/sync/file-upload-size.validator';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImgOperationService {
-  host = 'http://localhost:8080';
-  imgFolder = 'hyl-img-subitem';
-  path = this.host + '/' + this.imgFolder + '/';
+
+  private path = environment.apiUrl + '/' + environment.imgSubItemFolder + '/';
 
   private filesToUpload: File[] = null;
   private imgPreview: (string|ArrayBuffer)[] = null;

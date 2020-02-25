@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
 import {SigninForm} from './signin/signin-form';
 import {HttpClient} from '@angular/common/http';
-import {Subject, throwError} from 'rxjs';
+import {Subject} from 'rxjs';
 import {SignupForm} from './signup/signup-form';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private host = 'http://localhost:8080';
+  private host = environment.apiUrl;
 
   public auth = localStorage.getItem('auth') ? localStorage.getItem('auth') : null;
   authSubject = new Subject<string>();

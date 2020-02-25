@@ -2,20 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {LoanModel} from './model/loan.model';
 import {Subject} from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoanService {
-  private host = 'http://localhost:8080';
 
-  fakeLoans: LoanModel[] = [
-      new LoanModel(1, new Date(), new Date(), 'FZINDZNFIFNZ', 'Jesus', 'information1', 'comment1', new Date()),
-      new LoanModel(2, new Date(), new Date(), 'PMLDJDJDNDNJ', 'Thomas', 'information2', 'comment2', new Date()),
-      new LoanModel(3, new Date(), new Date(), 'NKDODKDUDNYI', 'Pierre', 'information3', 'comment3', new Date()),
-      new LoanModel(4, new Date(), new Date(), 'CVGDTSUDNTDY', 'Jean', 'information4', 'comment4', new Date()),
-
-  ];
+  private host = environment.apiUrl;
 
   private loansInProgress: LoanModel[] = [];
   private loansTerminated: LoanModel[] = [];
@@ -39,8 +33,7 @@ export class LoanService {
 
     return this.httpClient.get<LoanModel[]>(this.host + '/loans/in-progress', {params}).toPromise().then(
         loans => {
-          // this.loansInProgress = loans;
-          this.loansInProgress = this.fakeLoans;
+          this.loansInProgress = loans;
           this.emitLoansInProgress();
         }
     );
@@ -52,8 +45,7 @@ export class LoanService {
 
     return this.httpClient.get<LoanModel[]>(this.host + '/loans/terminated', {params}).toPromise().then(
         loans => {
-          // this.loansTerminated = loans;
-          this.loansTerminated = this.fakeLoans;
+          this.loansTerminated = loans;
           this.emitLoansTerminated();
         }
     );

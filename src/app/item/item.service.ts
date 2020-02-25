@@ -5,13 +5,14 @@ import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
 import {isUndefined} from 'util';
 import {SubItemComponent} from './list-item/item/sub-item/sub-item.component';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
+  private host = environment.apiUrl;
 
-  private host = 'http://localhost:8080';
   private categoryStorage: CategoryComponent;
   categoryStorageSubject = new Subject<CategoryComponent>();
 
