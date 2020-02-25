@@ -76,13 +76,13 @@
                         <td [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}">
                             <small>{{ loan.beneficiary }}</small>
                         </td>
-                        <td [ngClass]="{'bg-light': i%2 === 1, 'align-middle': true}">
+                        <td [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}">
                             <small>{{ loan.information }}</small>
                         </td>
-                        <td *ngIf="etat === 'en cours'" [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}">
-                            <small>{{ loan.reminder }}</small>
+                        <td *ngIf="etat === 'en cours'" [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}"  [attr.data-sort]="loan.reminder">
+                            <small>{{ loan.reminder | date: 'dd/MM/yyyy' }}</small>
                         </td>
-                        <td *ngIf="etat === 'terminés'" [ngClass]="{'bg-light': i%2 === 1, 'align-middle': true}">
+                        <td *ngIf="etat === 'terminés'" [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}">
                             <small>{{ loan.comment }}</small>
                         </td>
                         <td [ngClass]="{'bg-light': i%2 === 1, 'align-middle text-center': true}">

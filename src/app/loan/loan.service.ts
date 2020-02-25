@@ -9,8 +9,16 @@ import {Subject} from 'rxjs';
 export class LoanService {
   private host = 'http://localhost:8080';
 
-  private loansInProgress: LoanModel[];
-  private loansTerminated: LoanModel[];
+  fakeLoans: LoanModel[] = [
+      new LoanModel(1, new Date(), new Date(), 'FZINDZNFIFNZ', 'Jesus', 'information1', 'comment1', new Date()),
+      new LoanModel(2, new Date(), new Date(), 'PMLDJDJDNDNJ', 'Thomas', 'information2', 'comment2', new Date()),
+      new LoanModel(3, new Date(), new Date(), 'NKDODKDUDNYI', 'Pierre', 'information3', 'comment3', new Date()),
+      new LoanModel(4, new Date(), new Date(), 'CVGDTSUDNTDY', 'Jean', 'information4', 'comment4', new Date()),
+
+  ];
+
+  private loansInProgress: LoanModel[] = [];
+  private loansTerminated: LoanModel[] = [];
   loansInProgressSubject = new Subject<LoanModel[]>();
   loansTerminatedSubject = new Subject<LoanModel[]>();
 
@@ -31,7 +39,8 @@ export class LoanService {
 
     return this.httpClient.get<LoanModel[]>(this.host + '/loans/in-progress', {params}).toPromise().then(
         loans => {
-          this.loansInProgress = loans;
+          // this.loansInProgress = loans;
+          this.loansInProgress = this.fakeLoans;
           this.emitLoansInProgress();
         }
     );
@@ -43,7 +52,8 @@ export class LoanService {
 
     return this.httpClient.get<LoanModel[]>(this.host + '/loans/terminated', {params}).toPromise().then(
         loans => {
-          this.loansTerminated = loans;
+          // this.loansTerminated = loans;
+          this.loansTerminated = this.fakeLoans;
           this.emitLoansTerminated();
         }
     );
@@ -74,6 +84,17 @@ export class LoanService {
           this.removeToLoansTerminatedArray(loans);
         }
     );
+  }
+
+  createLoan(loan: LoanModel) {
+    const token = localStorage.getItem('auth');
+    return this.httpClient.post<LoanModel>(this.host + '/loans/add-loan', {token, loan})
+        .toPromise().then(
+            (newLoan) => {
+              this.addToLoansInProgressArray([newLoan]);
+            }
+        );
+
   }
 
   private removeToLoansInProgressArray(loans: LoanModel[]) {
@@ -108,9 +129,15 @@ export class LoanService {
 
   private addToLoansTerminatedArray(loans: LoanModel[]) {
     for (const loan of loans) {
-      // TODO VOIR SI 'PUSH' RESPECT ORDRE CHRONOLOGIQUE OU CHANGER POUR 'UNSHIFT'
-      this.loansTerminated.push(loan);
+      this.loansTerminated.unshift(loan);
     }
-    this.getLoansTerminated();
+    this.emitLoansTerminated();
+  }
+
+  private addToLoansInProgressArray(loans: LoanModel[]) {
+    for (const loan of loans) {
+      this.loansInProgress.unshift(loan);
+    }
+    this.emitLoansInProgress();
   }
 }

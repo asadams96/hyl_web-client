@@ -21,7 +21,7 @@
                 </button>
             </div>
             <form [formGroup]="loanForm">
-                <div class="modal-body">
+                <div class="modal-body text-truncate">
                     <div *ngIf="singleLoan">
                         <p class="mt-2 mb-4 font-weight-bolder text-danger text-center">
                             Attention, vous êtes sur le point de
@@ -51,9 +51,9 @@
                                     <th>Information</th>
                                     <td class="">{{ loans[0].information }}</td>
                                 </tr>
-                                <tr *ngIf="etat === 'en cours' && (loans[0].reminder && loans[0].reminder.length > 0)">
+                                <tr *ngIf="etat === 'en cours'">
                                     <th>Rappel</th>
-                                    <td class="">{{ loans[0].reminder }}</td>
+                                    <td class="">{{ loans[0].reminder ?  (loans[0].reminder | date: 'dd/MM/yyyy') : 'Aucun rappel de prévu'}}</td>
                                 </tr>
                                 <tr *ngIf="etat === 'terminés' && (loans[0].comment && loans[0].comment.length > 0)">
                                     <th>Commentaire</th>

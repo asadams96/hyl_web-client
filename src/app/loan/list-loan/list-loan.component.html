@@ -10,7 +10,7 @@
         <div *ngIf="etat === 'en cours'">
             <div class="text-center d-flex flex-row">
                 <h5 class="mt-3 mt-md-0 mt-lg-0">
-                    <button class="mr-3 p-3 btn btn-primary font-weight-bolder" (click)="''">
+                    <button class="mr-3 p-3 btn btn-primary font-weight-bolder" data-toggle="modal" data-target="#addLoanModal">
                         Ajouter un prêt
                     </button>
                 </h5>
@@ -36,4 +36,7 @@
     </div>
     <div class="mt-5"></div>
 </div>
+
+<!-- ******************************************************* MODALS ************************************************ -->
+<app-add-loan-modal></app-add-loan-modal>
 

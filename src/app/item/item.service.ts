@@ -52,6 +52,20 @@ export class ItemService {
     );
   }
 
+  getFullItemsInOneArray(category: CategoryComponent) {
+    const categoryInOneArray = this.getFullCategoriesInOneArray(category);
+    const items: Array<ItemComponent> = [];
+    for (const pCategory of categoryInOneArray) {
+      if ( pCategory.items ) {
+        for (const item of pCategory.items) {
+          items.push(item);
+        }
+      }
+    }
+    return items;
+
+  }
+
   getFullCategoriesInOneArray(category: CategoryComponent): CategoryComponent[] {
 
     const categories: CategoryComponent[] = [];

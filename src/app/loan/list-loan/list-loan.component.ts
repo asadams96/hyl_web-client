@@ -36,7 +36,12 @@ export class ListLoanComponent implements OnInit {
     if (this.etat === 'en cours') {
       this.loansSubscription = this.loanService.loansInProgressSubject.subscribe(
           (value) => {
-            this.loans = value;
+            this.loans = null;
+            const interval = setInterval(() => {
+                this.loans = value;
+                clearInterval(interval);
+            }, 100);
+
           }
       );
     } else if ( this.etat === 'terminés') {

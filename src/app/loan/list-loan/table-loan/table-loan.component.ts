@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {LoanModel} from '../../model/loan.model';
 import {DataTablesService} from '../../../shared/services/datatables/data-tables.service';
 
@@ -11,7 +11,7 @@ export class TableLoanComponent implements OnInit, AfterViewInit {
   @Input() etat: string;
   @Input() private loans: LoanModel[];
 
-  constructor(private dataTablesService: DataTablesService) { }
+  constructor(private dataTablesService: DataTablesService, private chRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.dataTablesService.initDatatables();

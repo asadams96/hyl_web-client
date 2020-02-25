@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {ChangeDetectorRef, NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {PUBLIC_ROUTES, PublicLayoutComponent} from './layout/public-layout/public-layout.component';
@@ -39,6 +39,7 @@ import { ListLoanComponent } from './loan/list-loan/list-loan.component';
 import { TableLoanComponent } from './loan/list-loan/table-loan/table-loan.component';
 import {LoanService} from './loan/loan.service';
 import { CloseLoanModalComponent } from './loan/list-loan/table-loan/close-loan-modal/close-loan-modal.component';
+import { AddLoanModalComponent } from './loan/list-loan/add-loan-modal/add-loan-modal.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/connexion', pathMatch: 'full', canActivate: [AuthGuard]},
@@ -77,12 +78,13 @@ const appRoutes: Routes = [
     ListLoanComponent,
     TableLoanComponent,
     CloseLoanModalComponent,
+    AddLoanModalComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     ReactiveFormsModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [
     ReactiveFormsModule,
@@ -90,7 +92,7 @@ const appRoutes: Routes = [
     HttpClient,
     ItemService,
     DatePipe,
-    LoanService,
+    LoanService
   ],
   bootstrap: [AppComponent]
 })
