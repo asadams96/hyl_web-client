@@ -12,6 +12,7 @@ export class AuthService {
 
   private host = environment.gatewayUrl;
 
+  public idUser =  localStorage.getItem('idUser') ? JSON.parse(localStorage.getItem('idUser')) : null;
   public auth = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')) : null;
   authSubject = new Subject<string>();
 
@@ -24,22 +25,22 @@ export class AuthService {
   signin(signinForm: SigninForm) {
       // @ts-ignore
       // tslint:disable-next-line:max-line-length
-      return this.httpClient.post<any>(this.host + '/signin', {email: signinForm.email, password: signinForm.password}, {responseType: 'text'})
+      return this.httpClient.post<{token: string, idUser: string}>(this.host + '/signin', {email: signinForm.email, password: signinForm.password})
         .toPromise().then(
-            token => {
-              this.setAuthState(token);
-        }
+           value => {
+               this.setAuthState(value.token, value.idUser);
+           }
     );
   }
 
   signup(signupForm: SignupForm) {
-    return this.httpClient.post<string>(this.host + '/signup', {email: signupForm.email, pseudo: signupForm.pseudo,
+    return this.httpClient.post<{token: string, idUser: string}>(this.host + '/signup', {email: signupForm.email, pseudo: signupForm.pseudo,
                                                                   cellphone: signupForm.cellphone, civility: signupForm.civility,
                                                                   name: signupForm.name, surname: signupForm.surname,
                                                                   password: signupForm.password })
         .toPromise().then(
-            token => {
-              this.setAuthState(token);
+            value => {
+                this.setAuthState(value.token, value.idUser);
             }
         );
   }
@@ -47,7 +48,7 @@ export class AuthService {
   signout() {
     return this.httpClient.post(this.host + environment.userUrl + '/signout', {}).toPromise().then(
         () => {
-          this.setAuthState(null);
+          this.setAuthState(null, null);
         }
     );
   }
@@ -61,9 +62,11 @@ export class AuthService {
       return this.httpClient.get(this.host + '/check-email', {params});
   }
 
-  private setAuthState(token: string) {
+  private setAuthState(token: string, idUser: string) {
     this.auth = token;
+    this.idUser = idUser;
     localStorage.setItem('auth', JSON.stringify(token));
+    localStorage.setItem('idUser', JSON.stringify(idUser));
     this.emitAuthSubject();
   }
 }
