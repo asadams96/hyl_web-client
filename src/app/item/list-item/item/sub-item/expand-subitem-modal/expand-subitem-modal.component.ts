@@ -11,7 +11,7 @@ import {environment} from '../../../../../../environments/environment';
 })
 export class ExpandSubitemModalComponent implements OnInit {
 
-  private path = environment.apiUrl + '/' + environment.imgSubItemFolder + '/';
+  private path = environment.gatewayUrl + '/' + environment.imgSubItemFolder + '/';
 
   editSubitem = false;
   addTrackingSheetModal = false;

@@ -10,7 +10,7 @@ import {environment} from '../../environments/environment';
 })
 export class AuthService {
 
-  private host = environment.apiUrl;
+  private host = environment.gatewayUrl;
 
   public auth = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')) : null;
   authSubject = new Subject<string>();
@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   signout() {
-    return this.httpClient.post(this.host + '/signout', {}).toPromise().then(
+    return this.httpClient.post(this.host + environment.userUrl + '/signout', {}).toPromise().then(
         () => {
           this.setAuthState(null);
         }

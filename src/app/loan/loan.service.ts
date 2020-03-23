@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class LoanService {
 
-  private host = environment.apiUrl;
+  private host = environment.gatewayUrl + environment.loanUrl;
 
   private loansInProgress: LoanModel[] = [];
   private loansTerminated: LoanModel[] = [];
@@ -28,7 +28,7 @@ export class LoanService {
   }
 
   getLoansInProgress() {
-    return this.httpClient.get<LoanModel[]>(this.host + '/loans/in-progress').toPromise().then(
+    return this.httpClient.get<LoanModel[]>(this.host + '/in-progress').toPromise().then(
         loans => {
           this.loansInProgress = loans;
           this.emitLoansInProgress();
@@ -37,7 +37,7 @@ export class LoanService {
   }
 
   getLoansTerminated() {
-    return this.httpClient.get<LoanModel[]>(this.host + '/loans/terminated').toPromise().then(
+    return this.httpClient.get<LoanModel[]>(this.host + '/terminated').toPromise().then(
         loans => {
           this.loansTerminated = loans;
           this.emitLoansTerminated();
@@ -46,7 +46,7 @@ export class LoanService {
   }
 
   closeLoans(loans: LoanModel[]) {
-    return this.httpClient.post(this.host + '/loans/close-loans', {loans})
+    return this.httpClient.post(this.host + '/close-loans', {loans})
         .toPromise().then(
             () => {
               this.removeToLoansInProgressArray(loans);
@@ -62,7 +62,7 @@ export class LoanService {
     }
     const params = {ids};
 
-    return this.httpClient.delete(this.host + '/loans/delete-loans', {params}).toPromise().then(
+    return this.httpClient.delete(this.host + '/delete-loans', {params}).toPromise().then(
         () => {
           this.removeToLoansInProgressArray(loans);
           this.removeToLoansTerminatedArray(loans);
@@ -71,7 +71,7 @@ export class LoanService {
   }
 
   createLoan(loan: LoanModel) {
-    return this.httpClient.post<LoanModel>(this.host + '/loans/add-loan', {loan})
+    return this.httpClient.post<LoanModel>(this.host + '/add-loan', {loan})
         .toPromise().then(
             (newLoan) => {
               this.addToLoansInProgressArray([newLoan]);

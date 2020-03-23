@@ -11,7 +11,7 @@ import {environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class ItemService {
-  private host = environment.apiUrl;
+  private host = environment.gatewayUrl + environment.itemUrl;
 
   private categoryStorage: CategoryComponent;
   categoryStorageSubject = new Subject<CategoryComponent>();
@@ -38,7 +38,7 @@ export class ItemService {
   }
 
   getItemsFormatInCategory() {
-    return this.httpClient.get<CategoryComponent>(this.host + '/items').toPromise().then(
+    return this.httpClient.get<CategoryComponent>(this.host + '/').toPromise().then(
         categoryData => {
           this.categoryStorage = categoryData;
           this.categoryStorage.id = null;
@@ -91,7 +91,7 @@ export class ItemService {
   createChildCategory(parentCategory: CategoryComponent, name: string) {
     const idParent = parentCategory.id;
 
-    return this.httpClient.post<CategoryComponent>(this.host + '/items/add-child-category', {name, idParent})
+    return this.httpClient.post<CategoryComponent>(this.host + '/add-child-category', {name, idParent})
       .toPromise<CategoryComponent>().then(
       newCategory => {
         this.addNewChildCategoryToArray([this.categoryStorage], newCategory, idParent);
@@ -102,7 +102,7 @@ export class ItemService {
   createParentCategory(childCategory: CategoryComponent, name: string) {
     const idChild = childCategory.id;
 
-    return this.httpClient.post<CategoryComponent>(this.host + '/items/add-parent-category', {name, idChild})
+    return this.httpClient.post<CategoryComponent>(this.host + '/add-parent-category', {name, idChild})
       .toPromise<CategoryComponent>().then(
         newCategory => {
           this.addNewParentCategoryToArray(this.categoryStorage.categories, newCategory, idChild);
@@ -113,7 +113,7 @@ export class ItemService {
   renameCategory(category: CategoryComponent, name: string) {
     const id = category.id;
 
-    return this.httpClient.patch(this.host + '/items/rename-category', {id, name})
+    return this.httpClient.patch(this.host + '/rename-category', {id, name})
       .toPromise().then(
         () => {
           this.renameCategoryInArray(this.categoryStorage.categories, name, id);
@@ -125,7 +125,7 @@ export class ItemService {
     const id = String(category.id);
 
     const params = {id};
-    return this.httpClient.delete(this.host + '/items/delete-category', {params}).toPromise().then(
+    return this.httpClient.delete(this.host + '/delete-category', {params}).toPromise().then(
       () => {
         this.deleteCategoryInArray(this.categoryStorage, category, true);
       }
@@ -142,7 +142,7 @@ export class ItemService {
     }
     formData.append('data', JSON.stringify(data));
 
-    return this.httpClient.post<ItemComponent>(this.host + '/items/add-item', formData)
+    return this.httpClient.post<ItemComponent>(this.host + '/add-item', formData)
         .toPromise<ItemComponent>().then(
             newItem => {
               this.addNewItemToArray(this.categoryStorage, newItem, idCategory);
@@ -154,7 +154,7 @@ export class ItemService {
     const id = categoryToMove.id;
     const idParent = idCategoryDestination;
 
-    return this.httpClient.patch(this.host + '/items/move-category', {id, idParent})
+    return this.httpClient.patch(this.host + '/move-category', {id, idParent})
         .toPromise().then(
         value => {
 
@@ -194,7 +194,7 @@ export class ItemService {
   renameItem(item: ItemComponent, name: string) {
     const id = item.id;
 
-    return this.httpClient.patch(this.host + '/items/rename-item', {id, name})
+    return this.httpClient.patch(this.host + '/rename-item', {id, name})
         .toPromise().then(
             () => {
               this.renameItemInArray(this.categoryStorage, name, id);
@@ -206,7 +206,7 @@ export class ItemService {
     const id = item.id;
     const idCategory = idCatDest;
 
-    return this.httpClient.patch(this.host + '/items/move-item', {id, idCategory})
+    return this.httpClient.patch(this.host + '/move-item', {id, idCategory})
         .toPromise().then(
             () => {
               this.deleteItemInArray(this.categoryStorage, id);
@@ -220,7 +220,7 @@ export class ItemService {
     const id = String(item.id);
     const params = {id};
 
-    return this.httpClient.delete(this.host + '/items/delete-item', {params})
+    return this.httpClient.delete(this.host + '/delete-item', {params})
         .toPromise().then(
             () => {
               this.deleteItemInArray(this.categoryStorage, item.id);
@@ -239,7 +239,7 @@ export class ItemService {
     }
     formData.append('data', JSON.stringify(data));
 
-    return this.httpClient.post<SubItemComponent>(this.host + '/items/add-subitem', formData)
+    return this.httpClient.post<SubItemComponent>(this.host + '/add-subitem', formData)
         .toPromise<SubItemComponent>().then(
             newSubItem => {
               this.addNewSubItemToArray(this.categoryStorage, newSubItem, idItem);
@@ -250,7 +250,7 @@ export class ItemService {
   renameSubItem(subItem: SubItemComponent, reference: string) {
     const id = subItem.id;
 
-    return this.httpClient.patch(this.host + '/items/rename-subitem', {id, reference})
+    return this.httpClient.patch(this.host + '/rename-subitem', {id, reference})
         .toPromise().then(
             () => {
               this.renameSubItemInArray(this.categoryStorage, reference, id);
@@ -262,7 +262,7 @@ export class ItemService {
     const id = String(subItem.id);
     const params = {id};
 
-    return this.httpClient.delete(this.host + '/items/delete-sub-item', {params})
+    return this.httpClient.delete(this.host + '/delete-sub-item', {params})
         .toPromise().then(
             () => {
               this.deleteSubItemInArray(this.categoryStorage, subItem.id);
@@ -313,7 +313,7 @@ export class ItemService {
     }
 
     // return la requete sous forme de promise
-    return this.httpClient.patch<SubItemComponent>(this.host + '/items/edit-subitem', formData)
+    return this.httpClient.patch<SubItemComponent>(this.host + '/edit-subitem', formData)
         .toPromise<SubItemComponent>().then(
             updateSubItem => {
               this.replaceSubItemInArray(this.categoryStorage, updateSubItem);
@@ -324,7 +324,7 @@ export class ItemService {
   createTrackingSheet(subitem: SubItemComponent, comment: string) {
     const idSubItem = subitem.id;
 
-    return this.httpClient.post<SubItemComponent>(this.host + '/items/add-tracking-sheet', {idSubItem, comment})
+    return this.httpClient.post<SubItemComponent>(this.host + '/add-tracking-sheet', {idSubItem, comment})
         .toPromise<SubItemComponent>().then(
             updateSubitem => {
               this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
@@ -341,7 +341,7 @@ export class ItemService {
     }
     const params = {ids};
 
-    return this.httpClient.delete<SubItemComponent>(this.host + '/items/delete-tracking-sheets', {params})
+    return this.httpClient.delete<SubItemComponent>(this.host + '/delete-tracking-sheets', {params})
         .toPromise<SubItemComponent>().then(
             updateSubitem => {
               for (const id of ids) {

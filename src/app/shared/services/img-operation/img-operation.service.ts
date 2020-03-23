@@ -10,7 +10,7 @@ import {environment} from '../../../../environments/environment';
 })
 export class ImgOperationService {
 
-  private path = environment.apiUrl + '/' + environment.imgSubItemFolder + '/';
+  private path = environment.gatewayUrl + environment.itemUrl + '/' + environment.imgSubItemFolder + '/';
 
   private filesToUpload: File[] = null;
   private imgPreview: (string|ArrayBuffer)[] = null;

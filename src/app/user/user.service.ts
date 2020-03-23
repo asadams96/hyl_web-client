@@ -7,7 +7,7 @@ import {environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-  private host = environment.apiUrl;
+  private host = environment.gatewayUrl;
 
   constructor(private httpClient: HttpClient) { }
 
