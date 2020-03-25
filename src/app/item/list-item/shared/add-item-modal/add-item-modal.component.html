@@ -13,8 +13,16 @@
                     <span aria-hidden="true"><i class="fas fa-window-close text-danger" ></i></span>
                 </button>
             </div>
+            <div>
+                <div *ngIf="!maxSubItemIsValid" class="alert-danger text-center mx-3 mt-1">
+                    Limite d'exemplaire d'objet atteinte: nouvel ajout impossible.
+                </div>
+                <div *ngIf="maxSubItemIsValid" class="mt-1">
+                    <div class="invisible">.</div>
+                </div>
+            </div>
             <form [formGroup]="createItemForm">
-                <div class="modal-body text-center pb-1 pt-0">
+                <div class="modal-body text-center pb-4 pt-0">
                     <div [ngClass]="{'invisible': createItemForm.controls.name.valid }" class="text-left mb-1 mt-1">
                         <div *ngIf="createItemForm.controls.name.errors?.minlength" class="alert-danger">
                             <small>Le nom de l'objet doit faire au moins {{ minlengthItemName }} caractères</small>
@@ -65,7 +73,7 @@
                     </div>
                     <div class="form-group">
                         <input class="d-none" #input multiple="multiple" formControlName="files" type="file" id="files" accept="image/*" (change)="handleFileInput($event.target.files)">
-                        <div class="card-deck pt-2 mx-1 justify-content-around" *ngIf="imgPreview !== null && imgPreview.length > 0">
+                        <div class="card-deck pt-4 mx-1 justify-content-around" *ngIf="imgPreview !== null && imgPreview.length > 0">
                             <div class="pt-2 pb-0" *ngFor="let img of imgPreview; let i = index">
                                 <span id="img-helper" class="align-middle d-inline-block h-100"></span>
                                 <figure class="p-0 m-0 d-inline-block align-middle">
@@ -116,7 +124,8 @@
                     </div>
                     <div>
                         <button class="btn btn-danger" type="button" data-dismiss="modal" (click)="onCancelCreateSubItemForm()">Annuler</button>
-                        <button class="ml-2 btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()" [disabled]="!createItemForm.valid">Ajouter un nouvel objet</button>
+                        <button class="ml-2 btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateItemForm()"
+                                [disabled]="!createItemForm.valid || !maxSubItemIsValid">Ajouter un nouvel objet</button>
                     </div>
                 </div>
             </form>

@@ -37,6 +37,10 @@ export class ItemService {
     return this.httpClient.get(this.host + '/check-sub-ref', {params});
   }
 
+  checkMaxSubItem() {
+    return this.httpClient.get(this.host + '/check-max-sub');
+  }
+
   checkCategoryDepth(idCategory: bigint, idCategoryToMove: bigint, type: string) {
     const params = {idCategory: String(idCategory), idCategoryToMove: String(idCategoryToMove), type};
     return this.httpClient.get(this.host + '/check-category-depth', {params});

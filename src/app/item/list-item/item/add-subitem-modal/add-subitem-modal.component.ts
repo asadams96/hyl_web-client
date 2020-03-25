@@ -7,6 +7,7 @@ import {ImgOperationService} from '../../../../shared/services/img-operation/img
 import {Router} from '@angular/router';
 import {ItemComponent} from '../item.component';
 import {SubItemComponent} from '../sub-item/sub-item.component';
+import {CheckMaxSubItem} from '../../../../shared/form-validators/async/check-max-subitem.async-validator';
 
 @Component({
   selector: 'app-add-subitem-modal',
@@ -36,6 +37,8 @@ export class AddSubitemModalComponent implements OnInit {
   private filesSizeMax = this.imgOperationService.filesSizeMax; // 1 mo
   private formatSupportedStr = this.imgOperationService.formatSupportedStr;
 
+  private maxSubItemIsValid = true;
+
   constructor(private itemService: ItemService,
               private imgOperationService: ImgOperationService,
               private formBuilder: FormBuilder,
@@ -44,6 +47,7 @@ export class AddSubitemModalComponent implements OnInit {
   ngOnInit() {
     this.checkClass();
     this.initSubscriptions();
+    this.checkMaxSubItemIsValid();
     this.initCreateSubItemForm();
   }
 
@@ -51,6 +55,12 @@ export class AddSubitemModalComponent implements OnInit {
     if ( !(this.object instanceof ItemComponent) && !(this.object instanceof SubItemComponent) ) {
       this.router.navigate(['/erreur']);
     }
+  }
+
+  checkMaxSubItemIsValid() {
+    CheckMaxSubItem(this.itemService).then(value => {
+      this.maxSubItemIsValid = value;
+    });
   }
 
   initSubscriptions() {

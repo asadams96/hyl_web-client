@@ -18,8 +18,18 @@
                     <span aria-hidden="true"><i class="fas fa-window-close text-danger" ></i></span>
                 </a>
             </div>
+            <div *ngIf="object.getClassNameFirstLetter() === 'I'" class="mb-0">
+                <div *ngIf="!maxSubItemIsValid" class="alert-danger text-center mx-3 mt-1">
+                    Limite d'exemplaire d'objet atteinte: nouvel ajout impossible.
+                </div>
+                <div *ngIf="maxSubItemIsValid" class="mt-1">
+                    <div class="invisible">.</div>
+                </div>
+            </div>
             <form [id]="'createSubItemForm'+object.id" [formGroup]="createSubItemForm">
-                <div class="modal-body text-center pt-2 pb-1">
+                <div class="modal-body text-center pb-1"
+                     [ngClass]="{'pt-2 ': object.getClassNameFirstLetter() === 'S',
+                                    'pt-1': object.getClassNameFirstLetter() === 'I'}">
                     <div [ngClass]="{'invisible': createSubItemForm.valid }" class="text-left mb-2">
                         <div *ngIf="createSubItemForm.controls.reference.errors?.minlength" class="alert-danger">
                             <small>La référence doit faire au moins {{ minlengthSubItemReference }} caractères</small>
@@ -80,7 +90,7 @@
                     </div>
                 </div>
                 <div class="mr-3 small text-right">
-                    <label class="mb-0">Cocher pour déverrouiller le bouton
+                    <label class="mb-3 mt-3">Cocher pour déverrouiller le bouton
                         <input class="mr-2 ml-2" type="checkbox" formControlName="checkbox">
                     </label>
                 </div>
@@ -98,13 +108,12 @@
                     <div>
                         <button [id]="'cancelAddSubItemModal' + object.id + object.getClassNameFirstLetter()"
                                 class="btn btn-danger" type="button" data-dismiss="modal" (click)="onCancelCreateSubItemForm()">Annuler</button>
-                        <button [id]="'submitAddSubItemModal' + object.id + object.getClassNameFirstLetter()"
+                        <button *ngIf="object.getClassNameFirstLetter() === 'S'" [id]="'submitAddSubItemModal' + object.id + object.getClassNameFirstLetter()"
                                 class="ml-2 btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateSubItemForm()"
-                                [disabled]="!createSubItemForm.valid">
-                            <span *ngIf="object.getClassNameFirstLetter() === 'I'">Ajouter </span>
-                            <span *ngIf="object.getClassNameFirstLetter() === 'S'">Éditer</span>
-                            l'exemplaire
-                        </button>
+                                [disabled]="!createSubItemForm.valid">Éditer l'exemplaire</button>
+                        <button *ngIf="object.getClassNameFirstLetter() === 'I'" [id]="'submitAddSubItemModal' + object.id + object.getClassNameFirstLetter()"
+                                class="ml-2 btn btn-primary" type="submit" data-dismiss="modal" (click)="onSubmitCreateSubItemForm()"
+                                [disabled]="!createSubItemForm.valid || !maxSubItemIsValid">Ajouter l'exemplaire</button>
                     </div>
                 </div>
             </form>

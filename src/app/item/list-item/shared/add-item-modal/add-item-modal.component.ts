@@ -7,6 +7,7 @@ import {ImgOperationService} from '../../../../shared/services/img-operation/img
 import {CheckAtomicItemName} from '../../../../shared/form-validators/async/atomic-item-name.async-validator';
 import {CheckAtomicSubItemRef} from '../../../../shared/form-validators/async/atomic-subitem-ref.async-validator';
 import {CategoryComponent} from '../../category/category.component';
+import {CheckMaxSubItem} from '../../../../shared/form-validators/async/check-max-subitem.async-validator';
 
 @Component({
   selector: 'app-add-item-modal',
@@ -41,6 +42,8 @@ export class AddItemModalComponent implements OnInit {
   private filesSizeMax = this.imgOperationService.filesSizeMax; // 1 mo
   private formatSupportedStr = this.imgOperationService.formatSupportedStr;
 
+  private maxSubItemIsValid = true;
+
   constructor(private itemService: ItemService,
               private formBuilder: FormBuilder,
               private router: Router,
@@ -48,7 +51,14 @@ export class AddItemModalComponent implements OnInit {
 
   ngOnInit() {
     this.initSubscriptions();
+    this.checkMaxSubItemIsValid();
     this.initCreateItemForm();
+  }
+
+  checkMaxSubItemIsValid() {
+    CheckMaxSubItem(this.itemService).then(value => {
+      this.maxSubItemIsValid = value;
+    });
   }
 
   initCreateItemForm() {
