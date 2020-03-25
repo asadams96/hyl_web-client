@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {ItemComponent} from '../../item/item.component';
 import {CategoryComponent} from '../../category/category.component';
 import {ClassNameFirstLetter} from '../../../../shared/functions/class-name-first-letter';
+import {CheckCategoryDepth} from '../../../../shared/form-validators/async/check-category-depth.async-validator';
 
 @Component({
   selector: 'app-move-modal',
@@ -27,8 +28,10 @@ export class MoveModalComponent implements OnInit {
   }
 
   initMoveForm() {
+    const async = [];
+    if ( this.whoMove instanceof CategoryComponent ) { async.push(CheckCategoryDepth(this.itemService, this.whoMove.id, 'MOVE')); }
     this.moveForm = this.formBuilder.group({
-      categoryMove: ['', [Validators.required]],
+      categoryMove: ['', [Validators.required], async],
     });
   }
 
@@ -122,5 +125,13 @@ export class MoveModalComponent implements OnInit {
     } else if (this.whoMove instanceof ItemComponent) {
       return getFullCategoriesForItemComponent(this.whoMove);
     }
+  }
+
+  instanceOfCategory() {
+    return this.whoMove instanceof CategoryComponent;
+  }
+
+  instanceOfItem() {
+    return this.whoMove instanceof ItemComponent;
   }
 }

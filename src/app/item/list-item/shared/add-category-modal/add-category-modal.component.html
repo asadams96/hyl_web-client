@@ -30,9 +30,21 @@
                             <small>.</small>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" [ngClass]="{'mb-0': formWithType }">
                         <input class="form-control form-control-user" formControlName="name" id="nameCreate" type="text"
                                placeholder="Saisir le nom de la nouvelle catégorie" [maxlength]="maxlengthCategoryName">
+                    </div>
+                    <div *ngIf="formWithType" [ngClass]="{'invisible': createCategoryForm.controls.type.valid }" class="text-left mb-1 mt-1">
+                        <div *ngIf="createCategoryForm.controls.type.errors?.checkcategorydepth" class="alert-danger">
+                            <small>La profondeur des catégories autorisé a été atteinte.</small>
+                        </div>
+                        <div *ngIf="createCategoryForm.controls.type.errors?.failcategorydepth" class="alert-danger">
+                            <small>Une erreur de communication s'est produite</small>
+                        </div>
+                        <div *ngIf="createCategoryForm.controls.type.errors === null || createCategoryForm.controls.type.errors.required"
+                             [ngClass]="{'invisible': true}">
+                            <small>.</small>
+                        </div>
                     </div>
                     <div class="form-group" *ngIf="formWithType">
                         <select  class="form-control custom-select" formControlName="type" id="type">

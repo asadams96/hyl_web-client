@@ -4,6 +4,7 @@ import {ItemService} from '../../../item.service';
 import {Router} from '@angular/router';
 import {CategoryComponent} from '../../category/category.component';
 import {CheckAtomicCategoryName} from '../../../../shared/form-validators/async/atomic-category-name.async-validator';
+import {CheckCategoryDepth} from '../../../../shared/form-validators/async/check-category-depth.async-validator';
 
 @Component({
   selector: 'app-add-category-modal',
@@ -27,10 +28,12 @@ export class AddCategoryModalComponent implements OnInit {
 
   private initCreateCategoryForm() {
     this.createCategoryForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(Number(this.minlengthCategoryName))], CheckAtomicCategoryName(this.itemService)]
+      name: ['', [Validators.required, Validators.minLength(Number(this.minlengthCategoryName))],
+        [CheckAtomicCategoryName(this.itemService)]]
     });
     if ( this.formWithType ) {
-      this.createCategoryForm.addControl('type', this.formBuilder.control('', [Validators.required]));
+      this.createCategoryForm.addControl('type', this.formBuilder.control('', [Validators.required],
+          [CheckCategoryDepth(this.itemService, this.category.id, '')]));
     }
   }
 
