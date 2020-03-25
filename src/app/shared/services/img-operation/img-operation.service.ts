@@ -10,7 +10,7 @@ import {environment} from '../../../../environments/environment';
 })
 export class ImgOperationService {
 
-  private path = environment.gatewayUrl + environment.itemUrl + '/' + environment.imgSubItemFolder + '/';
+  private path = environment.gatewayUrl + environment.itemUrl + '/';
 
   private filesToUpload: File[] = null;
   private imgPreview: (string|ArrayBuffer)[] = null;
@@ -45,7 +45,7 @@ export class ImgOperationService {
   }
 
   // Appel lorsqu'un fichier à été choisi par grâce à la balise 'input' de type 'file'
-  handleFileInput(files: FileList) {
+  handleFileInput(files: (FileList)) {
     if (this.filesToUpload === null) { this.filesToUpload = []; }
     this.formatUnsuppErrFile = null;
     this.sizeMaxErrFile = null;

@@ -2,16 +2,19 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SubItemComponent} from '../sub-item.component';
 import {ImgOperationService} from '../../../../../shared/services/img-operation/img-operation.service';
 import {environment} from '../../../../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Subscription} from 'rxjs';
 
 
 @Component({
   selector: 'app-expand-subitem-modal',
   templateUrl: './expand-subitem-modal.component.html',
-  styleUrls: ['./expand-subitem-modal.component.scss']
+  styleUrls: ['./expand-subitem-modal.component.scss'],
+  providers: [ImgOperationService]
 })
 export class ExpandSubitemModalComponent implements OnInit {
 
-  private path = environment.gatewayUrl + '/' + environment.imgSubItemFolder + '/';
+  private path = environment.gatewayUrl + environment.itemUrl + '/';
 
   editSubitem = false;
   addTrackingSheetModal = false;
@@ -21,9 +24,29 @@ export class ExpandSubitemModalComponent implements OnInit {
   oldModalWidth = 0;
   height = 537;
 
-  constructor(private imgOperationService: ImgOperationService) { }
+  private imgPreview: (string|ArrayBuffer)[] = null;
+  private imgPreviewSubscription: Subscription;
 
-  ngOnInit() {}
+  constructor(private imgOperationService: ImgOperationService, private httpClient: HttpClient) { }
+
+  ngOnInit() {
+    this.initImgPreviewSubscription();
+    this.initLoadingImg();
+  }
+
+  initImgPreviewSubscription() {
+    this.imgPreviewSubscription = this.imgOperationService.imgPreviewSubject.subscribe(
+        (imgsExtract: (string|ArrayBuffer)[]) => {
+          this.imgPreview = imgsExtract;
+        }
+    );
+  }
+
+  initLoadingImg() {
+    if ( this.subitem.urlImages !== null &&  this.subitem.urlImages.length > 0) {
+      this.imgOperationService.loadFilesFromUrl( this.subitem.urlImages);
+    }
+  }
 
   onLoad(img: HTMLImageElement) {
     this.imgOperationService.setMaxSizeOfImage(img, this.height, this.height - 7);
@@ -141,4 +164,5 @@ export class ExpandSubitemModalComponent implements OnInit {
     }
     htmlElement.addEventListener('click', event);
   }
+  
 }

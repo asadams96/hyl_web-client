@@ -21,10 +21,10 @@
                     </ol>
                     <div [id]="'carouselSubItem'+subitem.id" #div [ngStyle]="{'height': height+'px'}" class="carousel-inner"
                          (window:resize)="resize(modalLg, imgSubitemNext, div)">
-                        <div *ngFor="let urlImage of subitem.urlImages; let i = index"
+                        <div *ngFor="let image of imgPreview; let i = index"
                              [ngClass]="{'active' : i === 0}" class="carousel-item h-100 text-center">
                             <span id="img-helper1" class="align-middle d-inline-block h-100"></span>
-                            <img #img class="border border-dark m-auto" [src]="path + urlImage.url" (load)="onLoad(img)" alt="slide">
+                            <img #img class="border border-dark m-auto" [src]="image" (load)="onLoad(img)" alt="slide">
                         </div>
                     </div>
                     <a [id]="'imgSubitemPrevious'+subitem.id" class="carousel-control-prev bg-gradient-light"

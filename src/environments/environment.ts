@@ -8,7 +8,6 @@ export const environment = {
   itemUrl: '/item',
   loanUrl: '/loan',
   userUrl: '/user',
-  imgSubItemFolder: 'hyl-img-subitem',
   imgStaticFolder: 'hyl-img-pages',
   subitemImgSizeMax: (1048576 / 2) // -> (1 Mo / 2) = 512 Ko
 };

@@ -10,7 +10,7 @@ import {environment} from '../../environments/environment';
 })
 export class ErrorPageComponent implements OnInit {
 
-  private path = environment.gatewayUrl + '/' + environment.imgStaticFolder + '/error.png';
+  private path = environment.gatewayUrl + environment.itemUrl + '/' + environment.imgStaticFolder + '/error.png';
   errorLoad = false;
 
   constructor(private imgOperationService: ImgOperationService, private router: Router) { }
