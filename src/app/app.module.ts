@@ -41,6 +41,7 @@ import {LoanService} from './loan/loan.service';
 import { CloseLoanModalComponent } from './loan/list-loan/table-loan/close-loan-modal/close-loan-modal.component';
 import { AddLoanModalComponent } from './loan/list-loan/add-loan-modal/add-loan-modal.component';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
+import {ResponseErrorInterceptor} from './interceptors/response-error.interceptor';
 
 
 const appRoutes: Routes = [
@@ -97,6 +98,7 @@ const appRoutes: Routes = [
     DatePipe,
     LoanService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ResponseErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

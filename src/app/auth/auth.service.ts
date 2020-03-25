@@ -62,7 +62,7 @@ export class AuthService {
       return this.httpClient.get(this.host + '/check-email', {params});
   }
 
-  private setAuthState(token: string, idUser: string) {
+  public setAuthState(token: string, idUser: string) {
     this.auth = token;
     this.idUser = idUser;
     localStorage.setItem('auth', JSON.stringify(token));
