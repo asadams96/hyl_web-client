@@ -99,7 +99,7 @@ export class AddSubitemModalComponent implements OnInit {
   }
 
   initCreateSubItemForm() {
-    const validators = [Validators.minLength(Number(this.minlengthSubItemReference))];
+    const validators = [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference))];
     const asyncValidators = [];
     if (this.object instanceof ItemComponent) {
       asyncValidators.push(CheckAtomicSubItemRef(this.itemService));

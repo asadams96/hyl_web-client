@@ -65,7 +65,8 @@ export class AddItemModalComponent implements OnInit {
     this.createItemForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(Number(this.minlengthItemName))], [CheckAtomicItemName(this.itemService)]],
       description: [''],
-      reference: ['', [Validators.minLength(Number(this.minlengthSubItemReference))], [CheckAtomicSubItemRef(this.itemService)]],
+      reference: ['', [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference))],
+                  [CheckAtomicSubItemRef(this.itemService)]],
       files: ['']
     });
     if ( this.formWithCategory ) {

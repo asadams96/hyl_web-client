@@ -40,14 +40,15 @@
                         <div *ngIf="createSubItemForm.controls.reference.errors?.failatomicref" class="alert-danger">
                             <small>Une erreur de communication s'est produite</small>
                         </div>
-                        <div *ngIf="createSubItemForm.controls.reference.errors === null"
+                        <div *ngIf="createSubItemForm.controls.reference.errors === null
+                                    || createSubItemForm.controls.reference.errors.required"
                              [ngClass]="{'invisible': createSubItemForm.valid}">
                             <small>.</small>
                         </div>
                     </div>
                     <div class="form-group pb-2">
                         <input class="form-control" formControlName="reference" id="reference" type="text"
-                               placeholder="Saisir une référence" [maxlength]="maxlengthSubItemReference">
+                               placeholder="Saisir une référence*" [maxlength]="maxlengthSubItemReference">
                     </div>
                     <div class="form-group">
                         <input class="d-none" #input multiple="multiple" formControlName="files" type="file" id="files" accept="image/*" (change)="handleFileInput($event.target.files)">
