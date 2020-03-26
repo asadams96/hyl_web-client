@@ -27,6 +27,11 @@ export class LoanService {
     this.loansTerminatedSubject.next(this.loansTerminated.slice());
   }
 
+  checkSubItemAvailable(reference: string) {
+    const params = {reference};
+    return this.httpClient.get(this.host + '/check-sub-available', {params});
+  }
+
   getLoansInProgress() {
     return this.httpClient.get<LoanModel[]>(this.host + '/in-progress').toPromise().then(
         loans => {

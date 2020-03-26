@@ -7,6 +7,7 @@ import {ItemComponent} from '../../../item/list-item/item/item.component';
 import {CharacterRepetition} from '../../../shared/form-validators/sync/character-repetition.validator';
 import {CheckNoWiteSpace} from '../../../shared/form-validators/sync/no-whitespace.validator';
 import {LoanModel} from '../../model/loan.model';
+import {CheckSubItemAvailable} from '../../../shared/form-validators/async/check-subitem-available.async-validator';
 
 @Component({
   selector: 'app-add-loan-modal',
@@ -36,8 +37,9 @@ export class AddLoanModalComponent implements OnInit {
 
   private initLoanForm() {
     this.loanForm = this.formBuilder.group({
-      beneficiary: ['', [Validators.required, CheckNoWiteSpace(), Validators.minLength(Number(this.minlengthBeneficiary)), CharacterRepetition(3)]],
-      reference: ['', [Validators.required]],
+      beneficiary: ['', [Validators.required, CheckNoWiteSpace(),
+        Validators.minLength(Number(this.minlengthBeneficiary)), CharacterRepetition(3)]],
+      reference: ['', [Validators.required], [CheckSubItemAvailable(this.loanService)]],
       information: ['', [Validators.minLength(Number(this.minlengthInformation))]],
       reminder: ['']
     });

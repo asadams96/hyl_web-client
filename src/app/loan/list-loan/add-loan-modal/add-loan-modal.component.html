@@ -42,23 +42,35 @@
                             <small>.</small>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-0">
                         <input class="form-control" formControlName="beneficiary" id="beneficiaryLoan" type="text"
                                placeholder="Saisir le bénéficiare du prêt*" [maxlength]="maxlengthBeneficiary">
                     </div>
-                    <div class="form-group" *ngIf="true">
+                    <div [ngClass]="{'invisible': loanForm.controls.reference.valid }" class="text-left mb-1 mt-1">
+                        <div *ngIf="loanForm.controls.reference.errors?.checksubitemavailable" class="alert-danger">
+                            <small>L'exemplaire est déjà en cours de prêt</small>
+                        </div>
+                        <div *ngIf="loanForm.controls.reference.errors?.failsubitemavailable" class="alert-danger">
+                            <small>Une erreur de communication s'est produite</small>
+                        </div>
+                        <div *ngIf="loanForm.controls.reference.errors === null || loanForm.controls.reference.errors.required"
+                             [ngClass]="{'invisible': true}">
+                            <small>.</small>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4" *ngIf="true">
                         <select  class="form-control custom-select" formControlName="reference" id="type">
                             <option value="" disabled hidden>Sélectionner l'objet à prêter*</option>
-                           <optgroup *ngFor="let item of items" [label]="item.name">
+                            <optgroup *ngFor="let item of items" [label]="item.name">
                                 <option *ngFor="let subitem of item.subItems" [value]="subitem.reference">{{subitem.reference}}</option>
                             </optgroup>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pt-2 mb-4">
                         <textarea class="form-control" formControlName="information" [maxlength]="maxlengthInformation"
                                   placeholder="Information optionnelle relative au prêt (15 caracts min)"></textarea>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pt-2">
                         <input #input (focus)="(input.type='date')" (blur)="input.type = loanForm.controls.reminder.value === '' ? 'text' : 'date'"
                                (change)="input.type = loanForm.controls.reminder.value === '' ? 'text' : 'date'"
                                placeholder="Recevoir un rappel concernant ce prêt par mail ?" formControlName="reminder"
