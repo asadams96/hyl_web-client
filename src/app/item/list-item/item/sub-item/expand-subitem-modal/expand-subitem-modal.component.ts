@@ -1,9 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {SubItemComponent} from '../sub-item.component';
 import {ImgOperationService} from '../../../../../shared/services/img-operation/img-operation.service';
-import {environment} from '../../../../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {Subscription} from 'rxjs';
+import {interval, Observable, Subscription} from 'rxjs';
 
 
 @Component({
@@ -12,9 +11,7 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./expand-subitem-modal.component.scss'],
   providers: [ImgOperationService]
 })
-export class ExpandSubitemModalComponent implements OnInit {
-
-  private path = environment.gatewayUrl + environment.itemUrl + '/';
+export class ExpandSubitemModalComponent implements OnInit, OnDestroy {
 
   editSubitem = false;
   addTrackingSheetModal = false;
@@ -24,14 +21,22 @@ export class ExpandSubitemModalComponent implements OnInit {
   oldModalWidth = 0;
   height = 537;
 
+  private intervalForImage;
+  private urlImage: Array<bigint> = [];
   private imgPreview: (string|ArrayBuffer)[] = null;
   private imgPreviewSubscription: Subscription;
 
-  constructor(private imgOperationService: ImgOperationService, private httpClient: HttpClient) { }
+
+  constructor(private imgOperationService: ImgOperationService) { }
 
   ngOnInit() {
     this.initImgPreviewSubscription();
     this.initLoadingImg();
+    this.initInterval();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalForImage);
   }
 
   initImgPreviewSubscription() {
@@ -45,6 +50,37 @@ export class ExpandSubitemModalComponent implements OnInit {
   initLoadingImg() {
     if ( this.subitem.urlImages !== null &&  this.subitem.urlImages.length > 0) {
       this.imgOperationService.loadFilesFromUrl( this.subitem.urlImages);
+    }
+  }
+
+  initInterval() {
+    this.urlImage = buildUrlImageArray(this.subitem.urlImages);
+
+    this.intervalForImage = setInterval(() => {
+      if (checkUrlImages(this.urlImage, this.subitem.urlImages)) {
+        this.imgOperationService.reset();
+        this.initLoadingImg();
+        this.urlImage = buildUrlImageArray(this.subitem.urlImages);
+      }
+    }, 5000);
+
+    function buildUrlImageArray(urlImages: {id: bigint, url: string, name: string}[]): Array<bigint> {
+      const urlImageReturn: Array<bigint> = [];
+      for (const urlImage of urlImages) {
+          urlImageReturn.push(urlImage.id);
+        }
+      return urlImageReturn;
+    }
+
+    function checkUrlImages(urlImage: Array<bigint>, urlImages: { id: bigint; url: string; name: string }[]): boolean {
+      if (urlImage.length !== urlImages.length) { return true; }
+      const length = urlImages.length;
+      for (let i = 0; i < length; i++) {
+        if ( urlImage[i] !== urlImages[i].id ) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 
@@ -164,5 +200,5 @@ export class ExpandSubitemModalComponent implements OnInit {
     }
     htmlElement.addEventListener('click', event);
   }
-  
+
 }

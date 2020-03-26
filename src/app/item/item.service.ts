@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {CategoryComponent} from './list-item/category/category.component';
 import {Subject} from 'rxjs';
 import {ItemComponent} from './list-item/item/item.component';
@@ -282,7 +282,8 @@ export class ItemService {
   updateSubItem(subitem: SubItemComponent, reference: string, filesToUpload: File[]) {
     const idSubItem = subitem.id;
 
-    const filesToDel: string[] = [];
+    const filesToDelId: string[] = [];
+    const filesToDelName: string[] = [];
     const newFileToUpload: File[] = [];
     const cs = subitem.urlImages.length;
     const cf = filesToUpload.length;
@@ -296,7 +297,8 @@ export class ItemService {
         }
       }
       if (!present) {
-        filesToDel.push(subitem.urlImages[i].name);
+        filesToDelId.push(String(subitem.urlImages[i].id));
+        filesToDelName.push(subitem.urlImages[i].name);
       }
     }
     // Add to newFileToUpload
@@ -307,13 +309,13 @@ export class ItemService {
           present = true;
         }
       }
-      if (!present && !filesToDel.includes(filesToUpload[i].name)) {
+      if (!present && !filesToDelName.includes(filesToUpload[i].name)) {
         newFileToUpload.push((filesToUpload[i]));
       }
     }
 
     // FormData
-    const data = { reference, idSubItem, filesToDel };
+    const data = { reference, idSubItem, filesToDelId };
     const formData: FormData = new FormData();
     formData.append('data', JSON.stringify(data));
     const c1 = newFileToUpload.length;
@@ -703,7 +705,11 @@ export class ItemService {
         });
 
         if (index !== -1) {
-          category.items[i].subItems[index] = updateSubItem;
+          category.items[i].subItems[index].id = updateSubItem.id;
+          category.items[i].subItems[index].reference = updateSubItem.reference;
+          category.items[i].subItems[index].urlImages = updateSubItem.urlImages;
+          category.items[i].subItems[index].description = updateSubItem.description;
+          category.items[i].subItems[index].trackingSheets = updateSubItem.trackingSheets;
           this.emitCategoryStorage();
           break;
         } else {

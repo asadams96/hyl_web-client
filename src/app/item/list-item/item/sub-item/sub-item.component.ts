@@ -10,7 +10,7 @@ export class SubItemComponent implements OnInit {
 
   @Input() id: bigint;
   @Input() reference: string;
-  @Input() urlImages: {url: string, name: string}[];
+  @Input() urlImages: {id: bigint, url: string, name: string}[];
   @Input() description: string;
   @Input() trackingSheets: {id: bigint, date: Date, comment: string}[];
 
