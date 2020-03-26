@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ClassNameFirstLetter} from '../../../../shared/functions/class-name-first-letter';
-import set = Reflect.set;
 
 @Component({
   selector: 'app-sub-item',
