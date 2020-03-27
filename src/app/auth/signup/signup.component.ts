@@ -44,6 +44,9 @@ export class SignupComponent implements OnInit {
 
       this.userService.getLocalUser().then(
           (userSignupForm) => {
+            if (userSignupForm.cellphone) {
+              userSignupForm.cellphone = '0' + userSignupForm.cellphone.substring(3);
+            }
             this.userSignupForm = userSignupForm;
             this.initForm(this.userSignupForm);
           },
