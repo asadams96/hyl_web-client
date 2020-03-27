@@ -54,12 +54,12 @@ export class AuthService {
   }
 
   forgotPassword(email: string) {
-      return this.httpClient.post(this.host + '/forgot-password', {email}).toPromise();
+      return this.httpClient.post(this.host + environment.userUrl + '/forgot-password', {email}).toPromise();
   }
 
   checkEmail(email: string) {
       const params = {email};
-      return this.httpClient.get(this.host + '/check-email', {params});
+      return this.httpClient.get(this.host + environment.userUrl + '/check-email', {params});
   }
 
     checkCellphone(cellphone: string) {
