@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ImgOperationService} from '../shared/services/img-operation/img-operation.service';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
@@ -8,7 +8,7 @@ import {environment} from '../../environments/environment';
   templateUrl: './error-page.component.html',
   styleUrls: ['./error-page.component.scss']
 })
-export class ErrorPageComponent implements OnInit {
+export class ErrorPageComponent implements OnInit, AfterViewInit {
 
   private path = environment.gatewayUrl + environment.itemUrl + '/' + environment.imgStaticFolder + '/error.png';
   errorLoad = false;
@@ -16,6 +16,13 @@ export class ErrorPageComponent implements OnInit {
   constructor(private imgOperationService: ImgOperationService, private router: Router) { }
 
   ngOnInit() { }
+
+  ngAfterViewInit(): void {
+    const interval0 = setInterval(() => {
+      $('.modal-backdrop').remove();
+      clearInterval(interval0);
+    }, 800);
+  }
 
   resize(img: HTMLImageElement, anchor: HTMLAnchorElement) {
     const size = anchor.parentElement.parentElement.offsetWidth;
