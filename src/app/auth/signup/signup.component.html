@@ -243,7 +243,7 @@
 
         <!-- Submit -->
         <hr class="mt-4 mb-4"/>
-        <button type="submit" class="btn btn-primary btn-user btn-block" [disabled]="!signupForm.valid">
+        <button type="submit" class="btn btn-primary btn-user btn-block" [disabled]="disabled()">
           <span *ngIf="!userSignupForm">Créer un compte</span>
           <span *ngIf="userSignupForm">Éditer mon compte</span>
         </button>

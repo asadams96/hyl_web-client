@@ -16,8 +16,8 @@ export class ListItemComponent implements OnInit {
    @Input() category: CategoryComponent = new CategoryComponent();
    private categorySubscription: Subscription;
 
-   addCategoryModal = false;
-   addItemModal = false;
+   private addCategoryModal = false;
+   private addItemModal = false;
 
   constructor(private itemService: ItemService,
               private formBuilder: FormBuilder,

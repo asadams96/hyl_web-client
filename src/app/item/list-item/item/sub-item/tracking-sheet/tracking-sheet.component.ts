@@ -4,7 +4,6 @@ import {FileReader} from '../../../../../confs/file-reader';
 import {ItemService} from '../../../../item.service';
 import {Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
-import {ClassNameFirstLetter} from '../../../../../shared/functions/class-name-first-letter';
 import {DataTablesService} from '../../../../../shared/services/datatables/data-tables.service';
 
 @Component({

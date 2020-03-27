@@ -18,7 +18,8 @@ import {CheckMaxSubItem} from '../../../../shared/form-validators/async/check-ma
 export class AddSubitemModalComponent implements OnInit {
 
   @Input() object: ItemComponent | SubItemComponent;
-  firstLoadEditSubItem = true;
+  private firstLoadEditSubItem = true;
+  private disabledButton;
 
   private createSubItemForm: FormGroup;
   private maxlengthSubItemReference = '15';
@@ -99,6 +100,7 @@ export class AddSubitemModalComponent implements OnInit {
   }
 
   initCreateSubItemForm() {
+    this.disabledButton = false;
     const validators = [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference))];
     const asyncValidators = [];
     if (this.object instanceof ItemComponent) {
@@ -119,32 +121,34 @@ export class AddSubitemModalComponent implements OnInit {
   }
 
   onSubmitCreateSubItemForm() {
-    const reference = this.createSubItemForm.controls.reference.value;
-    if (this.object instanceof ItemComponent) {
-      this.itemService.createSubItem(this.object, reference, this.filesToUpload).then(
-          value => {
-            this.initCreateSubItemForm();
-            this.imgOperationService.reset();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else if (this.object instanceof SubItemComponent) {
-      this.itemService.updateSubItem(this.object, reference, this.filesToUpload).then(
-          value => {
-            this.imgOperationService.reset();
-            this.initCreateSubItemForm();
-            this.firstLoadEditSubItem = true;
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      const reference = this.createSubItemForm.controls.reference.value;
+      if (this.object instanceof ItemComponent) {
+        this.itemService.createSubItem(this.object, reference, this.filesToUpload).then(
+            value => {
+              this.initCreateSubItemForm();
+              this.imgOperationService.reset();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else if (this.object instanceof SubItemComponent) {
+        this.itemService.updateSubItem(this.object, reference, this.filesToUpload).then(
+            value => {
+              this.imgOperationService.reset();
+              this.initCreateSubItemForm();
+              this.firstLoadEditSubItem = true;
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      }
     }
-
   }
 
   // Appel lorsqu'un fichier à été choisi par grâce à la balise 'input' de type 'file'

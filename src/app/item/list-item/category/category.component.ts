@@ -1,8 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ItemComponent} from '../item/item.component';
-import {FormBuilder} from '@angular/forms';
-import {ItemService} from '../../item.service';
-import {Router} from '@angular/router';
 import {ClassNameFirstLetter} from '../../../shared/functions/class-name-first-letter';
 
 @Component({
@@ -16,11 +13,11 @@ export class CategoryComponent implements OnInit {
   @Input() categories: Array<CategoryComponent>;
   @Input() items: Array<ItemComponent>;
 
-  addCategoryModal = false;
-  renameCategoryModal = false;
-  deleteCategoryModal = false;
-  addItemModal = false;
-  moveCategoryModal = false;
+  private addCategoryModal = false;
+  private renameCategoryModal = false;
+  private deleteCategoryModal = false;
+  private addItemModal = false;
+  private moveCategoryModal = false;
 
   constructor() {}
 

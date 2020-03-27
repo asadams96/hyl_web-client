@@ -13,7 +13,7 @@ import {CharacterRepetition} from '../../shared/form-validators/sync/character-r
 export class SigninComponent implements OnInit {
 
   private signinForm: FormGroup;
-  protected signinError: string;
+  private signinError: string;
   private disabledForm = false;
 
   constructor(private router: Router,
@@ -32,6 +32,7 @@ export class SigninComponent implements OnInit {
   }
 
   protected onSubmitForm() {
+    this.disabledForm = true;
     const formValue = this.signinForm.value;
     const newSignin = new SigninForm(formValue.email, formValue.password);
 
@@ -41,13 +42,12 @@ export class SigninComponent implements OnInit {
       },
       error => {
         if (error && String(error.status)[0] === '4') {
+          const interval = setInterval( () => {
+            this.disabledForm = false;
+            clearInterval(interval);
+          }, 5000);
           if (error.status === 401) {
             this.signinError = 'Identifiant ou mot de passe invalide...';
-            this.disabledForm = true;
-            const interval = setInterval( () => {
-              this.disabledForm = false;
-              clearInterval(interval);
-            }, 5000);
           } else {
             this.signinError = 'Une erreur s\'est produite...';
           }

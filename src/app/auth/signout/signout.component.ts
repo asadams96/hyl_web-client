@@ -9,6 +9,8 @@ import {Router} from '@angular/router';
 })
 export class SignoutComponent implements OnInit {
 
+   private disabledButton = false;
+
   constructor(private authService: AuthService,
               private router: Router) { }
 
@@ -16,14 +18,17 @@ export class SignoutComponent implements OnInit {
   }
 
   onLogout() {
-    this.authService.signout().then(
-        () => {
-          this.router.navigate(['/connexion']);
-        },
-        reason => {
-          console.log(reason);
-          this.router.navigate(['/erreur']);
-        }
-    );
+    if (!this.disabledButton) {
+        this.disabledButton = true;
+        this.authService.signout().then(
+            () => {
+                this.router.navigate(['/connexion']);
+            },
+            reason => {
+                console.log(reason);
+                this.router.navigate(['/erreur']);
+            }
+        );
+    }
   }
 }

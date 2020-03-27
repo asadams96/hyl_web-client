@@ -19,6 +19,7 @@ export class RenameModalComponent implements OnInit {
   @Input() whoRename: CategoryComponent | ItemComponent | SubItemComponent;
 
   private renameForm: FormGroup;
+  private disabledButton;
 
   private maxlengthCategoryName = '15';
   private minlengthCategoryName = '3';
@@ -61,44 +62,48 @@ export class RenameModalComponent implements OnInit {
   }
 
   initRenameForm() {
+    this.disabledButton = false;
     this.renameForm = this.formBuilder.group({
       name: ['', this.validators, this.asyncValidators]
     });
   }
 
   onSubmitRenameForm() {
-    if ( this.whoRename instanceof CategoryComponent) {
-      this.itemService.renameCategory(this.whoRename, this.renameForm.controls.name.value).then(
-          value =>  {
-            this.initRenameForm();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else if ( this.whoRename instanceof ItemComponent) {
-      this.itemService.renameItem(this.whoRename, this.renameForm.controls.name.value).then(
-          () => {
-            this.initRenameForm();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else if ( this.whoRename instanceof SubItemComponent) {
-      this.itemService.renameSubItem(this.whoRename, this.renameForm.controls.name.value).then(
-          () => {
-            this.initRenameForm();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else {
-      this.router.navigate(['/erreur']);
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      if (this.whoRename instanceof CategoryComponent) {
+        this.itemService.renameCategory(this.whoRename, this.renameForm.controls.name.value).then(
+            value => {
+              this.initRenameForm();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else if (this.whoRename instanceof ItemComponent) {
+        this.itemService.renameItem(this.whoRename, this.renameForm.controls.name.value).then(
+            () => {
+              this.initRenameForm();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else if (this.whoRename instanceof SubItemComponent) {
+        this.itemService.renameSubItem(this.whoRename, this.renameForm.controls.name.value).then(
+            () => {
+              this.initRenameForm();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else {
+        this.router.navigate(['/erreur']);
+      }
     }
   }
 

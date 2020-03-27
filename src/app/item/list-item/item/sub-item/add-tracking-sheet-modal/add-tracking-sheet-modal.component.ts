@@ -13,9 +13,11 @@ export class AddTrackingSheetModalComponent implements OnInit {
 
   @Input() subitem: SubItemComponent;
 
-  addTrackingSheetForm: FormGroup;
-  minlengthComment = '15';
-  maxlengthComment = '150';
+  private addTrackingSheetForm: FormGroup;
+  private minlengthComment = '15';
+  private maxlengthComment = '150';
+
+  private disabledButton;
 
   constructor(private formBuilder: FormBuilder,
               private itemService: ItemService,
@@ -26,20 +28,24 @@ export class AddTrackingSheetModalComponent implements OnInit {
   }
 
   initTrackingSheetForm() {
+    this.disabledButton = false;
     this.addTrackingSheetForm = this.formBuilder.group({
       comment: ['', [Validators.required, Validators.minLength(Number(this.minlengthComment))]]
     });
   }
 
   onSubmitAddTrackingSheetForm() {
-    this.itemService.createTrackingSheet(this.subitem, this.addTrackingSheetForm.controls.comment.value).then(
-        value => {
-          this.initTrackingSheetForm();
-        },
-        reason => {
-          console.log(reason);
-          this.router.navigate(['/erreur']);
-        }
-    );
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      this.itemService.createTrackingSheet(this.subitem, this.addTrackingSheetForm.controls.comment.value).then(
+          value => {
+            this.initTrackingSheetForm();
+          },
+          reason => {
+            console.log(reason);
+            this.router.navigate(['/erreur']);
+          }
+      );
+    }
   }
 }

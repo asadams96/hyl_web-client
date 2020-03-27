@@ -16,9 +16,10 @@ export class CloseLoanModalComponent implements OnInit {
   @Input() goal: string;
   @Input() etat: string;
 
-  loanForm: FormGroup;
-  minlengthComment = '15';
-  maxlengthComment = '150';
+  private loanForm: FormGroup;
+  private disabledButton;
+  private minlengthComment = '15';
+  private maxlengthComment = '150';
 
   constructor(private loanService: LoanService,
               private formBuilder: FormBuilder,
@@ -29,6 +30,7 @@ export class CloseLoanModalComponent implements OnInit {
   }
 
   initLoanForm() {
+    this.disabledButton = false;
     this.loanForm = this.formBuilder.group({
       checkbox: [false, [Validators.pattern('true')]]
     });
@@ -39,24 +41,27 @@ export class CloseLoanModalComponent implements OnInit {
   }
 
   onSubmitLoanForm() {
-    if (this.goal === 'close') {
-      for (const loan of this.loans) {
-        loan.comment = this.loanForm.controls.comment.value;
-        loan.endDate = new Date();
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      if (this.goal === 'close') {
+        for (const loan of this.loans) {
+          loan.comment = this.loanForm.controls.comment.value;
+          loan.endDate = new Date();
+        }
+        this.loanService.closeLoans(this.loans).catch(
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else if (this.goal === 'delete') {
+        this.loanService.deleteLoans(this.loans).catch(
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
       }
-      this.loanService.closeLoans(this.loans).catch(
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else if (this.goal === 'delete') {
-      this.loanService.deleteLoans(this.loans).catch(
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
     }
   }
 

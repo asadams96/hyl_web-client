@@ -13,13 +13,13 @@ import {interval, Observable, Subscription} from 'rxjs';
 })
 export class ExpandSubitemModalComponent implements OnInit, OnDestroy {
 
-  editSubitem = false;
-  addTrackingSheetModal = false;
+  private editSubitem = false;
+  private addTrackingSheetModal = false;
 
   @Input() subitem: SubItemComponent;
   @Input() description: string;
-  oldModalWidth = 0;
-  height = 537;
+  private oldModalWidth = 0;
+  private height = 537;
 
   private intervalForImage;
   private urlImage: Array<bigint> = [];

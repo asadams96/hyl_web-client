@@ -19,6 +19,7 @@ export class AddCategoryModalComponent implements OnInit {
   private createCategoryForm: FormGroup;
   private maxlengthCategoryName = '15';
   private minlengthCategoryName = '3';
+  private disabledButton;
 
   constructor(private itemService: ItemService, private formBuilder: FormBuilder, private router: Router) { }
 
@@ -27,6 +28,7 @@ export class AddCategoryModalComponent implements OnInit {
   }
 
   private initCreateCategoryForm() {
+    this.disabledButton = false;
     this.createCategoryForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(Number(this.minlengthCategoryName))],
         [CheckAtomicCategoryName(this.itemService)]]
@@ -38,28 +40,31 @@ export class AddCategoryModalComponent implements OnInit {
   }
 
   private onSubmitCreateCategoryForm() {
-    if ( !this.formWithType || (String(this.formWithType && this.createCategoryForm.controls.type.value) === 'C') ) {
-      this.itemService.createChildCategory(this.category, String(this.createCategoryForm.controls.name.value)).then(
-          () => {
-            this.initCreateCategoryForm();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else if ((String(this.formWithType && this.createCategoryForm.controls.type.value) === 'P')) {
-      this.itemService.createParentCategory(this.category, String(this.createCategoryForm.controls.name.value)).then(
-          value =>  {
-            this.initCreateCategoryForm();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else {
-      this.router.navigate(['/erreur']);
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      if (!this.formWithType || (String(this.formWithType && this.createCategoryForm.controls.type.value) === 'C')) {
+        this.itemService.createChildCategory(this.category, String(this.createCategoryForm.controls.name.value)).then(
+            () => {
+              this.initCreateCategoryForm();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else if ((String(this.formWithType && this.createCategoryForm.controls.type.value) === 'P')) {
+        this.itemService.createParentCategory(this.category, String(this.createCategoryForm.controls.name.value)).then(
+            value => {
+              this.initCreateCategoryForm();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else {
+        this.router.navigate(['/erreur']);
+      }
     }
   }
 }

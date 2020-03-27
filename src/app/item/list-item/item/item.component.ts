@@ -15,10 +15,10 @@ export class ItemComponent implements OnInit {
   @Input() urlItem: string;
   @Input() subItems: SubItemComponent[];
 
-  renameItemModal = false;
-  moveItemModal = false;
-  deleteItemModal = false;
-  addSubItemModal = false;
+  private renameItemModal = false;
+  private moveItemModal = false;
+  private deleteItemModal = false;
+  private addSubItemModal = false;
 
   constructor() { }
 

@@ -17,7 +17,7 @@ export class MoveModalComponent implements OnInit {
   @Input() whoMove: ItemComponent | CategoryComponent;
 
   private moveForm: FormGroup;
-
+  private disabledButton;
 
   constructor(private itemService: ItemService,
               private formBuilder: FormBuilder,
@@ -28,6 +28,7 @@ export class MoveModalComponent implements OnInit {
   }
 
   initMoveForm() {
+    this.disabledButton = false;
     const async = [];
     if ( this.whoMove instanceof CategoryComponent ) { async.push(CheckCategoryDepth(this.itemService, this.whoMove.id, 'MOVE')); }
     this.moveForm = this.formBuilder.group({
@@ -36,29 +37,32 @@ export class MoveModalComponent implements OnInit {
   }
 
   onSubmitMoveForm() {
-    const idCategory = this.moveForm.controls.categoryMove.value !== '' ?  this.moveForm.controls.categoryMove.value : null;
-    if (this.whoMove instanceof CategoryComponent) {
-      this.itemService.moveCategory(this.whoMove, idCategory).then(
-          value => {
-            this.initMoveForm();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else if (this.whoMove instanceof ItemComponent) {
-      this.itemService.moveItem(this.whoMove, idCategory).then(
-          () => {
-            this.initMoveForm();
-          },
-          reason => {
-            console.log(reason);
-            this.router.navigate(['/erreur']);
-          }
-      );
-    } else {
-      this.router.navigate(['/erreur']);
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      const idCategory = this.moveForm.controls.categoryMove.value !== '' ? this.moveForm.controls.categoryMove.value : null;
+      if (this.whoMove instanceof CategoryComponent) {
+        this.itemService.moveCategory(this.whoMove, idCategory).then(
+            value => {
+              this.initMoveForm();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else if (this.whoMove instanceof ItemComponent) {
+        this.itemService.moveItem(this.whoMove, idCategory).then(
+            () => {
+              this.initMoveForm();
+            },
+            reason => {
+              console.log(reason);
+              this.router.navigate(['/erreur']);
+            }
+        );
+      } else {
+        this.router.navigate(['/erreur']);
+      }
     }
   }
 

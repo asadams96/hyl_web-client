@@ -14,7 +14,7 @@ export class ListLoanComponent implements OnInit {
   private loans: LoanModel[];
   loansSubscription: Subscription;
 
-  etat: string;
+  private etat: string;
 
   constructor(private loanService: LoanService, private route: ActivatedRoute, private router: Router) {}
 

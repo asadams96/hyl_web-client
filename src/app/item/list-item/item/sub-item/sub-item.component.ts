@@ -14,9 +14,9 @@ export class SubItemComponent implements OnInit {
   @Input() description: string;
   @Input() trackingSheets: {id: bigint, date: Date, comment: string}[];
 
-  expandSubitem = false;
-  deleteSubItemModal = false;
-  renameSubItemModal = false;
+  private expandSubitem = false;
+  private deleteSubItemModal = false;
+  private renameSubItemModal = false;
 
   constructor() { }
 

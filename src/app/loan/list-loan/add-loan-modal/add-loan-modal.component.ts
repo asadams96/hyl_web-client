@@ -17,12 +17,13 @@ import {CheckSubItemAvailable} from '../../../shared/form-validators/async/check
 export class AddLoanModalComponent implements OnInit {
   items: ItemComponent[];
 
-  loanForm: FormGroup;
-  minlengthInformation = '15';
-  minlengthBeneficiary = '5';
-  maxlengthInformation = '100';
-  maxlengthBeneficiary = '15';
-  minDate = Date.now() + (1000 * 60 * 60 * 24);
+  private loanForm: FormGroup;
+  private disabledButton;
+  private minlengthInformation = '15';
+  private minlengthBeneficiary = '5';
+  private maxlengthInformation = '100';
+  private maxlengthBeneficiary = '15';
+  private minDate = Date.now() + (1000 * 60 * 60 * 24);
 
   constructor(private formBuilder: FormBuilder,
               private loanService: LoanService,
@@ -36,6 +37,7 @@ export class AddLoanModalComponent implements OnInit {
 
 
   private initLoanForm() {
+    this.disabledButton = false;
     this.loanForm = this.formBuilder.group({
       beneficiary: ['', [Validators.required, CheckNoWiteSpace(),
         Validators.minLength(Number(this.minlengthBeneficiary)), CharacterRepetition(3)]],
@@ -47,23 +49,26 @@ export class AddLoanModalComponent implements OnInit {
 
 
   onSubmitLoanForm() {
-    const controls = this.loanForm.controls;
-    const reference = controls.reference.value;
-    const beneficiary = controls.beneficiary.value;
-    const information = controls.information.value && controls.information.value !== '' ? controls.information.value : null;
-    const reminder = controls.reminder.value && controls.reminder.value !== '' ? controls.reminder.value : null;
-    const loan = new  LoanModel(null, new Date(), null, reference,  beneficiary, information,  null, reminder);
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      const controls = this.loanForm.controls;
+      const reference = controls.reference.value;
+      const beneficiary = controls.beneficiary.value;
+      const information = controls.information.value && controls.information.value !== '' ? controls.information.value : null;
+      const reminder = controls.reminder.value && controls.reminder.value !== '' ? controls.reminder.value : null;
+      const loan = new LoanModel(null, new Date(), null, reference, beneficiary, information, null, reminder);
 
-    this.loanService.createLoan(loan).then(
-        value => {
-          this.removeSubItems(reference);
-          this.initLoanForm();
-        },
-        reason => {
-          console.log(reason);
-          this.router.navigate(['/erreur']);
-        }
-    );
+      this.loanService.createLoan(loan).then(
+          value => {
+            this.removeSubItems(reference);
+            this.initLoanForm();
+          },
+          reason => {
+            console.log(reason);
+            this.router.navigate(['/erreur']);
+          }
+      );
+    }
   }
 
   getDate() {

@@ -13,11 +13,11 @@ import {CharacterRepetition} from '../../shared/form-validators/sync/character-r
 })
 export class ForgotPassComponent implements OnInit {
 
-  forgotPassForm: FormGroup;
-  disabledForm = false;
-  forgotPassSuccesMsg = false;
-  forgotPassErrorMsg = false;
-  num = 5;
+  private forgotPassForm: FormGroup;
+  private disabledForm = false;
+  private forgotPassSuccesMsg = false;
+  private forgotPassErrorMsg = false;
+  private num = 5;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -36,6 +36,7 @@ export class ForgotPassComponent implements OnInit {
   }
 
   onSubmitForgotPassForm() {
+    this.disabledForm = true;
     this.authService.forgotPassword(this.forgotPassForm.controls.email.value).then(
         () => {
           this.forgotPassErrorMsg = false;
@@ -55,7 +56,6 @@ export class ForgotPassComponent implements OnInit {
         reason => {
           if (reason.status === 404) {
             this.forgotPassErrorMsg = true;
-            this.disabledForm = true;
             this.initForgotPassForm();
             const interval0 = setInterval( () => {
               this.disabledForm = false;

@@ -22,6 +22,7 @@ export class AddItemModalComponent implements OnInit {
   @Input() formWithCategory = false;
 
   private createItemForm: FormGroup;
+  private disabledButton;
 
   private maxlengthItemName = '15';
   private maxlengthItemDescription = '50';
@@ -62,6 +63,7 @@ export class AddItemModalComponent implements OnInit {
   }
 
   initCreateItemForm() {
+    this.disabledButton = false;
     this.createItemForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(Number(this.minlengthItemName))], [CheckAtomicItemName(this.itemService)]],
       description: [''],
@@ -110,26 +112,29 @@ export class AddItemModalComponent implements OnInit {
   }
 
   onSubmitCreateItemForm() {
-    const name: string = this.createItemForm.controls.name.value;
-    const description: string = this.createItemForm.controls.description.value;
-    const reference: string = this.createItemForm.controls.reference.value;
-    let idCategory: bigint;
-    if ( this.formWithCategory ) {
-      idCategory = this.createItemForm.controls.category.value;
-    } else {
-      idCategory = this.id;
-    }
+    if (!this.disabledButton) {
+      this.disabledButton = true;
+      const name: string = this.createItemForm.controls.name.value;
+      const description: string = this.createItemForm.controls.description.value;
+      const reference: string = this.createItemForm.controls.reference.value;
+      let idCategory: bigint;
+      if (this.formWithCategory) {
+        idCategory = this.createItemForm.controls.category.value;
+      } else {
+        idCategory = this.id;
+      }
 
-    this.itemService.createItem(idCategory, name, description, reference, this.filesToUpload).then(
-        value => {
-          this.initCreateItemForm();
-          this.imgOperationService.reset();
-        },
-        reason => {
-          console.log(reason);
-          this.router.navigate(['/erreur']);
-        }
-    );
+      this.itemService.createItem(idCategory, name, description, reference, this.filesToUpload).then(
+          value => {
+            this.initCreateItemForm();
+            this.imgOperationService.reset();
+          },
+          reason => {
+            console.log(reason);
+            this.router.navigate(['/erreur']);
+          }
+      );
+    }
   }
 
   // Appel lorsqu'un fichier à été choisi par grâce à la balise 'input' de type 'file'

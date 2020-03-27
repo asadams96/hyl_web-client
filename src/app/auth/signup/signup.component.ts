@@ -18,8 +18,9 @@ import {CheckAtomicCellphone} from '../../shared/form-validators/async/atomic-ce
 })
 export class SignupComponent implements OnInit {
 
-  userSignupForm: SignupForm;
-  editUserSuccesMsg: string;
+  private disabledForm = false;
+  private userSignupForm: SignupForm;
+  private editUserSuccesMsg: string;
 
   public signupForm: FormGroup = null;
 
@@ -103,6 +104,7 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmitForm() {
+    this.disabledForm = true;
     const formValue = this.signupForm.value;
     const signupForm = new SignupForm(formValue.email, formValue.pseudo, formValue.surname,
                                       formValue.name, formValue.civility, formValue.cellphone, formValue.password);
@@ -111,6 +113,7 @@ export class SignupComponent implements OnInit {
           () => {
             this.initForm(signupForm);
             this.editUserSuccesMsg = 'Les modifications ont bien été prises en compte';
+            this.disabledForm = false;
           },
           reason => {
             console.log(reason);
@@ -128,5 +131,9 @@ export class SignupComponent implements OnInit {
           }
       );
     }
+  }
+
+  disabled() {
+    return !this.signupForm.valid || this.disabledForm;
   }
 }
