@@ -12,7 +12,6 @@ export class ItemComponent implements OnInit {
   @Input() id: bigint;
   @Input() name: string;
   @Input() description: string;
-  @Input() urlItem: string;
   @Input() subItems: SubItemComponent[];
 
   private renameItemModal = false;
