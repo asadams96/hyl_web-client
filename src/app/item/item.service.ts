@@ -145,9 +145,11 @@ export class ItemService {
     const data = {name, description, idCategory, reference};
 
     const formData: FormData = new FormData();
-    const c = fileToUpload.length;
-    for (let i = 0; i < c; i++) {
-      formData.append('files', fileToUpload[i], fileToUpload[i].name);
+    if (fileToUpload) {
+      const c = fileToUpload.length;
+      for (let i = 0; i < c; i++) {
+        formData.append('files', fileToUpload[i], fileToUpload[i].name);
+      }
     }
     formData.append('data', JSON.stringify(data));
 
@@ -242,9 +244,11 @@ export class ItemService {
     const data = {reference, idItem };
 
     const formData: FormData = new FormData();
-    const c = fileToUpload.length;
-    for (let i = 0; i < c; i++) {
-      formData.append('files', fileToUpload[i], fileToUpload[i].name);
+    if (fileToUpload) {
+      const c = fileToUpload.length;
+      for (let i = 0; i < c; i++) {
+        formData.append('files', fileToUpload[i], fileToUpload[i].name);
+      }
     }
     formData.append('data', JSON.stringify(data));
 
@@ -280,48 +284,50 @@ export class ItemService {
   }
 
   updateSubItem(subitem: SubItemComponent, reference: string, filesToUpload: File[]) {
+    const formData: FormData = new FormData();
     const idSubItem = subitem.id;
-
     const filesToDelId: string[] = [];
     const filesToDelName: string[] = [];
     const newFileToUpload: File[] = [];
-    const cs = subitem.urlImages.length;
-    const cf = filesToUpload.length;
 
-    // Add to filesToDel
-    for (let i = 0; i < cs; i++) {
-      let present = false;
-      for (let j = 0; j < cf; j++) {
-        if (subitem.urlImages[i].name === filesToUpload[j].name) {
-          present = true;
+    if (filesToUpload) {
+      const cs = subitem.urlImages.length;
+      const cf = filesToUpload.length;
+
+      // Add to filesToDel
+      for (let i = 0; i < cs; i++) {
+        let present = false;
+        for (let j = 0; j < cf; j++) {
+          if (subitem.urlImages[i].name === filesToUpload[j].name) {
+            present = true;
+          }
+        }
+        if (!present) {
+          filesToDelId.push(String(subitem.urlImages[i].id));
+          filesToDelName.push(subitem.urlImages[i].name);
         }
       }
-      if (!present) {
-        filesToDelId.push(String(subitem.urlImages[i].id));
-        filesToDelName.push(subitem.urlImages[i].name);
-      }
-    }
-    // Add to newFileToUpload
-    for (let i = 0; i < cf; i++) {
-      let present = false;
-      for (let j = 0; j < cs; j++) {
-        if ( filesToUpload[i].name  === subitem.urlImages[j].name) {
-          present = true;
+      // Add to newFileToUpload
+      for (let i = 0; i < cf; i++) {
+        let present = false;
+        for (let j = 0; j < cs; j++) {
+          if (filesToUpload[i].name === subitem.urlImages[j].name) {
+            present = true;
+          }
+        }
+        if (!present && !filesToDelName.includes(filesToUpload[i].name)) {
+          newFileToUpload.push((filesToUpload[i]));
         }
       }
-      if (!present && !filesToDelName.includes(filesToUpload[i].name)) {
-        newFileToUpload.push((filesToUpload[i]));
+
+      const c1 = newFileToUpload.length;
+      for (let j = 0; j < c1; j++) {
+        formData.append('files', newFileToUpload[j], newFileToUpload[j].name);
       }
     }
 
-    // FormData
     const data = { reference, idSubItem, filesToDelId };
-    const formData: FormData = new FormData();
     formData.append('data', JSON.stringify(data));
-    const c1 = newFileToUpload.length;
-    for (let j = 0; j < c1; j++) {
-      formData.append('files', newFileToUpload[j], newFileToUpload[j].name);
-    }
 
     // return la requete sous forme de promise
     return this.httpClient.patch<SubItemComponent>(this.host + '/edit-subitem', formData)

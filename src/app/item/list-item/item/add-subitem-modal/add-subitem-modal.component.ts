@@ -139,6 +139,7 @@ export class AddSubitemModalComponent implements OnInit {
         this.itemService.updateSubItem(this.object, reference, this.filesToUpload).then(
             value => {
               this.imgOperationService.reset();
+              if (this.object instanceof SubItemComponent) { this.object.reference = reference; }
               this.initCreateSubItemForm();
               this.firstLoadEditSubItem = true;
             },
