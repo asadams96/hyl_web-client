@@ -16,6 +16,10 @@ export class UserService {
   }
 
   updateUser(signupForm: SignupForm) {
-        return this.httpClient.patch(this.host + '/patch-user', {user: signupForm}).toPromise();
+    return this.httpClient.patch(this.host + '/patch-user',
+        {email: signupForm.email, pseudo: signupForm.pseudo,
+          cellphone: signupForm.cellphone, civility: signupForm.civility,
+          name: signupForm.name, surname: signupForm.surname,
+          password: signupForm.password }).toPromise();
     }
 }
