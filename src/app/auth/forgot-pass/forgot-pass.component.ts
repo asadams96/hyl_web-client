@@ -29,7 +29,8 @@ export class ForgotPassComponent implements OnInit {
 
   initForgotPassForm() {
     this.forgotPassForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.pattern('^[a-z0-9._-]{3,99}@[a-z0-9._-]{3,99}\.[a-z]{2,}$'), CharacterRepetition(3)]],
+      email: [(this.forgotPassForm  && this.forgotPassForm.controls.email ? this.forgotPassForm.controls.email.value  : ''),
+          [Validators.required, Validators.pattern('^[a-z0-9._-]{3,99}@[a-z0-9._-]{3,99}\.[a-z]{2,}$'), CharacterRepetition(3)]],
       checkbox: [false, [Validators.pattern('true')]]
     });
   }
@@ -52,9 +53,10 @@ export class ForgotPassComponent implements OnInit {
           }, 5000);
         },
         reason => {
-          if (reason.status === 403) {
+          if (reason.status === 404) {
             this.forgotPassErrorMsg = true;
             this.disabledForm = true;
+            this.initForgotPassForm();
             const interval0 = setInterval( () => {
               this.disabledForm = false;
               clearInterval(interval0);

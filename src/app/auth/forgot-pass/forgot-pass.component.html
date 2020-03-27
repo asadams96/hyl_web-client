@@ -6,11 +6,11 @@
                 <h1 class="h2 text-gray-800 mb-4">Mot de passe oublié ?</h1>
                 <p class="mb-4 text-left small text-center">
                     <span class="d-block text-left" *ngIf="!forgotPassSuccesMsg && !forgotPassErrorMsg">
-                        Saisssez votre adresse mail pour que nous puissions vous envoyer votre mot de passe.
+                        Saisissez votre adresse email pour que nous puissions vous envoyer un nouveau mot de passe.
                     </span>
-                    <span class="d-block text-danger font-weight-bolder" *ngIf="forgotPassErrorMsg">Adresse mail associé à aucun compte</span>
+                    <span class="d-block text-danger font-weight-bolder" *ngIf="forgotPassErrorMsg">L'adresse email n'est associé à aucun compte</span>
                     <span class="d-block text-success font-weight-bolder" *ngIf="forgotPassSuccesMsg">Mot de passe envoyé avec succès !</span>
-                    <span class="d-block" *ngIf="forgotPassSuccesMsg">Rediriger vers la page de connexion dans {{ num }} secondes.</span>
+                    <span class="d-block" *ngIf="forgotPassSuccesMsg">Redirection vers la page de connexion dans {{ num }} secondes.</span>
                 </p>
             </div>
             <form class="user" [formGroup]="forgotPassForm">
@@ -23,7 +23,7 @@
                     <small>Cocher pour déverrouiller le bouton</small>
                 </div>
                 <button type="submit" class="btn btn-primary text-white btn-user btn-block" (click)="onSubmitForgotPassForm()" [disabled]="disabled()">
-                    Envoyer le mot de passe
+                    Envoyer un nouveau mot de passe
                 </button>
             </form>
             <hr class="mt-4">
