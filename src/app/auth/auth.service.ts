@@ -62,6 +62,11 @@ export class AuthService {
       return this.httpClient.get(this.host + '/check-email', {params});
   }
 
+    checkCellphone(cellphone: string) {
+        const params = {cellphone};
+        return this.httpClient.get(this.host + environment.userUrl + '/check-cellphone', {params});
+    }
+
   public setAuthState(token: string, idUser: string) {
     this.auth = token;
     this.idUser = idUser;

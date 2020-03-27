@@ -187,6 +187,13 @@
               <div class="alert-danger" *ngIf="signupForm.controls.cellphone.errors?.numberFormat">
                 <small class="ml-1">Format 10 chiffres requis</small>
               </div>
+              <div *ngIf="signupForm.controls.cellphone.errors?.checkatomiccellphone" class="alert-danger">
+                <small class="ml-1">Téléphone déjà utilisée</small>
+              </div>
+              <div class="alert-danger" *ngIf="!signupForm.controls.cellphone.errors?.localFormat
+                                              && signupForm.controls.cellphone.errors?.failatomiccellphone">
+                <small class="ml-1">Échec réseau, réessayez plus tard.</small>
+              </div>
               <div *ngIf="signupForm.controls.cellphone.errors === null"
                    [ngClass]="{'invisible': true}">
                 <small>.</small>

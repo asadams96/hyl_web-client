@@ -9,6 +9,7 @@ import {SignupForm} from './signup-form';
 import {CheckAtomicEmail} from '../../shared/form-validators/async/atomic-email.async-validator';
 import {CheckNoWiteSpace} from '../../shared/form-validators/sync/no-whitespace.validator';
 import {UserService} from '../../user/user.service';
+import {CheckAtomicCellphone} from '../../shared/form-validators/async/atomic-cellphone.async-validator';
 
 @Component({
   selector: 'app-signup',
@@ -86,7 +87,7 @@ export class SignupComponent implements OnInit {
 
       civility: [civility, []],
 
-      cellphone: [cellphone, [CheckCellPhoneControle()]],
+      cellphone: [cellphone, [CheckCellPhoneControle()], [CheckAtomicCellphone(this.authService, cellphone)]],
 
       password: ['', passValidators],
 
