@@ -51,7 +51,12 @@ export class LoanService {
   }
 
   closeLoans(loans: LoanModel[]) {
-    return this.httpClient.post(this.host + '/close-loans', {loans})
+    const body: Array<{id: string, endDate: Date, comment: string}> = [];
+    for (const loan of loans) {
+      body.push({id: String(loan.id), endDate: loan.endDate, comment: loan.comment});
+    }
+
+    return this.httpClient.post(this.host + '/close-loans', body)
         .toPromise().then(
             () => {
               this.removeToLoansInProgressArray(loans);
