@@ -47,7 +47,11 @@ export class ListLoanComponent implements OnInit {
     } else if ( this.etat === 'terminés') {
       this.loansSubscription = this.loanService.loansTerminatedSubject.subscribe(
           (value) => {
-            this.loans = value;
+              this.loans = null;
+              const interval = setInterval(() => {
+                  this.loans = value;
+                  clearInterval(interval);
+              }, 100);
           }
       );
     }
