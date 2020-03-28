@@ -23,6 +23,7 @@ export class SignupComponent implements OnInit {
   private editUserSuccesMsg: string;
 
   public signupForm: FormGroup = null;
+  private readonlyEmail: boolean;
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -75,6 +76,8 @@ export class SignupComponent implements OnInit {
     } else {
       passValidators.push(Validators.required);
     }
+
+    this.readonlyEmail = email !== '';
 
     this.signupForm = this.formBuilder.group({
 
