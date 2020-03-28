@@ -60,7 +60,6 @@ export class AddLoanModalComponent implements OnInit {
 
       this.loanService.createLoan(loan).then(
           value => {
-            this.removeSubItems(reference);
             this.initLoanForm();
           },
           reason => {
@@ -84,18 +83,5 @@ export class AddLoanModalComponent implements OnInit {
           this.router.navigate(['/erreur']);
         }
     );
-   }
-
-   removeSubItems(reference: string) {
-     for (const item of this.items) {
-       const index = item.subItems.findIndex(
-           pSubItem => {
-             return reference === pSubItem.reference;
-           });
-       if (index !== -1) {
-         item.subItems.splice(index, 1);
-         break;
-       }
-     }
    }
 }

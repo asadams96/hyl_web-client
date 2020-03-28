@@ -76,7 +76,8 @@ export class LoanService {
   }
 
   createLoan(loan: LoanModel) {
-    return this.httpClient.post<LoanModel>(this.host + '/add-loan', {loan})
+    return this.httpClient.post<LoanModel>(this.host + '/add-loan', {startDate: loan.startDate, reference: loan.reference,
+                                            beneficiary: loan.beneficiary, information: loan.information, reminder: loan.reminder})
         .toPromise().then(
             (newLoan) => {
               this.addToLoansInProgressArray([newLoan]);
