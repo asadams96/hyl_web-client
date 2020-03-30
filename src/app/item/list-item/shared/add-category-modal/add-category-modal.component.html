@@ -19,10 +19,32 @@
                         <div *ngIf="createCategoryForm.controls.name.errors?.minlength" class="alert-danger">
                             <small>Le nom de la categorie doit faire au moins {{ minlengthCategoryName }} caractères</small>
                         </div>
+                        <div class="alert-danger" *ngIf="!createCategoryForm.controls.name.errors?.minlength
+                                                        && createCategoryForm.controls.name.errors?.leftwhitespace">
+                            <small class="ml-1">Espacement à gauche interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createCategoryForm.controls.name.errors?.minlength
+                                                        && createCategoryForm.controls.name.errors?.rightwhitespace">
+                            <small class="ml-1">Espacement à doite interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createCategoryForm.controls.name.errors?.minlength
+                                                        && createCategoryForm.controls.name.errors?.witespacerepetition">
+                            <small class="ml-1">Espacement interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createCategoryForm.controls.name.errors?.leftwhitespace
+                                                      && !createCategoryForm.controls.name.errors?.rightwhitespace
+                                                      && !createCategoryForm.controls.name.errors?.witespacerepetition
+                                                      &&  createCategoryForm.controls.name.errors?.characterrepetition">
+                            <small class="ml-1 small">Répétition de caractère interdite</small>
+                        </div>
                         <div *ngIf="createCategoryForm.controls.name.errors?.checkatomiccategoryname" class="alert-danger">
                             <small>Vous utilisez déjà ce nom pour une de vos categories</small>
                         </div>
-                        <div *ngIf="createCategoryForm.controls.name.errors?.failatomiccategoryname" class="alert-danger">
+                        <div class="alert-danger" *ngIf="!createCategoryForm.controls.name.errors?.leftwhitespace
+                                                      && !createCategoryForm.controls.name.errors?.rightwhitespace
+                                                      && !createCategoryForm.controls.name.errors?.witespacerepetition
+                                                      && !createCategoryForm.controls.name.errors?.characterrepetition
+                                                      && createCategoryForm.controls.name.errors?.failatomiccategoryname">
                             <small>Une erreur de communication s'est produite</small>
                         </div>
                         <div *ngIf="createCategoryForm.controls.name.errors === null || createCategoryForm.controls.name.errors.required"

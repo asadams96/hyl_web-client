@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import {CategoryComponent} from '../../category/category.component';
 import {CheckAtomicCategoryName} from '../../../../shared/form-validators/async/atomic-category-name.async-validator';
 import {CheckCategoryDepth} from '../../../../shared/form-validators/async/check-category-depth.async-validator';
+import {CheckNoWiteSpace} from '../../../../shared/form-validators/sync/no-whitespace.validator';
+import {CharacterRepetition} from '../../../../shared/form-validators/sync/character-repetition.validator';
 
 @Component({
   selector: 'app-add-category-modal',
@@ -30,8 +32,8 @@ export class AddCategoryModalComponent implements OnInit {
   private initCreateCategoryForm() {
     this.disabledButton = false;
     this.createCategoryForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(Number(this.minlengthCategoryName))],
-        [CheckAtomicCategoryName(this.itemService)]]
+      name: ['', [Validators.required, Validators.minLength(Number(this.minlengthCategoryName)),
+            CheckNoWiteSpace(), CharacterRepetition(3)], [CheckAtomicCategoryName(this.itemService)]]
     });
     if ( this.formWithType ) {
       this.createCategoryForm.addControl('type', this.formBuilder.control('', [Validators.required],

@@ -48,7 +48,7 @@ export class RenameModalComponent implements OnInit {
     if ( this.whoRename instanceof CategoryComponent) {
       this.minlength = this.minlengthCategoryName;
       this.maxlength = this.maxlengthCategoryName;
-      this.validators = [Validators.required, Validators.minLength(Number(this.minlength))];
+      this.validators = [Validators.required, Validators.minLength(Number(this.minlength)), CheckNoWiteSpace(), CharacterRepetition(3)];
       this.asyncValidators = [CheckAtomicCategoryName(this.itemService)];
     } else if ( this.whoRename instanceof ItemComponent) {
       this.minlength = this.minlengthItemName;
