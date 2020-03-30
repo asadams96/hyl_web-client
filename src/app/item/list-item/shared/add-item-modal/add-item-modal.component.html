@@ -27,10 +27,32 @@
                         <div *ngIf="createItemForm.controls.name.errors?.minlength" class="alert-danger">
                             <small>Le nom de l'objet doit faire au moins {{ minlengthItemName }} caractères</small>
                         </div>
+                        <div class="alert-danger" *ngIf="!createItemForm.controls.name.errors?.minlength
+                                                        && createItemForm.controls.name.errors?.leftwhitespace">
+                            <small class="ml-1">Espacement à gauche interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createItemForm.controls.name.errors?.minlength
+                                                        && createItemForm.controls.name.errors?.rightwhitespace">
+                            <small class="ml-1">Espacement à doite interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createItemForm.controls.name.errors?.minlength
+                                                        && createItemForm.controls.name.errors?.witespacerepetition">
+                            <small class="ml-1">Espacement interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createItemForm.controls.name.errors?.leftwhitespace
+                                                      && !createItemForm.controls.name.errors?.rightwhitespace
+                                                      && !createItemForm.controls.name.errors?.witespacerepetition
+                                                      &&  createItemForm.controls.name.errors?.characterrepetition">
+                            <small class="ml-1 small">Répétition de caractère interdite</small>
+                        </div>
                         <div *ngIf="createItemForm.controls.name.errors?.checkatomicitemname" class="alert-danger">
                             <small>Vous utilisez déjà ce nom pour un de vos objets</small>
                         </div>
-                        <div *ngIf="createItemForm.controls.name.errors?.failatomicitemname" class="alert-danger">
+                        <div class="alert-danger" *ngIf="!createItemForm.controls.name.errors?.leftwhitespace
+                                                      && !createItemForm.controls.name.errors?.rightwhitespace
+                                                      && !createItemForm.controls.name.errors?.witespacerepetition
+                                                      && !createItemForm.controls.name.errors?.characterrepetition
+                                                      && createItemForm.controls.name.errors?.failatomicitemname">
                             <small>Une erreur de communication s'est produite</small>
                         </div>
                         <div *ngIf="createItemForm.controls.name.errors === null || createItemForm.controls.name.errors.required"

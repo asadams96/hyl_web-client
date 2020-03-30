@@ -67,7 +67,8 @@ export class AddItemModalComponent implements OnInit {
   initCreateItemForm() {
     this.disabledButton = false;
     this.createItemForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(Number(this.minlengthItemName))], [CheckAtomicItemName(this.itemService)]],
+      name: ['', [Validators.required, Validators.minLength(Number(this.minlengthItemName)),
+            CheckNoWiteSpace(), CharacterRepetition(3)], [CheckAtomicItemName(this.itemService)]],
       description: [''],
       reference: ['', [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference)),
                       CheckNoWiteSpace(), CharacterRepetition(3)], [CheckAtomicSubItemRef(this.itemService)]],
