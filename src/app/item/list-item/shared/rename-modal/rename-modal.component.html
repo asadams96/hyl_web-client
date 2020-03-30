@@ -33,7 +33,7 @@
                         </div>
                         <div class="alert-danger" *ngIf="!renameForm.controls.name.errors?.minlength
                                                         && renameForm.controls.name.errors?.witespacerepetition">
-                            <small class="ml-1">Espacement interdit</small>
+                            <small class="ml-1">Double espacement interdit</small>
                         </div>
                         <div class="alert-danger" *ngIf="!renameForm.controls.name.errors?.leftwhitespace
                                                       && !renameForm.controls.name.errors?.rightwhitespace

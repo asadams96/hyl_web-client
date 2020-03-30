@@ -28,7 +28,7 @@
                         </div>
                         <div class="alert-danger" *ngIf="!loanForm.controls.beneficiary.errors?.minlength
                                                         && loanForm.controls.beneficiary.errors?.witespacerepetition">
-                            <small class="ml-1">Espacement interdit</small>
+                            <small class="ml-1">Double espacement interdit</small>
                         </div>
                         <div class="alert-danger" *ngIf="!loanForm.controls.beneficiary.errors?.minlength
                                                        && !loanForm.controls.beneficiary.errors?.leftwhitespace

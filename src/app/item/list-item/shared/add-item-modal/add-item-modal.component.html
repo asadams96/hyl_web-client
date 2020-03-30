@@ -37,7 +37,7 @@
                         </div>
                         <div class="alert-danger" *ngIf="!createItemForm.controls.name.errors?.minlength
                                                         && createItemForm.controls.name.errors?.witespacerepetition">
-                            <small class="ml-1">Espacement interdit</small>
+                            <small class="ml-1">Double espacement interdit</small>
                         </div>
                         <div class="alert-danger" *ngIf="!createItemForm.controls.name.errors?.leftwhitespace
                                                       && !createItemForm.controls.name.errors?.rightwhitespace
@@ -88,7 +88,7 @@
                         </div>
                         <div class="alert-danger" *ngIf="!createItemForm.controls.reference.errors?.minlength
                                                         && createItemForm.controls.reference.errors?.witespacerepetition">
-                            <small class="ml-1">Espacement interdit</small>
+                            <small class="ml-1">Double espacement interdit</small>
                         </div>
                         <div class="alert-danger" *ngIf="!createItemForm.controls.reference.errors?.leftwhitespace
                                                       && !createItemForm.controls.reference.errors?.rightwhitespace
