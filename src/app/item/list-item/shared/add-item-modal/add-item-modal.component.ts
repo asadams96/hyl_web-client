@@ -8,6 +8,8 @@ import {CheckAtomicItemName} from '../../../../shared/form-validators/async/atom
 import {CheckAtomicSubItemRef} from '../../../../shared/form-validators/async/atomic-subitem-ref.async-validator';
 import {CategoryComponent} from '../../category/category.component';
 import {CheckMaxSubItem} from '../../../../shared/form-validators/async/check-max-subitem.async-validator';
+import {CheckNoWiteSpace} from '../../../../shared/form-validators/sync/no-whitespace.validator';
+import {CharacterRepetition} from '../../../../shared/form-validators/sync/character-repetition.validator';
 
 @Component({
   selector: 'app-add-item-modal',
@@ -67,8 +69,8 @@ export class AddItemModalComponent implements OnInit {
     this.createItemForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(Number(this.minlengthItemName))], [CheckAtomicItemName(this.itemService)]],
       description: [''],
-      reference: ['', [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference))],
-                  [CheckAtomicSubItemRef(this.itemService)]],
+      reference: ['', [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference)),
+                      CheckNoWiteSpace(), CharacterRepetition(3)], [CheckAtomicSubItemRef(this.itemService)]],
       files: ['']
     });
     if ( this.formWithCategory ) {

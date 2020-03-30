@@ -8,6 +8,8 @@ import {Router} from '@angular/router';
 import {ItemComponent} from '../item.component';
 import {SubItemComponent} from '../sub-item/sub-item.component';
 import {CheckMaxSubItem} from '../../../../shared/form-validators/async/check-max-subitem.async-validator';
+import {CheckNoWiteSpace} from '../../../../shared/form-validators/sync/no-whitespace.validator';
+import {CharacterRepetition} from '../../../../shared/form-validators/sync/character-repetition.validator';
 
 @Component({
   selector: 'app-add-subitem-modal',
@@ -101,7 +103,8 @@ export class AddSubitemModalComponent implements OnInit {
 
   initCreateSubItemForm() {
     this.disabledButton = false;
-    const validators = [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference))];
+    const validators = [Validators.required, Validators.minLength(Number(this.minlengthSubItemReference)),
+                        CheckNoWiteSpace(), CharacterRepetition(3)];
     const asyncValidators = [];
     if (this.object instanceof ItemComponent) {
       asyncValidators.push(CheckAtomicSubItemRef(this.itemService));

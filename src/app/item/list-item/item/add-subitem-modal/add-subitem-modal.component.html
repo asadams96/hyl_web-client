@@ -34,10 +34,32 @@
                         <div *ngIf="createSubItemForm.controls.reference.errors?.minlength" class="alert-danger">
                             <small>La référence doit faire au moins {{ minlengthSubItemReference }} caractères</small>
                         </div>
+                        <div class="alert-danger" *ngIf="!createSubItemForm.controls.reference.errors?.minlength
+                                                        && createSubItemForm.controls.reference.errors?.leftwhitespace">
+                            <small class="ml-1">Espacement à gauche interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createSubItemForm.controls.reference.errors?.minlength
+                                                        && createSubItemForm.controls.reference.errors?.rightwhitespace">
+                            <small class="ml-1">Espacement à doite interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createSubItemForm.controls.reference.errors?.minlength
+                                                        && createSubItemForm.controls.reference.errors?.witespacerepetition">
+                            <small class="ml-1">Espacement interdit</small>
+                        </div>
+                        <div class="alert-danger" *ngIf="!createSubItemForm.controls.reference.errors?.leftwhitespace
+                                                      && !createSubItemForm.controls.reference.errors?.rightwhitespace
+                                                      && !createSubItemForm.controls.reference.errors?.witespacerepetition
+                                                      &&  createSubItemForm.controls.reference.errors?.characterrepetition">
+                            <small class="ml-1 small">Répétition de caractère interdite</small>
+                        </div>
                         <div *ngIf="createSubItemForm.controls.reference.errors?.checkatomicref" class="alert-danger">
                             <small>Vous utilisez déjà cette référence pour un de vos objets</small>
                         </div>
-                        <div *ngIf="createSubItemForm.controls.reference.errors?.failatomicref" class="alert-danger">
+                        <div class="alert-danger" *ngIf="!createSubItemForm.controls.reference.errors?.leftwhitespace
+                                                      && !createSubItemForm.controls.reference.errors?.rightwhitespace
+                                                      && !createSubItemForm.controls.reference.errors?.witespacerepetition
+                                                      && !createSubItemForm.controls.reference.errors?.characterrepetition
+                                                      && createSubItemForm.controls.reference.errors?.failatomicref">
                             <small>Une erreur de communication s'est produite</small>
                         </div>
                         <div *ngIf="createSubItemForm.controls.reference.errors === null

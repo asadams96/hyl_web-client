@@ -8,6 +8,8 @@ import {CheckAtomicCategoryName} from '../../../../shared/form-validators/async/
 import {CheckAtomicItemName} from '../../../../shared/form-validators/async/atomic-item-name.async-validator';
 import {SubItemComponent} from '../../item/sub-item/sub-item.component';
 import {CheckAtomicSubItemRef} from '../../../../shared/form-validators/async/atomic-subitem-ref.async-validator';
+import {CheckNoWiteSpace} from '../../../../shared/form-validators/sync/no-whitespace.validator';
+import {CharacterRepetition} from '../../../../shared/form-validators/sync/character-repetition.validator';
 
 @Component({
   selector: 'app-rename-modal',
@@ -56,7 +58,7 @@ export class RenameModalComponent implements OnInit {
     } else if ( this.whoRename instanceof SubItemComponent) {
       this.minlength = this.minlengthSubItemReference;
       this.maxlength = this.maxlengthSubItemReference;
-      this.validators = [Validators.required, Validators.minLength(Number(this.minlength))];
+      this.validators = [Validators.required, Validators.minLength(Number(this.minlength)), CheckNoWiteSpace(), CharacterRepetition(3)];
       this.asyncValidators = [CheckAtomicSubItemRef(this.itemService)];
     }
   }
