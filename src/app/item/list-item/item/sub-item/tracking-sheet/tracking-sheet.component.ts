@@ -26,7 +26,9 @@ export class TrackingSheetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.datatablesPluginAdjustment();
+    if (this.subitem.trackingSheets && this.subitem.trackingSheets.length > 0) {
+      this.datatablesPluginAdjustment();
+    }
   }
 
   sortDateTable() {
@@ -36,11 +38,11 @@ export class TrackingSheetComponent implements OnInit, AfterViewInit {
   datatablesPluginAdjustment() {
     this.dataTablesService.datatablesPluginAdjustment(
         'trHead' + this.subitem.id + this.subitem.getClassNameFirstLetter(),
-        'expandSubItemModal' + this.subitem.id,
-        this);
+        'expandSubItemModal' + this.subitem.id);
   }
 
-  onCLickDeleteTrackingSheet(trackingSheetComponent: TrackingSheetComponent, trackingSheet: {id: bigint, date: Date, comment: string}) {
+  onCLickDeleteTrackingSheet(trackingSheet: {id: bigint, date: Date, comment: string}) {
+    const trackingSheetComponent: TrackingSheetComponent = this;
     // @ts-ignore
     $.confirm({
       title: ('Confirmer la suppression du commentaire en date du '
@@ -54,7 +56,7 @@ export class TrackingSheetComponent implements OnInit, AfterViewInit {
           text: 'Annuler',
           btnClass: 'btn-danger'
         },
-        somethingElse: {
+        confirm: {
           text: 'Supprimer le commentaire',
           btnClass: 'btn-primary',
           action() {
@@ -65,40 +67,55 @@ export class TrackingSheetComponent implements OnInit, AfterViewInit {
     });
   }
 
-  initOnCLickDeleteAllTrackingSheet() {
+  onClickDeleteAllTrackingSheet() {
     const trackingSheetComponent: TrackingSheetComponent = this;
-    $('#deleteAllTrackingSheet' + this.subitem.id.toString()).get()[0].addEventListener('click', () => {
-      // @ts-ignore
-      $.confirm({
-        title: 'Confirmer la suppression',
-        content: 'Attention ! Tous les commentaires de ' + trackingSheetComponent.subitem.reference
-                  + ' seront supprimés et ne pourront plus être récupérés par la suite',
-        type: 'red',
-        typeAnimated: true,
-        columnClass: 'large',
-        buttons: {
-          cancel: {
-            text: 'Annuler',
-            btnClass: 'btn-danger'
-          },
-          somethingElse: {
-            text: 'Supprimer tous les commentaires',
-            btnClass: 'btn-primary',
-            action() {
-              trackingSheetComponent.deleteTrackingSheets(null);
+    // @ts-ignore
+    $.confirm({
+      title: 'Confirmer la suppression',
+      content: 'Attention ! Tous les commentaires de ' + this.subitem.reference
+          + ' seront supprimés et ne pourront plus être récupérés par la suite.',
+      type: 'red',
+      typeAnimated: true,
+      columnClass: 'large',
+      buttons: {
+        cancel: {
+          text: 'Annuler',
+          btnClass: 'btn-danger'
+        },
+        confirm: {
+          text: 'Supprimer tous les commentaires',
+          btnClass: 'btn-primary',
+          action() {
+            if (trackingSheetComponent.subitem.trackingSheets && trackingSheetComponent.subitem.trackingSheets.length > 0) {
+              trackingSheetComponent.deleteTrackingSheetsByIdsSubItem(trackingSheetComponent.subitem.id);
             }
           }
         }
-      });
+      }
     });
-
   }
 
   deleteTrackingSheets( trackingSheets: {id: bigint, date: Date, comment: string}[] ) {
-    this.itemService.deleteTrackingSheets(trackingSheets).catch(
+    const refresh = this.subitem.trackingSheets.length !== 1;
+    this.itemService.deleteTrackingSheets(trackingSheets).then(
+      () => {
+        if (refresh) { this.refreshDataTable(); }
+      },
       reason => {
         console.log(reason);
         this.router.navigate(['/erreur']);
     });
+  }
+
+  deleteTrackingSheetsByIdsSubItem( id: bigint ) {
+    this.itemService.deleteTrackingSheetsByIdSubItem(id).catch(
+       reason => {
+          console.log(reason);
+          this.router.navigate(['/erreur']);
+        });
+  }
+
+  private refreshDataTable() {
+     this.dataTablesService.refreshDataTable(this.subitem, true);
   }
 }

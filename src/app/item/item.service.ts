@@ -6,6 +6,7 @@ import {ItemComponent} from './list-item/item/item.component';
 import {isUndefined} from 'util';
 import {SubItemComponent} from './list-item/item/sub-item/sub-item.component';
 import {environment} from '../../environments/environment';
+import {TrackingSheetComponent} from './list-item/item/sub-item/tracking-sheet/tracking-sheet.component';
 
 @Injectable({
   providedIn: 'root'
@@ -361,9 +362,18 @@ export class ItemService {
     return this.httpClient.delete<SubItemComponent>(this.host + '/delete-tracking-sheets', {params})
         .toPromise<SubItemComponent>().then(
             updateSubitem => {
-              for (const id of ids) {
-                this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
-              }
+              this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
+            }
+        );
+  }
+
+  deleteTrackingSheetsByIdSubItem(idSubItem: bigint) {
+    const params = {idSubItem: String(idSubItem)};
+
+    return this.httpClient.delete<SubItemComponent>(this.host + '/delete-tracking-sheets-by-id-subitem', {params})
+        .toPromise<SubItemComponent>().then(
+            updateSubitem => {
+              this.replaceSubItemInArray(this.categoryStorage, updateSubitem);
             }
         );
   }

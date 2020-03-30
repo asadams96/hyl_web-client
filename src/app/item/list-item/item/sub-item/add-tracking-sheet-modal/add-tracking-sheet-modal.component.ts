@@ -3,6 +3,8 @@ import {SubItemComponent} from '../sub-item.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ItemService} from '../../../../item.service';
 import {Router} from '@angular/router';
+import {DataTablesService} from '../../../../../shared/services/datatables/data-tables.service';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-add-tracking-sheet-modal',
@@ -21,7 +23,8 @@ export class AddTrackingSheetModalComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private itemService: ItemService,
-              private router: Router) { }
+              private router: Router,
+              private dataTablesService: DataTablesService) { }
 
   ngOnInit() {
     this.initTrackingSheetForm();
@@ -37,9 +40,22 @@ export class AddTrackingSheetModalComponent implements OnInit {
   onSubmitAddTrackingSheetForm() {
     if (!this.disabledButton) {
       this.disabledButton = true;
+
+      // Evite bug lors de chargement de 'initDatable()' dans
+      // 'dataTablesService.refreshDataTableBis()' si la recherche n'affiche aucun résultat
+      // @ts-ignore
+      const table = $('#dataTable').DataTable();
+      if (!isUndefined(table.page.info()) && table.page.info().recordsDisplay === 0) {
+        table.search('').draw(false);
+      }
+
       this.itemService.createTrackingSheet(this.subitem, this.addTrackingSheetForm.controls.comment.value).then(
           value => {
             this.initTrackingSheetForm();
+            const interval0 = setInterval(() => {
+              this.dataTablesService.refreshDataTable(this.subitem, false);
+              clearInterval(interval0);
+            }, 200);
           },
           reason => {
             console.log(reason);

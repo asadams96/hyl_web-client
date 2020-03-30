@@ -21,7 +21,7 @@ export class ResponseErrorInterceptor implements HttpInterceptor {
         return next.handle(req)
             .pipe(
                 catchError((error: HttpErrorResponse) => {
-                    if (error.status === 401) {
+                    if (error.status === 401 || error.status === 0) {
                         this.authService.setAuthState(null, null);
                     }
                     return next.handle(req); // renvoi la réponse de la requête à l'envoyeur

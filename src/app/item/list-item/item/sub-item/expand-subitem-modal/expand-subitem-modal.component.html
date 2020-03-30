@@ -59,7 +59,7 @@
                     </button>
                     -->
                 </div>
-                <hr />
+                <hr *ngIf="subitem.trackingSheets && subitem.trackingSheets.length > 0" />
                 <!-- TABLE -->
                 <app-tracking-sheet [subitem]="subitem"></app-tracking-sheet>
             </div>
