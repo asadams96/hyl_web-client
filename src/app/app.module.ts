@@ -42,6 +42,7 @@ import { CloseLoanModalComponent } from './loan/list-loan/table-loan/close-loan-
 import { AddLoanModalComponent } from './loan/list-loan/add-loan-modal/add-loan-modal.component';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
 import {ResponseErrorInterceptor} from './interceptors/response-error.interceptor';
+import { MemoComponent } from './memo/memo.component';
 
 
 const appRoutes: Routes = [
@@ -83,6 +84,7 @@ const appRoutes: Routes = [
     TableLoanComponent,
     CloseLoanModalComponent,
     AddLoanModalComponent,
+    MemoComponent,
   ],
   imports: [
     BrowserModule,
