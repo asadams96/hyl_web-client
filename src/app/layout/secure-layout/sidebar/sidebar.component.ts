@@ -17,6 +17,7 @@ export class SidebarComponent implements OnInit {
     const cssClass = 'css-adjustment';
     const sidebar = document.getElementById('sidebarToggle');
     const toAdjust = [
+      document.getElementById('memos'),
       document.getElementById('items'),
       document.getElementById('loans'),
       document.getElementById('profil'),
