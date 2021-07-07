@@ -1,1 +1,69 @@
-<p>memo works!</p>
+<div class="mt-4">
+    <div class="card-deck align-items-center justify-content-between">
+        <div class="d-flex">
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="text-gray-800 btn btn-link d-md-none rounded-circle mr-1 ml-1">
+                <i class="fa fa-bars"></i>
+            </button>
+            <h1 class="mb-2 text-gray-800">Mémos</h1>
+        </div>
+        <div class="text-center d-flex flex-row">
+            <h5>
+                <button class="mr-3 p-3 btn btn-primary font-weight-bolder" data-toggle="modal" data-target="#addMemoModal">
+                    Ajouter un mémo
+                </button>
+            </h5>
+        </div>
+    </div>
+    <hr />
+    <div class="card-deck justify-content-start">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" *ngFor="let memo of memos">
+            <div class="card shadow m-1 mb-2 mt-2">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header bg-gradient-light py-0 d-flex flex-row align-items-center">
+                    <div class="col-11 px-0">
+                        <a [href]="'#collapseMemo'+memo.id" class="d-block pt-2 text-decoration-none" data-toggle="collapse" role="button" aria-expanded="true">
+                            <!--<h5 class="font-weight-bold font-italic text-gray-800 text-truncate">{{ name }}</h5>-->
+                            <h6 class="font-weight-bold font-italic text-primary text-truncate">{{memo.title}}</h6>
+                        </a>
+                    </div>
+
+                    <!-- Dropdown Category -->
+                    <div class="dropdown no-arrow">
+                        <!-- Bouton menu animé -->
+                        <a class="dropdown-toggle" href="#" role="button" [id]="'dropdownMemo'+memo.id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-primary"></i>
+                        </a>
+                        <!-- Menu annimé -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" [attr.aria-labelledby]="'dropdownMemo'+memo.id">
+                            <!-- <div class="dropdown-header">{{ name }}</div> -->
+                             <div class="dropdown-header">{{memo.title}}</div>
+                            <div class="dropdown-divider"></div>
+                             <a class="dropdown-item text-decoration-none" (click)="updateMemoClick()" href="#">
+                                 <span class="font-weight-bolder">Modifier</span> le mémo
+                             </a>
+                             <a class="dropdown-item" (click)="deleteMemoClick()" href="#">
+                                 <span class="font-weight-bolder">Supprimer</span> une catégorie
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- Category Body -->
+                <div class="collapse" [id]="'collapseMemo'+memo.id">
+                    <div class="card-body bg-light py-2 px-3">
+                        <p class="text-primary">{{memo.title}}</p>
+                        <hr>
+                        <p class="text-primary">{{memo.content}}</p>
+                        <hr>
+                        <p class="text-success">Rappel le {{memo.reminderDate | date: 'dd/MM/yyyy'}}</p>
+                        <hr>
+                        <div class="text-right">
+                            <small class="text-secondary">Crée le {{memo.creationDate | date: 'dd/MM/yyyy'}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
