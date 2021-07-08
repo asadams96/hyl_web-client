@@ -22,7 +22,7 @@ export class MemoService {
   }
 
   getMemos() {
-    return this.httpClient.get<MemoModel[]>(this.host + '/memos-test').toPromise().then(
+    return this.httpClient.get<MemoModel[]>(this.host + '/memos-by-id_user').toPromise().then(
         memos => {
           this.memos = memos;
           this.emitMemos();
