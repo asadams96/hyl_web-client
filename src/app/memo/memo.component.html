@@ -56,10 +56,10 @@
                         <hr>
                         <p class="text-primary">{{memo.content}}</p>
                         <hr>
-                        <p class="text-success">Rappel le {{memo.reminderDate | date: 'dd/MM/yyyy'}}</p>
+                        <p class="text-success">Rappel le {{memo.reminderByDate | date: 'dd/MM/yyyy'}}</p>
                         <hr>
                         <div class="text-right">
-                            <small class="text-secondary">Crée le {{memo.creationDate | date: 'dd/MM/yyyy'}}</small>
+                            <small class="text-secondary">Crée le {{memo.lastModif | date: 'dd/MM/yyyy'}}</small>
                         </div>
                     </div>
                 </div>
