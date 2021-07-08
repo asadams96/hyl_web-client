@@ -56,10 +56,45 @@
                         <hr>
                         <p class="text-primary">{{memo.content}}</p>
                         <hr>
-                        <p class="text-success">Rappel le {{memo.reminderByDate | date: 'dd/MM/yyyy'}}</p>
+
+                        <div *ngIf="(!memo.reminderByDate || memo.reminderByDate.length === 0)
+                                    && !memo.reminderByDay">
+                            <p>Aucun rappel de programmé.</p>
+                        </div>
+
+                        <div *ngIf="(memo.reminderByDate && memo.reminderByDate.length > 0)
+                                    && !memo.reminderByDay" class="text-success">
+                            <div *ngIf="memo.reminderByDate.length === 1">
+                                <p>Rappel le {{memo.reminderByDate[0].reminderDate | date: 'dd/MM/yyyy'}}</p>
+                            </div>
+                            <div *ngIf="memo.reminderByDate.length > 1">
+                                <p class="mb-1">Rappel les :</p>
+                                <ul>
+                                    <li *ngFor="let reminder of memo.reminderByDate">
+                                        {{reminder.reminderDate | date: 'dd/MM/yyyy'}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div *ngIf="memo.reminderByDay && (!memo.reminderByDate || memo.reminderByDate.length === 0)"
+                             class="text-success">
+                            <p class="mb-1">Rappel chaque :</p>
+                            <ul>
+                                <li *ngIf="memo.reminderByDay.monday">lundi</li>
+                                <li *ngIf="memo.reminderByDay.tuesday">mardi</li>
+                                <li *ngIf="memo.reminderByDay.wednesday">mercredi</li>
+                                <li *ngIf="memo.reminderByDay.thursday">jeudi</li>
+                                <li *ngIf="memo.reminderByDay.friday">vendredi</li>
+                                <li *ngIf="memo.reminderByDay.saturday">samedi</li>
+                                <li *ngIf="memo.reminderByDay.sunday">dimanche</li>
+                            </ul>
+
+                        </div>
+
                         <hr>
                         <div class="text-right">
-                            <small class="text-secondary">Crée le {{memo.lastModif | date: 'dd/MM/yyyy'}}</small>
+                            <small class="text-secondary">Modifié le {{memo.lastModif | date: 'dd/MM/yyyy'}}</small>
                         </div>
                     </div>
                 </div>
