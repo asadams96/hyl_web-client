@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {LoanModel} from '../loan/model/loan.model';
 import {MemoModel} from './model/memo.model';
 import {Subject} from 'rxjs';
 
@@ -18,7 +17,14 @@ export class MemoService {
   constructor(private httpClient: HttpClient) { }
 
   emitMemos() {
-    this.memosSubject.next(this.memos.slice());
+      this.memos.forEach(memo => {
+          if (memo.reminderByDate && memo.reminderByDate.length > 1) {
+              memo.reminderByDate.sort((a, b) => {
+                  return a.reminderDate < b.reminderDate ? -1 : a.reminderDate > b.reminderDate ? 1 : 0;
+              });
+          }
+      });
+      this.memosSubject.next(this.memos.slice());
   }
 
   getMemos() {
@@ -29,4 +35,14 @@ export class MemoService {
         }
     );
   }
+
+    createMemo(memo: MemoModel) {
+      return this.httpClient.post<MemoModel>(this.host + '/add-memo', memo)
+          .toPromise<MemoModel>().then(
+              newMemo => {
+                this.memos.push(newMemo);
+                this.emitMemos();
+              }
+          );
+    }
 }

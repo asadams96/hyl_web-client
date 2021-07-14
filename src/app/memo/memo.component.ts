@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MemoModel} from './model/memo.model';
 import {MemoService} from './memo.service';
 import {Router} from '@angular/router';
