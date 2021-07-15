@@ -1,10 +1,10 @@
-<div class="modal fade" [id]="'addMemoModal'" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+<div class="modal fade" [id]="'addMemoModal' + (this.whoMemoUpdate ? this.whoMemoUpdate.id : '')" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" (focus)="this.whoMemoUpdate ? resetModal(false) : null">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header mb-3">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    Ajouter un mémo
+                    {{this.whoMemoUpdate ? 'Modifier le' : 'Ajouter un'}} mémo
                 </h5>
                 <button class="close" data-dismiss="modal" type="button" aria-label="Close">
                     <span aria-hidden="true"><i class="fas fa-window-close text-danger" ></i></span>
@@ -40,7 +40,7 @@
                     <div class="mb-1 alert-success" *ngIf="memoForm.controls.title.valid">
                         <small class="ml-1">Titre valide</small>
                     </div>
-                    <div class="form-group mb-1">
+                    <div class="form-group mb-3">
                         <input aria-label="" class="form-control" formControlName="title" id="titleMemo" type="text"
                                placeholder="Saisir le titre du mémo*" [maxlength]="maxlengthTitle">
                     </div>
@@ -78,6 +78,7 @@
                                   placeholder="Saisir le contenu du mémo*" [maxlength]="maxlengthContent"></textarea>
                     </div>
 
+                    <hr>
                     <div>
                         <p class="mb-0">Désirez-vous mettre un rappel pour ce mémo ?</p>
                         <input class="mr-2 ml-2" type="radio"
@@ -161,13 +162,21 @@
                                         'btn-success': getRemindersByDay().controls.sunday.value}">
                         </div>
                     </div>
-
+                    <div *ngIf="whoMemoUpdate">
+                        <hr>
+                        <label>
+                            <input formControlName="checkbox" type="checkbox">
+                            <span class="ml-2">Je valide les modifications</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-success" type="button"
+                            (click)="resetModal(true)">Valeurs par défaut</button>
                     <button class="btn btn-danger" data-dismiss="modal" type="button">Annuler</button>
                     <button class="btn btn-primary" type="submit" data-dismiss="modal"
                             (click)="onSubmitMemoForm()"  [disabled]="!memoForm.valid">
-                        Ajouter le mémo
+                        {{this.whoMemoUpdate ? 'Modifier' : 'Ajouter'}} le mémo
                     </button>
                 </div>
             </form>

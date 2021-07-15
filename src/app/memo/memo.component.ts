@@ -14,6 +14,8 @@ export class MemoComponent implements OnInit {
   private memos: MemoModel[];
   private memosSubscription: Subscription;
 
+  memoToUpdate: MemoModel = null;
+
   constructor(private memoService: MemoService, private router: Router) { }
 
   ngOnInit() {
@@ -37,8 +39,8 @@ export class MemoComponent implements OnInit {
     );
   }
 
-  updateMemoClick() {
-    // TODO
+  updateMemoClick(memoToUpdate: MemoModel) {
+    this.memoToUpdate = memoToUpdate;
   }
 
   deleteMemoClick() {

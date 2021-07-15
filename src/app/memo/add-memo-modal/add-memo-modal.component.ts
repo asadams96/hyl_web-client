@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MemoService} from '../memo.service';
 import {Router} from '@angular/router';
 import {CheckNoWiteSpace} from '../../shared/form-validators/sync/no-whitespace.validator';
@@ -13,8 +13,11 @@ import {MemoModel} from '../model/memo.model';
 })
 export class AddMemoModalComponent implements OnInit {
 
+  @Input() whoMemoUpdate: MemoModel;
+  id: number | bigint;
+
   private memoForm: FormGroup;
-  private disabledButton;
+  private disabledButton: boolean;
   private minlengthContent = '15';
   private minlengthTitle = '5';
   private maxlengthContent = '250';
@@ -34,27 +37,33 @@ export class AddMemoModalComponent implements OnInit {
     this.initMemoForm();
   }
 
-
   private initMemoForm() {
     this.disabledButton = false;
     this.memoForm = this.formBuilder.group({
-      title: ['', [Validators.required, CheckNoWiteSpace(),
+      title: [this.whoMemoUpdate ? this.whoMemoUpdate.title : '', [Validators.required, CheckNoWiteSpace(),
         Validators.minLength(Number(this.minlengthTitle)), CharacterRepetition(4)]],
-      content: ['', [Validators.required, CheckNoWiteSpace(),
+      content: [this.whoMemoUpdate ? this.whoMemoUpdate.content : '', [Validators.required, CheckNoWiteSpace(),
         Validators.minLength(Number(this.minlengthContent)), CharacterRepetition(4)]],
-      radio: [this.radioDefaultValue],
-      nbrRemindersByDate: [],
-      remindersByDate: this.formBuilder.array([]),
+      radio: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDate && this.whoMemoUpdate.reminderByDate.length > 0
+                ? this.radioReminderByDateValue : this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.radioReminderByDayValue
+                  : this.radioDefaultValue],
+      nbrRemindersByDate: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDate && this.whoMemoUpdate.reminderByDate.length > 0
+                            ? this.whoMemoUpdate.reminderByDate.length : ''],
+      remindersByDate: this.formBuilder.array(this.whoMemoUpdate && this.whoMemoUpdate.reminderByDate
+                && this.whoMemoUpdate.reminderByDate.length > 0 ? this.getReminderByDateInStrDate(this.whoMemoUpdate.reminderByDate) : []),
       remindersByDay: this.formBuilder.group({
-        monday: [false],
-        tuesday: [false],
-        wednesday: [false],
-        thursday: [false],
-        friday: [false],
-        saturday: [false],
-        sunday: [false]
+        monday: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.whoMemoUpdate.reminderByDay.monday : false],
+        tuesday: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.whoMemoUpdate.reminderByDay.tuesday : false],
+        wednesday: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.whoMemoUpdate.reminderByDay.wednesday : false],
+        thursday: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.whoMemoUpdate.reminderByDay.thursday : false],
+        friday: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.whoMemoUpdate.reminderByDay.friday : false],
+        saturday: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.whoMemoUpdate.reminderByDay.saturday : false],
+        sunday: [this.whoMemoUpdate && this.whoMemoUpdate.reminderByDay ? this.whoMemoUpdate.reminderByDay.sunday : false]
       }),
     });
+    if (this.whoMemoUpdate) {
+      this.memoForm.addControl('checkbox', new FormControl(false, Validators.pattern('true')));
+    }
   }
 
   onSubmitMemoForm() {
@@ -69,7 +78,11 @@ export class AddMemoModalComponent implements OnInit {
         memo.reminderByDay = this.doSubmitWithReminderByDay();
       }
 
-      this.doCreateMeme(memo);
+      if (this.whoMemoUpdate) {
+        this.doUpdateMemo(memo);
+      } else {
+        this.doCreateMemo(memo);
+      }
     }
   }
 
@@ -151,9 +164,23 @@ export class AddMemoModalComponent implements OnInit {
     }
   }
 
-  private doCreateMeme(memo: MemoModel) {
+  private doCreateMemo(memo: MemoModel) {
     this.memoService.createMemo(memo).then(
         () => {
+          this.initMemoForm();
+        },
+        reason => {
+          console.log(reason);
+          this.router.navigate(['/erreur']);
+        }
+    );
+  }
+
+  private doUpdateMemo(memo: MemoModel) {
+    memo.id = this.whoMemoUpdate.id;
+    this.memoService.updateMemo(memo).then(
+        memoReturn => {
+          this.whoMemoUpdate = memoReturn;
           this.initMemoForm();
         },
         reason => {
@@ -197,6 +224,14 @@ export class AddMemoModalComponent implements OnInit {
     }
   }
 
+  getReminderByDateInStrDate(remindersByDate: [{id: number|bigint, reminderDate: Date}]) {
+    const array: string[] = [];
+    remindersByDate.forEach(value => {
+      array.push(value.reminderDate.toString().substring(0, 10));
+    });
+    return array;
+  }
+
   getArray(nbr: number) {
     return new Array(nbr);
   }
@@ -209,4 +244,16 @@ export class AddMemoModalComponent implements OnInit {
     return this.memoForm.get('remindersByDay') as FormGroup;
   }
 
+  resetModal(resetButton: boolean) {
+    if (resetButton) {
+      this.initMemoForm();
+    } else {
+      if (!this.id) {
+        this.id = this.whoMemoUpdate.id;
+      } else if (this.id !== this.whoMemoUpdate.id) {
+        this.id = this.whoMemoUpdate.id;
+        this.initMemoForm();
+      }
+    }
+  }
 }

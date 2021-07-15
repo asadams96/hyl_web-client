@@ -39,7 +39,7 @@
                             <!-- <div class="dropdown-header">{{ name }}</div> -->
                              <div class="dropdown-header">{{memo.title}}</div>
                             <div class="dropdown-divider"></div>
-                             <a class="dropdown-item text-decoration-none" (click)="updateMemoClick()" href="#">
+                             <a class="dropdown-item text-decoration-none" (click)="updateMemoClick(memo)" data-toggle="modal" [attr.data-target]="'#addMemoModal' + (this.memoToUpdate ? this.memoToUpdate.id : '')" href="#">
                                  <span class="font-weight-bolder">Modifier</span> le mémo
                              </a>
                              <a class="dropdown-item" (click)="deleteMemoClick()" href="#">
@@ -81,13 +81,13 @@
                              class="text-success">
                             <p class="mb-1">Rappel chaque :</p>
                             <ul>
-                                <li *ngIf="memo.reminderByDay.monday">lundi</li>
-                                <li *ngIf="memo.reminderByDay.tuesday">mardi</li>
-                                <li *ngIf="memo.reminderByDay.wednesday">mercredi</li>
-                                <li *ngIf="memo.reminderByDay.thursday">jeudi</li>
-                                <li *ngIf="memo.reminderByDay.friday">vendredi</li>
-                                <li *ngIf="memo.reminderByDay.saturday">samedi</li>
-                                <li *ngIf="memo.reminderByDay.sunday">dimanche</li>
+                                <li *ngIf="memo.reminderByDay.monday">Lundi</li>
+                                <li *ngIf="memo.reminderByDay.tuesday">Mardi</li>
+                                <li *ngIf="memo.reminderByDay.wednesday">Mercredi</li>
+                                <li *ngIf="memo.reminderByDay.thursday">Jeudi</li>
+                                <li *ngIf="memo.reminderByDay.friday">Vendredi</li>
+                                <li *ngIf="memo.reminderByDay.saturday">Samedi</li>
+                                <li *ngIf="memo.reminderByDay.sunday">Dimanche</li>
                             </ul>
 
                         </div>
@@ -106,3 +106,4 @@
 <!-- ******************************************************** MODALS ************************************************-->
 <!-- ADD CATEGORY -->
 <app-add-memo-modal></app-add-memo-modal>
+<app-add-memo-modal *ngIf="memoToUpdate" [whoMemoUpdate]="memoToUpdate"></app-add-memo-modal>

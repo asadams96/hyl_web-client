@@ -45,4 +45,22 @@ export class MemoService {
               }
           );
     }
+
+    updateMemo(memo: MemoModel) {
+        return this.httpClient.patch<MemoModel>(this.host + '/update-memo', memo)
+            .toPromise<MemoModel>().then(
+                memoUpdated => {
+                    let index: number;
+                    for (let i = 0; i < this.memos.length; i++) {
+                        if (this.memos[i].id === memoUpdated.id) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    this.memos[index] = memoUpdated;
+                    this.emitMemos();
+                    return memoUpdated;
+                }
+            );
+    }
 }
