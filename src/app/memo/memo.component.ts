@@ -17,6 +17,8 @@ export class MemoComponent implements OnInit {
   private memoToUpdate: MemoModel = null;
   private memoToDelete: MemoModel = null;
 
+  private todayDate: number = Date.parse(new Date().toString());
+
   constructor(private memoService: MemoService, private router: Router) { }
 
   ngOnInit() {
@@ -40,11 +42,15 @@ export class MemoComponent implements OnInit {
     );
   }
 
-  updateMemoClick(memoToUpdate: MemoModel) {
+  onUpdateMemoClick(memoToUpdate: MemoModel) {
     this.memoToUpdate = memoToUpdate;
   }
 
-  deleteMemoClick(memoToDelete: MemoModel) {
+  onDeleteMemoClick(memoToDelete: MemoModel) {
     this.memoToDelete = memoToDelete;
+  }
+
+  getDateNbr(date: string) {
+      return Date.parse(date);
   }
 }

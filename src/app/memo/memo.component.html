@@ -43,10 +43,12 @@
                             <!-- <div class="dropdown-header">{{ name }}</div> -->
                              <div class="dropdown-header">{{memo.title}}</div>
                             <div class="dropdown-divider"></div>
-                             <a class="dropdown-item text-decoration-none" (click)="updateMemoClick(memo)" data-toggle="modal" [attr.data-target]="'#addMemoModal' + (this.memoToUpdate ? this.memoToUpdate.id : '')" href="#">
+                             <a class="dropdown-item text-decoration-none" href="#" (click)="onUpdateMemoClick(memo)"
+                                data-toggle="modal" [attr.data-target]="'#addMemoModal' + (this.memoToUpdate ? this.memoToUpdate.id : '')">
                                  <span class="font-weight-bolder">Modifier</span> le mémo
                              </a>
-                             <a class="dropdown-item" (click)="deleteMemoClick(memo)" data-toggle="modal" data-target="#deleteMemoModal" href="#">
+                             <a class="dropdown-item" href="#" (click)="onDeleteMemoClick(memo)"
+                                data-toggle="modal" data-target="#deleteMemoModal">
                                  <span class="font-weight-bolder">Supprimer</span> le mémo
                              </a>
                          </div>
@@ -63,18 +65,23 @@
 
                         <div *ngIf="(!memo.reminderByDate || memo.reminderByDate.length === 0)
                                     && !memo.reminderByDay">
-                            <p>Aucun rappel de programmé.</p>
+                            <p class="text-danger">Aucun rappel de programmé.</p>
                         </div>
 
                         <div *ngIf="(memo.reminderByDate && memo.reminderByDate.length > 0)
-                                    && !memo.reminderByDay" class="text-success">
+                                    && !memo.reminderByDay">
                             <div *ngIf="memo.reminderByDate.length === 1">
-                                <p>Rappel le {{memo.reminderByDate[0].reminderDate | date: 'dd/MM/yyyy'}}</p>
+                                <p [ngClass]="{'text-success': getDateNbr(memo.reminderByDate[0].reminderDate.toString()) > todayDate,
+                                                'text-danger': getDateNbr(memo.reminderByDate[0].reminderDate.toString()) <= todayDate}">
+                                    Rappel le {{memo.reminderByDate[0].reminderDate | date: 'dd/MM/yyyy'}}
+                                </p>
                             </div>
                             <div *ngIf="memo.reminderByDate.length > 1">
-                                <p class="mb-1">Rappel les :</p>
+                                <p class="mb-1 text-primary">Rappel les :</p>
                                 <ul>
-                                    <li *ngFor="let reminder of memo.reminderByDate">
+                                    <li *ngFor="let reminder of memo.reminderByDate; let i = index"
+                                        [ngClass]="{'text-success': getDateNbr(memo.reminderByDate[i].reminderDate.toString()) > todayDate,
+                                                'text-danger': getDateNbr(memo.reminderByDate[i].reminderDate.toString()) <= todayDate}">
                                         {{reminder.reminderDate | date: 'dd/MM/yyyy'}}
                                     </li>
                                 </ul>
