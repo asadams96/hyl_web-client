@@ -16,7 +16,11 @@
         </div>
     </div>
     <hr />
-    <div class="card-deck justify-content-start">
+    <div *ngIf="!memos || memos.length === 0" class="text-center">
+        <h3 class="mt-5">Vous n'avez aucun mémo</h3>
+        <h5 class="mt-5">Vous pouvez créer un mémo grâce au bouton ci-dessus<i class="ml-3 fas fa-long-arrow-alt-up"></i></h5>
+    </div>
+    <div *ngIf="memos && memos.length > 0" class="card-deck justify-content-start">
         <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" *ngFor="let memo of memos">
             <div class="card shadow m-1 mb-2 mt-2">
                 <!-- Card Header - Dropdown -->
