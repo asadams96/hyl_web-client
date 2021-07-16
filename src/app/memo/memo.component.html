@@ -42,8 +42,8 @@
                              <a class="dropdown-item text-decoration-none" (click)="updateMemoClick(memo)" data-toggle="modal" [attr.data-target]="'#addMemoModal' + (this.memoToUpdate ? this.memoToUpdate.id : '')" href="#">
                                  <span class="font-weight-bolder">Modifier</span> le mémo
                              </a>
-                             <a class="dropdown-item" (click)="deleteMemoClick()" href="#">
-                                 <span class="font-weight-bolder">Supprimer</span> une catégorie
+                             <a class="dropdown-item" (click)="deleteMemoClick(memo)" data-toggle="modal" data-target="#deleteMemoModal" href="#">
+                                 <span class="font-weight-bolder">Supprimer</span> le mémo
                              </a>
                          </div>
                      </div>
@@ -107,3 +107,4 @@
 <!-- ADD CATEGORY -->
 <app-add-memo-modal></app-add-memo-modal>
 <app-add-memo-modal *ngIf="memoToUpdate" [whoMemoUpdate]="memoToUpdate"></app-add-memo-modal>
+<app-delete-memo-modal *ngIf="memoToDelete" [whoMemoToDelete]="memoToDelete"></app-delete-memo-modal>

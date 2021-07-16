@@ -44,6 +44,7 @@ import {JwtInterceptor} from './interceptors/jwt.interceptor';
 import {ResponseErrorInterceptor} from './interceptors/response-error.interceptor';
 import { MemoComponent } from './memo/memo.component';
 import { AddMemoModalComponent } from './memo/add-memo-modal/add-memo-modal.component';
+import { DeleteMemoModalComponent } from './memo/delete-memo-modal/delete-memo-modal.component';
 
 
 const appRoutes: Routes = [
@@ -87,6 +88,7 @@ const appRoutes: Routes = [
     AddLoanModalComponent,
     MemoComponent,
     AddMemoModalComponent,
+    DeleteMemoModalComponent,
   ],
   imports: [
     BrowserModule,

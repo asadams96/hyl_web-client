@@ -63,4 +63,21 @@ export class MemoService {
                 }
             );
     }
+
+    deleteMemo(id: number|bigint) {
+      const params = {id: String(id)};
+      return this.httpClient.delete(this.host + '/delete-memo', {params})
+          .toPromise().then( () => {
+
+              let indexMemo: number;
+              this.memos.forEach((memo, index) => {
+                  if (memo.id === id) {
+                      indexMemo = index;
+                      return;
+                   }
+              });
+              this.memos.splice(indexMemo, 1);
+              this.emitMemos();
+          });
+    }
 }
